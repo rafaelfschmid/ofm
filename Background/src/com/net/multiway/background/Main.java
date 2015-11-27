@@ -1,4 +1,6 @@
-package com.net.multiway.background.model;
+package com.net.multiway.background;
+
+import com.net.multiway.background.model.Host;
 
 public class Main {
 
