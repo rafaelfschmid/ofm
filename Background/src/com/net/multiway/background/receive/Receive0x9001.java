@@ -6,11 +6,13 @@ import java.util.Vector;
 
 import com.net.multiway.background.model.Package;
 import com.net.multiway.background.utils.Utils;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /*Classe para recebimento de dados com o código: 0x9000001*/
 public class Receive0x9001 extends Package {
 
-    private Vector<Integer> data;
+    private int [] data;
     private DataInputStream in;
 
     public Receive0x9001(DataInputStream in) {
@@ -24,14 +26,17 @@ public class Receive0x9001 extends Package {
 
         in.read(d);
         this.length = Utils.byte4ToInt(d);
-        data = new Vector<Integer>(this.length);
+        data = new int[this.length];
+
+        FileWriter file = new FileWriter("resultTest.txt");
+        PrintWriter writer = new PrintWriter(file);
 
         byte[] b = new byte[2];
 
         for (int i = 0; i < this.length; i++) {
             in.read(b);
-            data.add(Utils.byte2ToInt(b));
-
+            data[i] = Utils.byte2ToInt(b);
+            writer.println(data[i]);    
         }
         in.read(d);
 
