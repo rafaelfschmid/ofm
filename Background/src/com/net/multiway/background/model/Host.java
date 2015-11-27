@@ -83,59 +83,79 @@ public class Host {
 
     private void receivePackage() throws IOException {
 
+        // ignorando bytes inuteis
         byte[] b = new byte[60];
-        try {
-            // ignorando bytes inuteis
-            this.in.read(b);
+        this.in.read(b);
+        
+        // ignorando cabecario
+        b = new byte[44];
+        this.in.read(b);
 
-            b = new byte[44];
-            // ignorando cabecario
-            this.in.read(b);
-            byte[] CMcode = new byte[4];
-            byte[] DataLen = new byte[4];
-            this.in.read(CMcode);
-            // System.out.println(Utils.byte4ToInt(DataLen));
-            this.in.read(DataLen);
-            // codigo de resposta padao
-            if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
-                Receive0xA000 r = new Receive0xA000(this.in, Utils.byte4ToInt(DataLen));
-                r.parser();
-            } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
-                Receive0x9001 r = new Receive0x9001(this.in);
-                r.parser();
-            } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
-                Receive0x9000 r = new Receive0x9000(this.in);
-                r.parser();
-            }
+        byte[] CMcode = new byte[4];
+        byte[] DataLen = new byte[4];
+        this.in.read(CMcode);
+        this.in.read(DataLen);
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        // codigo de resposta padao
+        if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
+            Receive0xA000 r = new Receive0xA000(this.in, Utils.byte4ToInt(DataLen));
+            r.parser();
+        } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
+            Receive0x9001 r = new Receive0x9001(this.in);
+            r.parser();
+        } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
+            Receive0x9000 r = new Receive0x9000(this.in);
+            r.parser();
         }
-
     }
 
     public void connect(Data0x1000 data) {
+
+        this.initialize();
         try {
-            // BD
+            
             sendPackage(data);
+            
             for (int i = 0; i < 10; i++) {
                 receivePackage();
-
                 sendPackage();
 
                 System.out.println(i + 1);
             }
-
             this.client.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void connect(Data0x1001 data) {
+
+        this.initialize();
+        try {
+            
+            sendPackage(data);
+            sendPackage();
+            this.client.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void connect(Data0x1002 data) {
+
+        this.initialize();
+        try {
+            
+            sendPackage(data);
+            sendPackage();
+            this.client.close();
+        
+        } catch (IOException ex) {
+            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
