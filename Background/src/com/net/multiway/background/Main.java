@@ -2,9 +2,6 @@ package com.net.multiway.background;
 
 import com.net.multiway.background.data.Data0x1000;
 import com.net.multiway.background.model.Host;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main {
 
