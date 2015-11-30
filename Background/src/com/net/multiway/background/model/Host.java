@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import com.net.multiway.background.data.Data0x1000;
 import com.net.multiway.background.data.Data0x1001;
