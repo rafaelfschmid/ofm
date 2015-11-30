@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATA0X1000")
+@Table(name = "DATA0X1002")
 @XmlRootElement
 
 public class Data0x1002 implements Data, Serializable {
