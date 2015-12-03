@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import com.net.multiway.background.data.Data0x1000;
 import com.net.multiway.background.data.Data0x1001;
@@ -103,6 +102,7 @@ public class Host {
         } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
             Receive0x9001 r = new Receive0x9001(this.in);
             r.parser();
+			r.print();
         } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
             Receive0x9000 r = new Receive0x9000(this.in);
             r.parser();

@@ -50,7 +50,7 @@ public class Send0x1002 {
 		os.write(Utils.intToByteArray(this.header.getDATALEN_4()));
 
 		// data
-		os.writeBytes(this.data.getData());
+		os.writeBytes(this.data.takeData());
 
 		// rsvd_4
 		os.write(Utils.intToByteArray(this.header.getRSVD2_ui4()));

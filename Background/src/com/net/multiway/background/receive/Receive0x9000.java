@@ -104,7 +104,7 @@ public class Receive0x9000 extends Package {
         return in;
     }
 
-    public void setIn(DataInputStream in) {
+    private void setIn(DataInputStream in) {
         this.in = in;
     }
 

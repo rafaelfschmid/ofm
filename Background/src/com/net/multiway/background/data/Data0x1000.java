@@ -37,10 +37,10 @@ public class Data0x1000 implements Data, Serializable {
     public Data0x1000() {
     }
 
-    public Data0x1000(int measureMode_4, int optimizeMode_4, float reflectionThreshold_4, int enabledRefresh_4,
+    public Data0x1000(Long id,int measureMode_4, int optimizeMode_4, float reflectionThreshold_4, int enabledRefresh_4,
             int refreshCycle_4, int testWaveLength_4, int measuringRangeOfTest_4, int testPulseWidth_4,
             int measuringTime_4, float refractiveIndex_4, float endThreshold_4, float nonReflactionThreshold_4) {
-
+		this.ID = id;
         this.measureMode = measureMode_4;
         this.optimizeMode = optimizeMode_4;
         this.reflectionThreshold = reflectionThreshold_4;
@@ -187,7 +187,7 @@ public class Data0x1000 implements Data, Serializable {
         this.nonReflactionThreshold = nonReflactionThreshold;
     }
 
-    public byte[] getData() {
+    public byte[] takeData() {
         byte[] b = new byte[48];
         byte[] c = new byte[4];
         int i = 0;
@@ -243,4 +243,21 @@ public class Data0x1000 implements Data, Serializable {
         return b;
 
     }
+	
+	public void copy(Data0x1000 data)
+	{
+		setEnabledRefresh(data.enabledRefresh);
+		setEndThreshold(data.endThreshold);
+		setID(data.ID);
+		setMeasureMode(data.measureMode);
+		setMeasuringRangeOfTest(data.measuringRangeOfTest);
+		setMeasuringTime(data.measuringTime);
+		setNonReflactionThreshold(data.nonReflactionThreshold);
+		setOptimizeMode(data.optimizeMode);
+		setReflectionThreshold(data.reflectionThreshold);
+		setRefractiveIndex(data.refractiveIndex);
+		setRefreshCycle(data.refreshCycle);
+		setTestPulseWidth(data.testPulseWidth);
+		setTestWaveLength(data.testWaveLength);
+	}
 }
