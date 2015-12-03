@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,22 +36,22 @@ public class Data0x1000 implements Data, Serializable {
     public Data0x1000() {
     }
 
-    public Data0x1000(Long id,int measureMode_4, int optimizeMode_4, float reflectionThreshold_4, int enabledRefresh_4,
-            int refreshCycle_4, int testWaveLength_4, int measuringRangeOfTest_4, int testPulseWidth_4,
-            int measuringTime_4, float refractiveIndex_4, float endThreshold_4, float nonReflactionThreshold_4) {
-		this.ID = id;
-        this.measureMode = measureMode_4;
-        this.optimizeMode = optimizeMode_4;
-        this.reflectionThreshold = reflectionThreshold_4;
-        this.enabledRefresh = enabledRefresh_4;
-        this.refreshCycle = refreshCycle_4;
-        this.testWaveLength = testWaveLength_4;
-        this.measuringRangeOfTest = measuringRangeOfTest_4;
-        this.testPulseWidth = testPulseWidth_4;
-        this.measuringTime = measuringTime_4;
-        this.refractiveIndex = refractiveIndex_4;
-        this.endThreshold = endThreshold_4;
-        this.nonReflactionThreshold = nonReflactionThreshold_4;
+    public Data0x1000(Long ID,int measureMode, int optimizeMode, float reflectionThreshold, int enabledRefresh,
+            int refreshCycle, int testWaveLength, int measuringRangeOfTest, int testPulseWidth,
+            int measuringTime, float refractiveIndex, float endThreshold, float nonReflactionThreshold) {
+		this.ID = ID;
+        this.measureMode = measureMode;
+        this.optimizeMode = optimizeMode;
+        this.reflectionThreshold = reflectionThreshold;
+        this.enabledRefresh = enabledRefresh;
+        this.refreshCycle = refreshCycle;
+        this.testWaveLength = testWaveLength;
+        this.measuringRangeOfTest = measuringRangeOfTest;
+        this.testPulseWidth = testPulseWidth;
+        this.measuringTime = measuringTime;
+        this.refractiveIndex = refractiveIndex;
+        this.endThreshold = endThreshold;
+        this.nonReflactionThreshold = nonReflactionThreshold;
     }
 
     @Id

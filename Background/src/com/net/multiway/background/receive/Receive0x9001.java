@@ -2,7 +2,6 @@ package com.net.multiway.background.receive;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Vector;
 
 import com.net.multiway.background.model.Package;
 import com.net.multiway.background.utils.Utils;
