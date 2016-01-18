@@ -29,7 +29,7 @@ public class Main {
 
 			switch (option) {
 				case 1: {
-					Data0x1000 data = new Data0x1000(Long.parseLong("2"),1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0);
+					Data0x1000 data = new Data0x1000(Long.parseLong("3"),1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0);
 					Data0x1000DAO dao = new Data0x1000DAO();
 					dao.create(data);
 					host.connect(data);

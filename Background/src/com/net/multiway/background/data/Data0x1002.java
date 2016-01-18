@@ -85,10 +85,10 @@ public class Data0x1002 implements Data, Serializable {
 	
 	public void copy(Data0x1002 data)
 	{
-		setID(data.ID);
-		setIp(data.ip);
-		setMask(data.mask);
-		setGateway(data.gateway);
+		setID(data.getID());
+		setIp(data.getIp());
+		setMask(data.getMask());
+		setGateway(data.getGateway());
 	}
 
 }
