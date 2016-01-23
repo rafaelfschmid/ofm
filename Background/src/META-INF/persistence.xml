@@ -4,6 +4,8 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>com.net.multiway.background.data.Data0x1000</class>
         <class>com.net.multiway.background.data.Data0x1002</class>
+		<class>com.net.multiway.background.data.Data0x9000</class>
+		<class>com.net.multiway.background.data.Data0x9001</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
