@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATA0X1000")
 @XmlRootElement
 
-public class Data0x1000 implements Data, Serializable {
+public class DataParameters implements Data, Serializable {
 
     private int measureMode;
     private int optimizeMode;
@@ -33,10 +33,10 @@ public class Data0x1000 implements Data, Serializable {
     private float nonReflactionThreshold;
     private Long ID;
 
-    public Data0x1000() {
+    public DataParameters() {
     }
 
-    public Data0x1000(Long ID,int measureMode, int optimizeMode, float reflectionThreshold, int enabledRefresh,
+    public DataParameters(Long ID,int measureMode, int optimizeMode, float reflectionThreshold, int enabledRefresh,
             int refreshCycle, int testWaveLength, int measuringRangeOfTest, int testPulseWidth,
             int measuringTime, float refractiveIndex, float endThreshold, float nonReflactionThreshold) {
 		
@@ -244,7 +244,7 @@ public class Data0x1000 implements Data, Serializable {
 
     }
 	
-	public void copy(Data0x1000 data)
+	public void copy(DataParameters data)
 	{
 		setEnabledRefresh(data.getEnabledRefresh());
 		setEndThreshold(data.getEndThreshold());

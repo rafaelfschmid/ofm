@@ -5,8 +5,8 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.Data0x1000;
-import com.net.multiway.background.data.Data0x1002;
+import com.net.multiway.background.data.DataParameters;
+import java.io.Serializable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,10 +15,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class Data0x1002DAO {
+public class ParametersDAO implements Serializable {
+
 	private EntityManagerFactory emf = null;
 
-	public Data0x1002DAO() {
+	public ParametersDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 
@@ -26,7 +27,7 @@ public class Data0x1002DAO {
 		return emf.createEntityManager();
 	}
 
-	public void create(Data0x1002 data) {
+	public void create(DataParameters data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
@@ -36,7 +37,7 @@ public class Data0x1002DAO {
 
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-			if (findData0x1002(data.getID()) != null) {
+			if (findData0x1000(data.getID()) != null) {
 				System.out.println("Data " + data.toString() + " already exists.");
 			}
 			throw ex;
@@ -47,12 +48,12 @@ public class Data0x1002DAO {
 		}
 	}
 
-	public void edit(Data0x1002 data) {
+	public void edit(DataParameters data) {
 		EntityManager em = null;
 
 		try {
 			em = getEntityManager();
-			Data0x1002 d = em.find(Data0x1002.class, data.getID());
+			DataParameters d = em.find(DataParameters.class, data.getID());
 			em.getTransaction().begin();
 			d.copy(data);
 			em.getTransaction().commit();
@@ -60,7 +61,7 @@ public class Data0x1002DAO {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findData0x1002(id) == null) {
+				if (findData0x1000(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -72,13 +73,12 @@ public class Data0x1002DAO {
 		}
 	}
 
-	public Data0x1002 findData0x1002(Long id) {
+	public DataParameters findData0x1000(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(Data0x1002.class, id);
+			return em.find(DataParameters.class, id);
 		} finally {
 			em.close();
 		}
 	}
-	
 }

@@ -14,17 +14,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*Classe para recebimento de dados com o código: 0x9000001*/
-public class Receive0x9001 extends Package {
+public class ReceiveValues extends Package {
 
 	private int[] data;
 	private DataInputStream in;
 
-	public Receive0x9001(DataInputStream in) {
+	public ReceiveValues(DataInputStream in) {
 		this.in = in;
 
 	}
 
-	public Receive0x9001() {
+	public ReceiveValues() {
 
 	}
 
@@ -57,7 +57,7 @@ public class Receive0x9001 extends Package {
 			}
 			out.flush();
 		} catch (IOException ex) {
-			Logger.getLogger(Receive0x9001.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

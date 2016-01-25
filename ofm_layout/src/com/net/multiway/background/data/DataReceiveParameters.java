@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "DATA0X9000")
 @XmlRootElement
-public class Data0x9000 implements Serializable {
+public class DataReceiveParameters implements Serializable {
 
 	private int sampleFrequency;
 	private int rangeOfTest;
@@ -49,7 +49,7 @@ public class Data0x9000 implements Serializable {
 
 	private Long ID;
 
-	public Data0x9000(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, Vector<Integer> data, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
+	public DataReceiveParameters(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, Vector<Integer> data, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
 		this.sampleFrequency = sampleFrequency;
 		this.rangeOfTest = rangeOfTest;
 		this.pulseWidth = pulseWidth;
@@ -293,7 +293,7 @@ public class Data0x9000 implements Serializable {
 	public void setID(Long ID) {
 		this.ID = ID;
 	}
-	public void copy(Data0x9000 data)
+	public void copy(DataReceiveParameters data)
 	{
 		setAcumulativeLoss(data.getAcumulativeLoss());
 		setAverageAttenuationCoefficient(data.getAverageAttenuationCoefficient());

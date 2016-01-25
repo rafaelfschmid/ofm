@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATA0X1002")
 @XmlRootElement
 
-public class Data0x1002 implements Data, Serializable {
+public class DataDevice implements Data, Serializable {
 
 	private String ip;
 	private String mask;
@@ -26,10 +26,10 @@ public class Data0x1002 implements Data, Serializable {
 
 	private Long ID;
 
-	public Data0x1002() {
+	public DataDevice() {
 	}
 
-	public Data0x1002(Long id, String ip, String mask, String gateway) {
+	public DataDevice(Long id, String ip, String mask, String gateway) {
 		this.ID = id;
 		this.ip = Utils.fillAddress(ip);
 		this.mask = Utils.fillAddress(mask);
@@ -83,7 +83,7 @@ public class Data0x1002 implements Data, Serializable {
 		this.gateway = gateway;
 	}
 	
-	public void copy(Data0x1002 data)
+	public void copy(DataDevice data)
 	{
 		setID(data.getID());
 		setIp(data.getIp());

@@ -3,21 +3,19 @@ package com.net.multiway.background.send;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import com.net.multiway.background.data.Data0x1000;
+import com.net.multiway.background.data.StopTest;
 import com.net.multiway.background.model.Header;
 import com.net.multiway.background.utils.Utils;
 
-/*Classe para envio de dados do código: 0x10000000*/
-
-public class Send0x1000 {
-
+/*Classe para envio de dados do código: 0x10000001*/
+public class SendStopTest {
 	private DataOutputStream os;
 	private Header header;
-	private Data0x1000 data;
-
-	public Send0x1000(DataOutputStream out, Data0x1000 data) {
+	private StopTest data;
+	
+	public SendStopTest(DataOutputStream out, StopTest data) {
 		this.os = out;
-		this.header = new Header(0x00000068, 0x10000000, 0x00000030);
+		this.header = new Header(0x0000003c, 0x10000001, 0x00000004);
 		this.data = data;
 	}
 
@@ -27,7 +25,6 @@ public class Send0x1000 {
 
 		// pklen_4
 		os.write(Utils.intToByteArray(this.header.getPKLEN_ui4()));
-
 		// rev_4
 		os.write(Utils.intToByteArray(this.header.getREV_ui4()));
 
@@ -52,8 +49,8 @@ public class Send0x1000 {
 		// datalen_4
 		os.write(Utils.intToByteArray(this.header.getDATALEN_4()));
 
-		// data
-		os.write(this.data.takeData());
+		// Data
+		os.write(Utils.intToByteArray(data.getControlMode()));
 
 		// rsvd_4
 		os.write(Utils.intToByteArray(this.header.getRSVD2_ui4()));

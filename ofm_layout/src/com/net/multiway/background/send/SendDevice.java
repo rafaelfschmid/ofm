@@ -3,19 +3,20 @@ package com.net.multiway.background.send;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.model.Header;
 import com.net.multiway.background.utils.Utils;
 
-/*Classe para envio de dados do código: 0x10000004*/
-public class Send0x1004 {
+/*Classe para envio de dados do código: 0x10000002*/
+public class SendDevice {
 	private DataOutputStream os;
 	private Header header;
-	
+	private DataDevice data;
 
-	public Send0x1004(DataOutputStream out) {
+	public SendDevice(DataOutputStream out, DataDevice data) {
 		this.os = out;
-		this.header = new Header(0x00000038, 0x10000004, 0x00000000);
-		
+		this.header = new Header(0x00000068, 0x10000002, 0x00000030);
+		this.data = data;
 	}
 
 	public void sender() throws IOException {
@@ -48,8 +49,10 @@ public class Send0x1004 {
 		// datalen_4
 		os.write(Utils.intToByteArray(this.header.getDATALEN_4()));
 
+		// data
+		os.writeBytes(this.data.takeData());
+
 		// rsvd_4
 		os.write(Utils.intToByteArray(this.header.getRSVD2_ui4()));
-
 	}
 }

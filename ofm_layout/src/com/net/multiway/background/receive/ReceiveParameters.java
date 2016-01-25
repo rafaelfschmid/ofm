@@ -8,12 +8,12 @@ import com.net.multiway.background.model.Package;
 import com.net.multiway.background.utils.Utils;
 
 /*Classe para recebimento de dados com o código: 0x9000000*/
-public class Receive0x9000 extends Package {
+public class ReceiveParameters extends Package {
 
     private DataInputStream in;
     private Vector<Integer> data;
 
-    public Receive0x9000(DataInputStream in) {
+    public ReceiveParameters(DataInputStream in) {
         this.setIn(in);
 
     }

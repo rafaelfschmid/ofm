@@ -1,6 +1,6 @@
 package com.net.multiway.background.data;
 
-public enum Data0x1001 {
+public enum StopTest {
 	CANCEL_TEST, TERMINATE_TEST;
 
 	public int getControlMode() {

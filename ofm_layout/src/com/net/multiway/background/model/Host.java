@@ -5,16 +5,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.net.multiway.background.data.Data0x1000;
-import com.net.multiway.background.data.Data0x1001;
-import com.net.multiway.background.data.Data0x1002;
-import com.net.multiway.background.receive.Receive0x9000;
-import com.net.multiway.background.receive.Receive0x9001;
-import com.net.multiway.background.receive.Receive0xA000;
-import com.net.multiway.background.send.Send0x1000;
-import com.net.multiway.background.send.Send0x1001;
-import com.net.multiway.background.send.Send0x1002;
-import com.net.multiway.background.send.Send0x1004;
+import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.StopTest;
+import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.receive.ReceiveParameters;
+import com.net.multiway.background.receive.ReceiveValues;
+import com.net.multiway.background.receive.ReceiveStatus;
+import com.net.multiway.background.send.SendParameters;
+import com.net.multiway.background.send.SendStopTest;
+import com.net.multiway.background.send.SendDevice;
+import com.net.multiway.background.send.SendConfirmationSignal;
 import com.net.multiway.background.utils.Utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,23 +60,23 @@ public class Host {
         }
     }
 
-    private void sendPackage(Data0x1000 data) throws IOException {
-        Send0x1000 s = new Send0x1000(this.out, data);
+    private void sendPackage(DataParameters data) throws IOException {
+        SendParameters s = new SendParameters(this.out, data);
         s.sender();
     }
 
-    private void sendPackage(Data0x1001 data) throws IOException {
-        Send0x1001 s = new Send0x1001(this.out, data);
+    private void sendPackage(StopTest data) throws IOException {
+        SendStopTest s = new SendStopTest(this.out, data);
         s.sender();
     }
 
-    private void sendPackage(Data0x1002 data) throws IOException {
-        Send0x1002 s = new Send0x1002(this.out, data);
+    private void sendPackage(DataDevice data) throws IOException {
+        SendDevice s = new SendDevice(this.out, data);
         s.sender();
     }
 
     private void sendPackage() throws IOException {
-        Send0x1004 s = new Send0x1004(this.out);
+        SendConfirmationSignal s = new SendConfirmationSignal(this.out);
         s.sender();
     }
 
@@ -97,19 +97,19 @@ public class Host {
 
         // codigo de resposta padao
         if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
-            Receive0xA000 r = new Receive0xA000(this.in, Utils.byte4ToInt(DataLen));
+            ReceiveStatus r = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
             r.parser();
         } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
-            Receive0x9001 r = new Receive0x9001(this.in);
+            ReceiveValues r = new ReceiveValues(this.in);
             r.parser();
 			r.print();
         } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
-            Receive0x9000 r = new Receive0x9000(this.in);
+            ReceiveParameters r = new ReceiveParameters(this.in);
             r.parser();
         }
     }
 
-    public void connect(Data0x1000 data) {
+    public void connect(DataParameters data) {
 
         this.initialize();
         try {
@@ -130,7 +130,7 @@ public class Host {
 
     }
 
-    public void connect(Data0x1001 data) {
+    public void connect(StopTest data) {
 
         this.initialize();
         try {
@@ -144,7 +144,7 @@ public class Host {
         }
     }
     
-    public void connect(Data0x1002 data) {
+    public void connect(DataDevice data) {
 
         this.initialize();
         try {

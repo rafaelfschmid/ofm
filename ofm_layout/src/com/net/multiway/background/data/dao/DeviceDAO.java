@@ -5,7 +5,8 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.Data0x9000;
+import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.DataDevice;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,11 +15,10 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class Data0x9000DAO {
-	
+public class DeviceDAO {
 	private EntityManagerFactory emf = null;
 
-	public Data0x9000DAO() {
+	public DeviceDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 
@@ -26,7 +26,7 @@ public class Data0x9000DAO {
 		return emf.createEntityManager();
 	}
 
-	public void create(Data0x9000 data) {
+	public void create(DataDevice data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
@@ -36,7 +36,7 @@ public class Data0x9000DAO {
 
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-			if (findData0x9000(data.getID()) != null) {
+			if (findData0x1002(data.getID()) != null) {
 				System.out.println("Data " + data.toString() + " already exists.");
 			}
 			throw ex;
@@ -47,12 +47,12 @@ public class Data0x9000DAO {
 		}
 	}
 
-	public void edit(Data0x9000 data) {
+	public void edit(DataDevice data) {
 		EntityManager em = null;
 
 		try {
 			em = getEntityManager();
-			Data0x9000 d = em.find(Data0x9000.class, data.getID());
+			DataDevice d = em.find(DataDevice.class, data.getID());
 			em.getTransaction().begin();
 			d.copy(data);
 			em.getTransaction().commit();
@@ -60,7 +60,7 @@ public class Data0x9000DAO {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findData0x9000(id) == null) {
+				if (findData0x1002(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -72,10 +72,10 @@ public class Data0x9000DAO {
 		}
 	}
 
-	public Data0x9000 findData0x9000(Long id) {
+	public DataDevice findData0x1002(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(Data0x9000.class, id);
+			return em.find(DataDevice.class, id);
 		} finally {
 			em.close();
 		}

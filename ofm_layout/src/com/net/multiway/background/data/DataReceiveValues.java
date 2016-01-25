@@ -22,12 +22,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "DATA0X9001")
 @XmlRootElement
-public class Data0x9001 implements Serializable{
+public class DataReceiveValues implements Serializable{
 	private int lenght;
 	private int data[];
 	private Long ID;
 
-	public Data0x9001(int lenght, int[] data) {
+	public DataReceiveValues(int lenght, int[] data) {
 		this.lenght = lenght;
 		this.data = data;
 	}
@@ -58,7 +58,7 @@ public class Data0x9001 implements Serializable{
 	public void setID(Long ID) {
 		this.ID = ID;
 	}
-	public void copy(Data0x9001 data)
+	public void copy(DataReceiveValues data)
 	{
 		this.setLenght(data.getLenght());
 		this.setID(data.getID());

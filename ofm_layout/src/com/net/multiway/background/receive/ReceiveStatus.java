@@ -8,12 +8,12 @@ import com.net.multiway.background.utils.Utils;
 
 /*Classe para recebimento de dados com o código: 0xA000000*/
 
-public class Receive0xA000 extends Package {
+public class ReceiveStatus extends Package {
 
 	private int data;
 	private DataInputStream in;
 
-	public Receive0xA000(DataInputStream in, int length) {
+	public ReceiveStatus(DataInputStream in, int length) {
 		this.in = in;
 		this.length = length;
 	}

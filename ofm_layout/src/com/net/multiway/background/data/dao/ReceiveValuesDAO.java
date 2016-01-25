@@ -5,8 +5,7 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.Data0x1000;
-import java.io.Serializable;
+import com.net.multiway.background.data.DataReceiveValues;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,11 +14,10 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class Data0x1000DAO implements Serializable {
-
+public class ReceiveValuesDAO {
 	private EntityManagerFactory emf = null;
 
-	public Data0x1000DAO() {
+	public ReceiveValuesDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 
@@ -27,7 +25,7 @@ public class Data0x1000DAO implements Serializable {
 		return emf.createEntityManager();
 	}
 
-	public void create(Data0x1000 data) {
+	public void create(DataReceiveValues data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
@@ -37,7 +35,7 @@ public class Data0x1000DAO implements Serializable {
 
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-			if (findData0x1000(data.getID()) != null) {
+			if (findData0x9001(data.getID()) != null) {
 				System.out.println("Data " + data.toString() + " already exists.");
 			}
 			throw ex;
@@ -48,12 +46,12 @@ public class Data0x1000DAO implements Serializable {
 		}
 	}
 
-	public void edit(Data0x1000 data) {
+	public void edit(DataReceiveValues data) {
 		EntityManager em = null;
 
 		try {
 			em = getEntityManager();
-			Data0x1000 d = em.find(Data0x1000.class, data.getID());
+			DataReceiveValues d = em.find(DataReceiveValues.class, data.getID());
 			em.getTransaction().begin();
 			d.copy(data);
 			em.getTransaction().commit();
@@ -61,7 +59,7 @@ public class Data0x1000DAO implements Serializable {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findData0x1000(id) == null) {
+				if (findData0x9001(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -73,10 +71,10 @@ public class Data0x1000DAO implements Serializable {
 		}
 	}
 
-	public Data0x1000 findData0x1000(Long id) {
+	public DataReceiveValues findData0x9001(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(Data0x1000.class, id);
+			return em.find(DataReceiveValues.class, id);
 		} finally {
 			em.close();
 		}
