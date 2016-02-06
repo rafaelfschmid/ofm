@@ -7,10 +7,19 @@ package com.net.multiway.background.controller;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.model.Device;
+import com.net.multiway.background.model.IController;
+import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
+import com.net.multiway.background.model.View;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
@@ -21,12 +30,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 
+
 /**
  * FXML Controller class
  *
  * @author rafael
  */
-public class ConfigurationWindowController {//implements Initializable {
+public class ConfigurationWindowController implements Initializable,IController {//implements Initializable {
 
     //device
     @FXML
@@ -383,15 +393,34 @@ public class ConfigurationWindowController {//implements Initializable {
     }
 
     @FXML
-    private void OnChangeToMonitor() {
-        int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex >= 0) {
-            mainApp.openMonitorWindow(devicesList.getSelectionModel().getSelectedItem());
-        } else {
-            mainApp.openMonitorWindow(devicesList.getItems().get(0));
-        }
-        
+    private void OnChangeToMonitor() throws IOException {
+//		int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
+//
+//        if (selectedIndex >= 0) {
+//            mainApp.openMonitorWindow(devicesList.getSelectionModel().getSelectedItem());
+//        } else {
+//            mainApp.openMonitorWindow(devicesList.getItems().get(0));
+//        }
+		MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
     }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+	}
+
+	@Override
+	public void handleSave(ActionEvent event) {
+
+	}
+
+	@Override
+	public void prepareForm(Mode mode) {
+
+	}
+
+	@Override
+	public void prepareMenu(Mode mode) {
+
+	}
 
 }

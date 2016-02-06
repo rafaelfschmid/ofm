@@ -7,10 +7,16 @@ package com.net.multiway.background.controller;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.model.Device;
+import com.net.multiway.background.model.IController;
+import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
@@ -19,14 +25,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.jws.WebParam;
 
 /**
  * FXML Controller class
  *
  * @author rafael
  */
-public class MonitorWindowController {
+public class MonitorWindowController implements Initializable,IController {
 
+	 private IController centerController;
     //implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -322,4 +330,23 @@ public class MonitorWindowController {
         mainApp.closeWindow(this.stage);
 
     }
+	public void setCenterController(IController controller) {
+        this.centerController = controller;
+    }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+	}
+
+	@Override
+	public void handleSave(ActionEvent event) {
+	}
+
+	@Override
+	public void prepareForm(Mode mode) {
+	}
+
+	@Override
+	public void prepareMenu(Mode mode) {
+	}
 }
