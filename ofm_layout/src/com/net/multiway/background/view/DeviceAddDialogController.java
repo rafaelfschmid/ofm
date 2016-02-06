@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.net.multiway.background.controller;
+package com.net.multiway.background.view;
 
 import com.net.multiway.background.model.Device;
 import javafx.fxml.FXML;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  *
  * @author rafael
  */
-public class DeviceAddController {
+public class DeviceAddDialogController {
 
     @FXML
     private TextField ipField;
@@ -51,7 +51,7 @@ public class DeviceAddController {
      *
      * @param vehicle
      */
-    public void setDevice(Device device) {
+    public void onHandlesetDevice(Device device) {
         this.device = device;
 
         ipField.setText(device.getIp());
@@ -80,7 +80,7 @@ public class DeviceAddController {
      * Chamado quando o usuário clica OK.
      */
     @FXML
-    private void handleOk() {
+    private void onHandleOk() {
 
         if (ipField.getText() == null) {
             alertIncorrectField("IP");
@@ -112,7 +112,7 @@ public class DeviceAddController {
      * Chamado quando o usuário clica Cancel.
      */
     @FXML
-    private void handleCancel() {
+    private void onHandleCancel() {
         dialogStage.close();
     }
 

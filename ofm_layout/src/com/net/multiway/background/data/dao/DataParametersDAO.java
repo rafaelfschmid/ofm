@@ -15,11 +15,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class ParametersDAO implements Serializable {
+public class DataParametersDAO implements Serializable {
 
 	private EntityManagerFactory emf = null;
 
-	public ParametersDAO() {
+	public DataParametersDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 

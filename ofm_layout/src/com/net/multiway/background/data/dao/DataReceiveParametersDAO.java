@@ -5,8 +5,7 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataReceiveParameters;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,10 +14,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DeviceDAO {
+public class DataReceiveParametersDAO {
+	
 	private EntityManagerFactory emf = null;
 
-	public DeviceDAO() {
+	public DataReceiveParametersDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 
@@ -26,7 +26,7 @@ public class DeviceDAO {
 		return emf.createEntityManager();
 	}
 
-	public void create(DataDevice data) {
+	public void create(DataReceiveParameters data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
@@ -36,7 +36,7 @@ public class DeviceDAO {
 
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-			if (findData0x1002(data.getID()) != null) {
+			if (findData0x9000(data.getID()) != null) {
 				System.out.println("Data " + data.toString() + " already exists.");
 			}
 			throw ex;
@@ -47,12 +47,12 @@ public class DeviceDAO {
 		}
 	}
 
-	public void edit(DataDevice data) {
+	public void edit(DataReceiveParameters data) {
 		EntityManager em = null;
 
 		try {
 			em = getEntityManager();
-			DataDevice d = em.find(DataDevice.class, data.getID());
+			DataReceiveParameters d = em.find(DataReceiveParameters.class, data.getID());
 			em.getTransaction().begin();
 			d.copy(data);
 			em.getTransaction().commit();
@@ -60,7 +60,7 @@ public class DeviceDAO {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findData0x1002(id) == null) {
+				if (findData0x9000(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -72,10 +72,10 @@ public class DeviceDAO {
 		}
 	}
 
-	public DataDevice findData0x1002(Long id) {
+	public DataReceiveParameters findData0x9000(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(DataDevice.class, id);
+			return em.find(DataReceiveParameters.class, id);
 		} finally {
 			em.close();
 		}

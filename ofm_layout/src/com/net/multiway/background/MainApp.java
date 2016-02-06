@@ -5,9 +5,9 @@
  */
 package com.net.multiway.background;
 
-import com.net.multiway.background.controller.ConfigurationWindowController;
-import com.net.multiway.background.controller.DeviceAddController;
-import com.net.multiway.background.controller.MonitorWindowController;
+import com.net.multiway.background.view.ConfigurationWindowController;
+import com.net.multiway.background.view.DeviceAddDialogController;
+import com.net.multiway.background.view.MonitorWindowController;
 import com.net.multiway.background.model.Device;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
@@ -37,6 +37,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 
 public class MainApp extends Application {
 
@@ -193,7 +198,13 @@ public class MainApp extends Application {
 
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Optical Fiber Monitor");
-		this.primaryStage.setOnCloseRequest(e -> flush());
+		this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+});
 		initRootLayout();
 // Shows the scene containing RootLayout
 		Scene scene = new Scene(rootLayout);
@@ -241,48 +252,7 @@ public class MainApp extends Application {
 		listWindow.remove(stage);
 	}
 
-	/**
-	 * Inicializa o root layout (layout base).
-	 *
-	 * @param device
-	 */
-	public void openMonitorWindow(Device device) {
-		try {
-			// Carrega o person overview.
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/MonitorWindow.fxml"));
-			AnchorPane monitorWindow = (AnchorPane) loader.load();
-
-			Stage stage;
-			int index = findWindow(device);
-			if (index >= 0) {
-				stage = listWindow.get(index);
-				//stage.show();
-				stage.toFront();
-
-			} else {
-				Scene scene = new Scene(monitorWindow);
-				stage = new Stage();
-
-				listWindow.add(stage);
-				stage.setTitle("Monitor - " + device.getIp());
-				stage.setScene(scene);
-				stage.show();
-			}
-
-			//Scene node = new Scene(configurationWindow);
-//           mainScene.getChildren().add(g);
-			// Dá ao controlador acesso à the main app.
-			MonitorWindowController controller = loader.getController();
-			controller.setStage(stage);
-			controller.setMainApp(this);
-			controller.setDevice(device);
-
-		} catch (IOException ex) {
-			Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
-
+	
 	/**
 	 * Abre uma janela para editar detalhes para o dispositivo especificado. Se
 	 * o usuário clicar OK, as mudanças são salvas no objeto Device fornecido
@@ -290,40 +260,41 @@ public class MainApp extends Application {
 	 *
 	 * @param device O objeto device a ser editado
 	 * @return true Se o usuário clicou OK, caso contrário false.
-	 */
-	public boolean openDeviceDialog(Device device) {
-		try {
-			// Carrega o arquivo fxml e cria um novo stage para a janela popup.
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/DeviceEditDialog.fxml"));
-			AnchorPane page;
-
-			page = (AnchorPane) loader.load();
-
-			// Cria o palco dialogStage.
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Editar dispositivo");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
-			Scene scene = new Scene(page);
-			dialogStage.setScene(scene);
-
-			// Define o device no controller.
-			DeviceAddController controller = loader.getController();
-			controller.setDialogStage(dialogStage);
-			controller.setDevice(device);
-
-			// Mostra a janela e espera até o usuário fechar.
-			dialogStage.showAndWait();
-
-			return controller.isOkClicked();
-
-		} catch (IOException ex) {
-			Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-			return false;
-		}
-
-	}
+	 */ 
+	// Mandar para o ConfigurationWindowController
+//	public boolean openDeviceDialog(Device device) {
+//		try {
+//			// Carrega o arquivo fxml e cria um novo stage para a janela popup.
+//			FXMLLoader loader = new FXMLLoader();
+//			loader.setLocation(MainApp.class.getResource("view/DeviceEditDialog.fxml"));
+//			AnchorPane page;
+//
+//			page = (AnchorPane) loader.load();
+//
+//			// Cria o palco dialogStage.
+//			Stage dialogStage = new Stage();
+//			dialogStage.setTitle("Editar dispositivo");
+//			dialogStage.initModality(Modality.WINDOW_MODAL);
+//			dialogStage.initOwner(primaryStage);
+//			Scene scene = new Scene(page);
+//			dialogStage.setScene(scene);
+//
+//			// Define o device no controller.
+//			DeviceAddDialogController controller = loader.getController();
+//			controller.setDialogStage(dialogStage);
+//			controller.setDevice(device);
+//
+//			// Mostra a janela e espera até o usuário fechar.
+//			dialogStage.showAndWait();
+//
+//			return controller.isOkClicked();
+//
+//		} catch (IOException ex) {
+//			Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+//			return false;
+//		}
+//
+//	}
 
 	/**
 	 * Retorna o palco principal.

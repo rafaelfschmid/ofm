@@ -14,10 +14,10 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class ReceiveValuesDAO {
+public class DataReceiveValuesDAO {
 	private EntityManagerFactory emf = null;
 
-	public ReceiveValuesDAO() {
+	public DataReceiveValuesDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.controller.ConfigurationWindowController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.ConfigurationWindowController">
    <children>
       <SplitPane dividerPositions="0.2595190380761523" prefHeight="610.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -18,8 +25,8 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
                               <Label prefHeight="32.0" prefWidth="84.0" text="Dispositivos" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0" />
-                              <Button mnemonicParsing="false" onAction="#OnDeleteDevice" prefHeight="26.0" prefWidth="29.0" text="-" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="3.0" />
-                              <Button mnemonicParsing="false" onAction="#OnAddDevice" text="+" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0" />
+                              <Button mnemonicParsing="false" onAction="#onHandleDeleteDevice" prefHeight="26.0" prefWidth="29.0" text="-" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="3.0" />
+                              <Button mnemonicParsing="false" onAction="#onHandleAddDevice" text="+" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0" />
                               <ListView fx:id="devicesList" prefHeight="168.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
                            </children>
                         </AnchorPane>
@@ -71,8 +78,8 @@
                                     <TextField fx:id="nonReflactionThresholdField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                                  </children>
                               </GridPane>
-                              <Button layoutX="189.0" layoutY="330.0" mnemonicParsing="false" onAction="#OnSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="330.0" />
-                              <Button layoutX="119.0" layoutY="330.0" mnemonicParsing="false" onAction="#OnEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="330.0" />
+                              <Button layoutX="189.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="330.0" />
+                              <Button layoutX="119.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="330.0" />
                            </children>
                         </AnchorPane>
                     </items>
@@ -115,10 +122,10 @@
                         </AnchorPane>
                     </items>
                   </SplitPane>
-                  <Button layoutX="253.0" layoutY="475.0" mnemonicParsing="false" onAction="#OnSetReference" prefHeight="26.0" prefWidth="88.0" text="Referencia" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="105.0" />
-                  <Button layoutX="146.0" layoutY="472.0" mnemonicParsing="false" onAction="#OnExport" prefHeight="26.0" prefWidth="88.0" text="Exportar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="205.0" />
-                  <Button layoutX="37.0" layoutY="480.0" mnemonicParsing="false" onAction="#OnExecute" prefHeight="26.0" prefWidth="88.0" text="Executar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="305.0" />
-                  <Button layoutX="413.0" layoutY="478.0" mnemonicParsing="false" onAction="#OnChangeToMonitor" prefHeight="26.0" prefWidth="88.0" text="Monitor" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <Button layoutX="253.0" layoutY="475.0" mnemonicParsing="false" onAction="#onHandleSetReference" prefHeight="26.0" prefWidth="88.0" text="Referencia" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="105.0" />
+                  <Button layoutX="146.0" layoutY="472.0" mnemonicParsing="false" onAction="#onHandleExport" prefHeight="26.0" prefWidth="88.0" text="Exportar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="205.0" />
+                  <Button layoutX="37.0" layoutY="480.0" mnemonicParsing="false" onAction="#onHandleExecute" prefHeight="26.0" prefWidth="88.0" text="Executar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="305.0" />
+                  <Button layoutX="413.0" layoutY="478.0" mnemonicParsing="false" onAction="#onHandleChangeToMonitor" prefHeight="26.0" prefWidth="88.0" text="Monitor" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                </children>
             </AnchorPane>
         </items>

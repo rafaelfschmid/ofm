@@ -3,61 +3,44 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.net.multiway.background.controller;
+package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.model.Device;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
+import com.net.multiway.background.model.View;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javax.jws.WebParam;
+import javafx.util.Callback;
+
 
 /**
  * FXML Controller class
  *
  * @author rafael
  */
-public class MonitorWindowController implements Initializable,IController {
-
-	 private IController centerController;
-    //implements Initializable {
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public void setDevice(Device device) {
-        this.device = device;
-        
-        ipLabel.setText(device.getIp());
-        maskLabel.setText(device.getMask());
-        gatewayLabel.setText(device.getGateway());
-    }
-
-    private Stage stage;
-    private Device device;
+public class ConfigurationWindowController implements Initializable,IController {//implements Initializable {
 
     //device
     @FXML
-    private Label ipLabel;
-    @FXML
-    private Label maskLabel;
-    @FXML
-    private Label gatewayLabel;
+    private ListView<Device> devicesList;
 
     // Gráfico
     @FXML
@@ -110,27 +93,32 @@ public class MonitorWindowController implements Initializable,IController {
     private TableColumn<Result, Double> accumulationColumn;
     @FXML
     private TableColumn<Result, Double> attenuationCoefficientColumn;
-    
-    //result
-//    @FXML
-//    private TableView<Warning> warningsTable;
-//    @FXML
-//    private TableColumn<Warning, Integer> idColumn;
-//    @FXML
-//    private TableColumn<Warning, String> warningColumn;
-//    @FXML
-//    private TableColumn<Warning, String> descriptionColumn;
-//    @FXML
-//    private TableColumn<Warning, Date> dateHourColumn;
-
-// Reference to the main application.
-    private MainApp mainApp;
 
     /**
      * Initializes the controller class.
      */
     @FXML
     public void initialize() {
+        devicesList.setCellFactory(new Callback<ListView<Device>, ListCell<Device>>() {
+
+            @Override
+            public ListCell<Device> call(ListView<Device> p) {
+
+                ListCell<Device> cell = new ListCell<Device>() {
+
+                    @Override
+                    protected void updateItem(Device t, boolean bln) {
+                        super.updateItem(t, bln);
+                        if (t != null) {
+                            setText(t.getIp());
+                        }
+                    }
+
+                };
+
+                return cell;
+            }
+        });
 
         // Inicializa grafico
         // Inicializa a tabela de parametros
@@ -166,15 +154,6 @@ public class MonitorWindowController implements Initializable,IController {
 
     }
 
-    /**
-     * É chamado pela aplicação principal para dar uma referência de volta a si
-     * mesmo.
-     *
-     * @param mainApp
-     */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-    }
 
     private void alertToSaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -193,111 +172,94 @@ public class MonitorWindowController implements Initializable,IController {
         alert.showAndWait();
     }
 
-    @FXML
-    private void OnEditParameters() {
-        measureModeField.setOpacity(1);
-        measureModeField.setEditable(true);
+    private void alertDeviceSelection() {
+        // Nada selecionado.
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Nenhuma seleção");
+        alert.setHeaderText("Nenhum dispositivo foi selecionado");
+        alert.setContentText("Por favor, selecione um dispositivo.");
 
-        optimizeModeField.setOpacity(1);
-        optimizeModeField.setEditable(true);
-
-        reflectionThresholdField.setOpacity(1);
-        reflectionThresholdField.setEditable(true);
-
-        enabledRefreshField.setOpacity(1);
-        enabledRefreshField.setEditable(true);
-
-        refreshCycleField.setOpacity(1);
-        refreshCycleField.setEditable(true);
-
-        testWaveLengthField.setOpacity(1);
-        testWaveLengthField.setEditable(true);
-
-        measuringRangeOfTestField.setOpacity(1);
-        measuringRangeOfTestField.setEditable(true);
-
-        testPulseWidthField.setOpacity(1);
-        testPulseWidthField.setEditable(true);
-
-        measuringTimeField.setOpacity(1);
-        measuringTimeField.setEditable(true);
-
-        refractiveIndexField.setOpacity(1);
-        refractiveIndexField.setEditable(true);
-
-        endThresholdField.setOpacity(1);
-        endThresholdField.setEditable(true);
-
-        nonReflactionThresholdField.setOpacity(1);
-        nonReflactionThresholdField.setEditable(true);
+        alert.showAndWait();
     }
 
-    @FXML
-    private void OnSaveParameters() {
-        try {
-            int measureMode = Integer.parseInt(measureModeField.getText());
-            int optimizeMode = Integer.parseInt(measureModeField.getText());
+    private boolean alertDeviceDeletion(String device) {
+        // Nada selecionado.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Exclusão de dispositivo");
+        alert.setHeaderText("Deseja excluir o dispositivo: " + device + "?");
 
-            /**
-             * PARSEFLOAT NÃO FUNCIONA -- ENTENDER POR QUE
-             */
-            float reflectionThreshold = Float.parseFloat(measureModeField.getText());
-            int enabledRefresh = Integer.parseInt(measureModeField.getText());
-            int refreshCycle = Integer.parseInt(measureModeField.getText());
-            int testWaveLength = Integer.parseInt(measureModeField.getText());
-            int measuringRangeOfTest = Integer.parseInt(measureModeField.getText());
-            int testPulseWidth = Integer.parseInt(measureModeField.getText());
-            int measuringTime = Integer.parseInt(measureModeField.getText());
-            float refractiveIndex = Float.parseFloat(measureModeField.getText());
-            float endThreshold = Float.parseFloat(measureModeField.getText());
-            float nonReflactionThreshold = Float.parseFloat(measureModeField.getText());
+        alert.showAndWait();
 
-        } catch (NumberFormatException ex) {
-            alertIncorrectTypeParameters(ex.getMessage());
-            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+        if (alert.getResult() == null) {
+            return false;
         }
 
-        measureModeField.setOpacity(0.4);
-        measureModeField.setEditable(false);
+        return true;
+    }
 
-        optimizeModeField.setOpacity(0.4);
-        optimizeModeField.setEditable(false);
+    /**
+     * Chamado quando o usuário clica no botão delete.
+     */
+    @FXML
+    private void onHandleDeleteDevice() {
 
-        reflectionThresholdField.setOpacity(0.4);
-        reflectionThresholdField.setEditable(false);
+        int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
-        enabledRefreshField.setOpacity(0.4);
-        enabledRefreshField.setEditable(false);
+        if (selectedIndex >= 0) {
+            if (alertDeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
+                devicesList.getItems().remove(selectedIndex);
+            }
 
-        refreshCycleField.setOpacity(0.4);
-        refreshCycleField.setEditable(false);
+        } else {
+            alertDeviceSelection();
+        }
 
-        testWaveLengthField.setOpacity(0.4);
-        testWaveLengthField.setEditable(false);
+        devicesList.setCellFactory(new Callback<ListView<Device>, ListCell<Device>>() {
 
-        measuringRangeOfTestField.setOpacity(0.4);
-        measuringRangeOfTestField.setEditable(false);
+            @Override
+            public ListCell<Device> call(ListView<Device> p) {
 
-        testPulseWidthField.setOpacity(0.4);
-        testPulseWidthField.setEditable(false);
+                ListCell<Device> cell = new ListCell<Device>() {
 
-        measuringTimeField.setOpacity(0.4);
-        measuringTimeField.setEditable(false);
+                    @Override
+                    protected void updateItem(Device t, boolean bln) {
+                        super.updateItem(t, bln);
+                        if (t != null) {
+                            setText(t.getIp());
+                        }
+                    }
 
-        refractiveIndexField.setOpacity(0.4);
-        refractiveIndexField.setEditable(false);
+                };
 
-        endThresholdField.setOpacity(0.4);
-        endThresholdField.setEditable(false);
+                return cell;
+            }
+        });
+    }
 
-        nonReflactionThresholdField.setOpacity(0.4);
-        nonReflactionThresholdField.setEditable(false);
-
+    /**
+     * Chamado quando o usuário clica no botão delete.
+     */
+    @FXML
+    private void onHandleAddDevice() {
+//        Device tempDevice = new Device();
+//        boolean okClicked = MainApp.getInstance().openDeviceDialog(tempDevice);
+//        if (okClicked) {
+//            MainApp.getInstance().getDevicesData().add(tempDevice);
+//        }
     }
 
     @FXML
-    private void OnExecute() {
+    private void onHandleEditParameters() {
+       
+    }
+
+    @FXML
+    private void onHandleSaveParameters() {
+        
+    }
+
+    @FXML
+    private void onHandleExecute() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Implementar");
         alert.setHeaderText("//TO DO");
@@ -305,7 +267,7 @@ public class MonitorWindowController implements Initializable,IController {
     }
 
     @FXML
-    private void OnExport() {
+    private void onHandleExport() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Implementar");
         alert.setHeaderText("//TO DO");
@@ -313,7 +275,7 @@ public class MonitorWindowController implements Initializable,IController {
     }
 
     @FXML
-    private void OnSetReference() {
+    private void onHandleSetReference() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Implementar");
         alert.setHeaderText("//TO DO");
@@ -321,17 +283,8 @@ public class MonitorWindowController implements Initializable,IController {
     }
 
     @FXML
-    private void OnChangeToConfiguration() {
-        //mainApp.openMonitorWindow();
-    }
-
-    @FXML
-    private void OnClose() {
-        mainApp.closeWindow(this.stage);
-
-    }
-	public void setCenterController(IController controller) {
-        this.centerController = controller;
+    private void onHandleChangeToMonitor() throws IOException {
+		MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
     }
 
 	@Override
@@ -340,13 +293,17 @@ public class MonitorWindowController implements Initializable,IController {
 
 	@Override
 	public void handleSave(ActionEvent event) {
+
 	}
 
 	@Override
 	public void prepareForm(Mode mode) {
+
 	}
 
 	@Override
 	public void prepareMenu(Mode mode) {
+
 	}
+
 }
