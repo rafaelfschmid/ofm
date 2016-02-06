@@ -29,20 +29,20 @@ public enum Mode {
     NEW;
 
     /**
-     * VIEW returns "Visualização"<br />
-     * EDIT returns "Edição" <br />
-     * NEW returns "Criação"
+     * VIEW returns "Visualizaï¿½ï¿½o"<br />
+     * EDIT returns "Ediï¿½ï¿½o" <br />
+     * NEW returns "Criaï¿½ï¿½o"
      *
      * @return String representation of the Mode Action
      */
     public String getActionName() {
         switch (this) {
             case VIEW:
-                return "Visualização";
+                return "View";
             case EDIT:
-                return "Edição";
+                return "Edit";
             case NEW:
-                return "Criação";
+                return "New";
             default:
                 throw new AssertionError(this.name());
 
