@@ -22,47 +22,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "DATA0X9001")
 @XmlRootElement
-public class DataReceiveValues implements Serializable{
-	private int lenght;
-	private int data[];
-	private Long ID;
+public class DataReceiveValues implements Serializable {
 
-	public DataReceiveValues(int lenght, int[] data) {
-		this.lenght = lenght;
-		this.data = data;
-	}
+    private int lenght;
+    private int data[];
+    private Long ID;
 
-	@Basic(optional = false)
-	@Column(name = "Lenght")
-	public int getLenght() {
-		return lenght;
-	}
+    public DataReceiveValues() {
+    }
 
-	public void setLenght(int lenght) {
-		this.lenght = lenght;
-	}
-	@OneToMany( mappedBy = "DATA0X9001", cascade = CascadeType.ALL)	
-	public int[] getData() {
-		return data;
-	}
+    @Basic(optional = false)
+    @Column(name = "Lenght")
+    public int getLenght() {
+        return lenght;
+    }
 
-	public void setData(int[] data) {
-		this.data = data;
-	}
+    public void setLenght(int lenght) {
+        this.lenght = lenght;
+    }
 
-	@Id
-	public Long getID() {
-		return ID;
-	}
+    @OneToMany(mappedBy = "DATA0X9001", cascade = CascadeType.ALL)
+    public int[] getData() {
+        return data;
+    }
 
-	public void setID(Long ID) {
-		this.ID = ID;
-	}
-	public void copy(DataReceiveValues data)
-	{
-		this.setLenght(data.getLenght());
-		this.setID(data.getID());
-		this.setData(data.getData());
-	}
-	
+    public void setData(int[] data) {
+        this.data = data;
+    }
+
+    @Id
+    public Long getID() {
+        return ID;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
+
+    public void copy(DataReceiveValues data) {
+        this.setLenght(data.getLenght());
+        this.setID(data.getID());
+        this.setData(data.getData());
+    }
 }

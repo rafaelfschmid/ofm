@@ -28,15 +28,14 @@ public class DeviceComunicator {
     private DataInputStream in;
     private DataOutputStream out;
     private Socket client;
-	private ReceiveStatus receiveStatusData;
-	private ArrayList<ReceiveValues> receiveValuesList;
-	private ReceiveParameters receiveParametersData;
+    private ReceiveStatus receiveStatusData;
+    private ArrayList<ReceiveValues> receiveValuesList;
+    private ReceiveParameters receiveParametersData;
 
-	
     public DeviceComunicator(String i, int d) {
         this.door = d;
         this.ip = i;
-		receiveValuesList = new ArrayList<ReceiveValues>();
+        receiveValuesList = new ArrayList<ReceiveValues>();
     }
 
     public int getDoor() {
@@ -91,7 +90,7 @@ public class DeviceComunicator {
         // ignorando bytes inuteis
         byte[] b = new byte[60];
         this.in.read(b);
-        
+
         // ignorando cabecario
         b = new byte[44];
         this.in.read(b);
@@ -108,7 +107,7 @@ public class DeviceComunicator {
         } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
             ReceiveValues r = new ReceiveValues(this.in);
             r.parser();
-			receiveValuesList.add(r);
+            receiveValuesList.add(r);
         } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
             receiveParametersData = new ReceiveParameters(this.in);
             receiveParametersData.parser();
@@ -119,9 +118,9 @@ public class DeviceComunicator {
 
         this.initialize();
         try {
-            
+
             sendPackage(data);
-            
+
             for (int i = 0; i < 10; i++) {
                 receivePackage();
                 sendPackage();
@@ -140,37 +139,36 @@ public class DeviceComunicator {
 
         this.initialize();
         try {
-            
+
             sendPackage(data);
             sendPackage();
             this.client.close();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void connect(DataDevice data) {
 
         this.initialize();
         try {
-            
+
             sendPackage(data);
             sendPackage();
             this.client.close();
-        
+
         } catch (IOException ex) {
             Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-	public ArrayList<ReceiveValues> getReceiveValuesList()
-	{
-		return this.receiveValuesList;
-	}
-	public ReceiveParameters getReceiveParametersData() {
-		return receiveParametersData;
-	}
-	
-	
+
+    public ArrayList<ReceiveValues> getReceiveValuesList() {
+        return this.receiveValuesList;
+    }
+
+    public ReceiveParameters getReceiveParametersData() {
+        return receiveParametersData;
+    }
 
 }

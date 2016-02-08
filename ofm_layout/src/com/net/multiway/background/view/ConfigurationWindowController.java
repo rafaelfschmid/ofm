@@ -14,11 +14,15 @@ import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
+import com.net.multiway.background.receive.ReceiveValues;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -104,8 +109,8 @@ public class ConfigurationWindowController implements Initializable, IController
     private TableColumn<Result, Double> attenuationCoefficientColumn;
     @FXML
     private Button buttonSave;
-	@FXML
-	private Button buttonEdit;
+    @FXML
+    private Button buttonEdit;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -279,8 +284,25 @@ public class ConfigurationWindowController implements Initializable, IController
     @FXML
     private void onHandleExecute() {
         DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
-		parameters.copy(new DataParameters(Long.parseLong("1"),1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
-		host.connect(parameters);
+        parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
+        host.connect(parameters);
+
+        plotGraph(host.getReceiveValuesList());
+    }
+
+    private void plotGraph(ArrayList<ReceiveValues> receiveValuesList) {
+        ObservableList<XYChart.Series<Double, Double>> coord = FXCollections.observableArrayList();
+        XYChart.Series<Double, Double> series = new XYChart.Series<>();
+        for (ReceiveValues receiveValues : receiveValuesList) {
+            int[] data = receiveValues.getDataValues();
+            for (int i = 0; i < data.length; i++) {
+                series.getData().add(new XYChart.Data(i, data[i]));
+            }
+            coord.addAll(series);
+            break;
+        }
+
+        grafico.getData().add(series);
     }
 
     @FXML
