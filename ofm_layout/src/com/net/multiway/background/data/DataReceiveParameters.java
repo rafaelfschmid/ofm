@@ -48,6 +48,10 @@ public class DataReceiveParameters implements Serializable {
 	private float acumulativeLoss;
 
 	private Long ID;
+	public DataReceiveParameters()
+	{
+		
+	}
 
 	public DataReceiveParameters(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, Vector<Integer> data, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
 		this.sampleFrequency = sampleFrequency;
