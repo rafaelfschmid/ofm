@@ -64,21 +64,21 @@
                                     <Label text="Refractive Index" GridPane.rowIndex="9" />
                                     <Label text="End Threshold" GridPane.rowIndex="10" />
                                     <Label text="Non Reflaction Threshold" GridPane.rowIndex="11" />
-                                    <TextField fx:id="measureModeField" editable="false" opacity="0.4" GridPane.columnIndex="1" />
-                                    <TextField fx:id="optimizeModeField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField fx:id="reflectionThresholdField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField fx:id="enabledRefreshField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <TextField fx:id="refreshCycleField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <TextField fx:id="testWaveLengthField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                    <TextField fx:id="measuringRangeOfTestField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                    <TextField fx:id="testPulseWidthField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                    <TextField fx:id="measuringTimeField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                    <TextField fx:id="refractiveIndexField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                    <TextField fx:id="endThresholdField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                                    <TextField fx:id="nonReflactionThresholdField" editable="false" opacity="0.4" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                                    <TextField fx:id="measureModeField" GridPane.columnIndex="1" />
+                                    <TextField fx:id="optimizeModeField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="reflectionThresholdField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="enabledRefreshField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="refreshCycleField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="testWaveLengthField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <TextField fx:id="measuringRangeOfTestField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <TextField fx:id="testPulseWidthField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <TextField fx:id="measuringTimeField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                    <TextField fx:id="refractiveIndexField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                    <TextField fx:id="endThresholdField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                                    <TextField fx:id="nonReflactionThresholdField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                                  </children>
                               </GridPane>
-                              <Button layoutX="189.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="330.0" />
+                              <Button fx:id="buttonSave" layoutX="189.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="330.0" />
                               <Button layoutX="119.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="330.0" />
                            </children>
                         </AnchorPane>

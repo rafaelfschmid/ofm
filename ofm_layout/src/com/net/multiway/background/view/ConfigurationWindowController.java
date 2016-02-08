@@ -7,6 +7,8 @@ package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
+
+import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
@@ -24,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -44,6 +47,8 @@ public class ConfigurationWindowController implements Initializable, IController
     //device
     @FXML
     private ListView<DataDevice> devicesList;
+
+    private DataParameters parameters;
 
     // Gráfico
     @FXML
@@ -96,44 +101,15 @@ public class ConfigurationWindowController implements Initializable, IController
     private TableColumn<Result, Double> accumulationColumn;
     @FXML
     private TableColumn<Result, Double> attenuationCoefficientColumn;
-
-    /**
-     * Initializes the controller class.
-     */
     @FXML
-    public void initialize() {
+    private Button buttonSave;
 
-        // Inicializa a tabela de parametros
-        measureModeField.setText("1");
-        optimizeModeField.setText("2");
-        reflectionThresholdField.setText("3.783");
-        enabledRefreshField.setText("4");
-        refreshCycleField.setText("5");
-        testWaveLengthField.setText("6");
-        measuringRangeOfTestField.setText("7");
-        testPulseWidthField.setText("8");
-        measuringTimeField.setText("9");
-        refractiveIndexField.setText("10.4898");
-        endThresholdField.setText("11.2672");
-        nonReflactionThresholdField.setText("12.3783");
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        parameters = new DataParameters();
 
-        // Inicializa a tabela de resultados
-        numeroColumn.setCellValueFactory(cellData -> cellData.getValue().numberProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().distanceProperty());
-        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().distanceProperty());
-        insertLossColumn.setCellValueFactory(cellData -> cellData.getValue().insertLossProperty());
-        reflectLossColumn.setCellValueFactory(cellData -> cellData.getValue().reflectLossProperty());
-        accumulationColumn.setCellValueFactory(cellData -> cellData.getValue().accumulationLossProperty());
-        attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().attenuationCoefficientProperty());
-
-        numeroColumn.setMinWidth(40);
-        typeColumn.setMinWidth(55);
-        distanceColumn.setMinWidth(90);
-        insertLossColumn.setMinWidth(105);
-        reflectLossColumn.setMinWidth(110);
-        accumulationColumn.setMinWidth(160);
-        attenuationCoefficientColumn.setMinWidth(190);
-
+        devicesList.setItems(MainApp.getInstance().getDevicesData());
+        updateDeviceList();
     }
 
     private void alertToSaveParameters() {
@@ -194,7 +170,7 @@ public class ConfigurationWindowController implements Initializable, IController
         } else {
             alertDeviceSelection();
         }
-        
+
         updateDeviceList();
     }
 
@@ -240,14 +216,61 @@ public class ConfigurationWindowController implements Initializable, IController
 
     }
 
+    private void alertIncorrectField(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Campo Incorreto");
+        alert.setHeaderText("Por favor, verifique o campo " + text + ".");
+
+        alert.showAndWait();
+    }
+
     @FXML
     private void onHandleEditParameters() {
-
+        prepareForm(Mode.EDIT);
     }
 
     @FXML
     private void onHandleSaveParameters() {
+        if (measureModeField.getText().isEmpty()) {
+            alertIncorrectField("Measure Mode");
+        } else if (optimizeModeField.getText().isEmpty()) {
+            alertIncorrectField("Optimize Mode");
+        } else if (reflectionThresholdField.getText().isEmpty()) {
+            alertIncorrectField("Reflection Threshold");
+        } else if (enabledRefreshField.getText().isEmpty()) {
+            alertIncorrectField("Enabled Refresh");
+        } else if (refreshCycleField.getText().isEmpty()) {
+            alertIncorrectField("Refresh Cycle");
+        } else if (testWaveLengthField.getText().isEmpty()) {
+            alertIncorrectField("Test Wave Length");
+        } else if (measuringRangeOfTestField.getText().isEmpty()) {
+            alertIncorrectField("Measuring Range Of Test");
+        } else if (testPulseWidthField.getText().isEmpty()) {
+            alertIncorrectField("Test Pulse Width");
+        } else if (measuringTimeField.getText().isEmpty()) {
+            alertIncorrectField("Measuring Time");
+        } else if (refractiveIndexField.getText().isEmpty()) {
+            alertIncorrectField("Refractive Index");
+        } else if (endThresholdField.getText().isEmpty()) {
+            alertIncorrectField("End Threshold");
+        } else if (nonReflactionThresholdField.getText().isEmpty()) {
+            alertIncorrectField("Non Reflaction Threshold");
 
+        } else {
+            parameters.setMeasureMode(Integer.parseInt(measureModeField.getText()));
+            parameters.setOptimizeMode(Integer.parseInt(optimizeModeField.getText()));
+            parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
+            parameters.setEnabledRefresh(Integer.parseInt(enabledRefreshField.getText()));
+            parameters.setRefreshCycle(Integer.parseInt(refreshCycleField.getText()));
+            parameters.setTestWaveLength(Integer.parseInt(testWaveLengthField.getText()));
+            parameters.setMeasuringRangeOfTest(Integer.parseInt(measuringRangeOfTestField.getText()));
+            parameters.setTestPulseWidth(Integer.parseInt(testPulseWidthField.getText()));
+            parameters.setMeasuringTime(Integer.parseInt(measuringTimeField.getText()));
+            parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
+            parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
+            parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
+            prepareForm(Mode.VIEW);
+        }
     }
 
     @FXML
@@ -279,9 +302,55 @@ public class ConfigurationWindowController implements Initializable, IController
         MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
     }
 
+    @Override
+    public void handleSave(ActionEvent event) {
+
+    }
+
+    @Override
+    public void prepareForm(Mode mode) {
+        switch (mode) {
+            case VIEW:
+                measureModeField.setDisable(true);
+                optimizeModeField.setDisable(true);
+                reflectionThresholdField.setDisable(true);
+                enabledRefreshField.setDisable(true);
+                refreshCycleField.setDisable(true);
+                testWaveLengthField.setDisable(true);
+                measuringRangeOfTestField.setDisable(true);
+                testPulseWidthField.setDisable(true);
+                measuringTimeField.setDisable(true);
+                refractiveIndexField.setDisable(true);
+                endThresholdField.setDisable(true);
+                nonReflactionThresholdField.setDisable(true);
+                buttonSave.setDisable(true);
+                break;
+            case EDIT:
+                measureModeField.setDisable(false);
+                optimizeModeField.setDisable(false);
+                reflectionThresholdField.setDisable(false);
+                enabledRefreshField.setDisable(false);
+                refreshCycleField.setDisable(false);
+                testWaveLengthField.setDisable(false);
+                measuringRangeOfTestField.setDisable(false);
+                testPulseWidthField.setDisable(false);
+                measuringTimeField.setDisable(false);
+                refractiveIndexField.setDisable(false);
+                endThresholdField.setDisable(false);
+                nonReflactionThresholdField.setDisable(false);
+                buttonSave.setDisable(false);
+
+                break;
+        }
+    }
+
+    @Override
+    public void prepareMenu(Mode mode) {
+
+    }
+
     private void updateDeviceList() {
         devicesList.setCellFactory(new Callback<ListView<DataDevice>, ListCell<DataDevice>>() {
-
             @Override
             public ListCell<DataDevice> call(ListView<DataDevice> p) {
 
@@ -300,28 +369,6 @@ public class ConfigurationWindowController implements Initializable, IController
                 return cell;
             }
         });
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        devicesList.setItems(MainApp.getInstance().getDevicesData());
-
-        updateDeviceList();
-    }
-
-    @Override
-    public void handleSave(ActionEvent event) {
-
-    }
-
-    @Override
-    public void prepareForm(Mode mode) {
-
-    }
-
-    @Override
-    public void prepareMenu(Mode mode) {
-
     }
 
 }

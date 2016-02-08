@@ -2,6 +2,8 @@ package com.net.multiway.background.data;
 
 import com.net.multiway.background.utils.Utils;
 import java.io.Serializable;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,177 +16,190 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATA0X1000")
+@Table(name = "DATAPARAMETERS")
 @XmlRootElement
 
 public class DataParameters implements Data, Serializable {
 
-    private int measureMode;
-    private int optimizeMode;
-    private float reflectionThreshold;
-    private int enabledRefresh;
-    private int refreshCycle;
-    private int testWaveLength;
-    private int measuringRangeOfTest;
-    private int testPulseWidth;
-    private int measuringTime;
-    private float refractiveIndex;
-    private float endThreshold;
-    private float nonReflactionThreshold;
-    private Long ID;
+    private ObjectProperty<Integer> measureMode;
+    private ObjectProperty<Integer> optimizeMode;
+    private ObjectProperty<Float> reflectionThreshold;
+    private ObjectProperty<Integer> enabledRefresh;
+    private ObjectProperty<Integer> refreshCycle;
+    private ObjectProperty<Integer> testWaveLength;
+    private ObjectProperty<Integer> measuringRangeOfTest;
+    private ObjectProperty<Integer> testPulseWidth;
+    private ObjectProperty<Integer> measuringTime;
+    private ObjectProperty<Float> refractiveIndex;
+    private ObjectProperty<Float> endThreshold;
+    private ObjectProperty<Float> nonReflactionThreshold;
+    private ObjectProperty<Long> ID;
 
     public DataParameters() {
+		this.ID = new SimpleObjectProperty<>();
+        this.measureMode = new SimpleObjectProperty<>();
+        this.optimizeMode = new SimpleObjectProperty<>();
+        this.reflectionThreshold = new SimpleObjectProperty<>();
+        this.enabledRefresh = new SimpleObjectProperty<>();
+        this.refreshCycle = new SimpleObjectProperty<>();
+        this.testWaveLength = new SimpleObjectProperty<>();
+        this.measuringRangeOfTest = new SimpleObjectProperty<>();
+        this.testPulseWidth = new SimpleObjectProperty<>();
+        this.measuringTime = new SimpleObjectProperty<>();
+        this.refractiveIndex = new SimpleObjectProperty<>();
+        this.endThreshold = new SimpleObjectProperty<>();
+        this.nonReflactionThreshold = new SimpleObjectProperty<>();
     }
 
     public DataParameters(Long ID,int measureMode, int optimizeMode, float reflectionThreshold, int enabledRefresh,
             int refreshCycle, int testWaveLength, int measuringRangeOfTest, int testPulseWidth,
             int measuringTime, float refractiveIndex, float endThreshold, float nonReflactionThreshold) {
 		
-		this.ID = ID;
-        this.measureMode = measureMode;
-        this.optimizeMode = optimizeMode;
-        this.reflectionThreshold = reflectionThreshold;
-        this.enabledRefresh = enabledRefresh;
-        this.refreshCycle = refreshCycle;
-        this.testWaveLength = testWaveLength;
-        this.measuringRangeOfTest = measuringRangeOfTest;
-        this.testPulseWidth = testPulseWidth;
-        this.measuringTime = measuringTime;
-        this.refractiveIndex = refractiveIndex;
-        this.endThreshold = endThreshold;
-        this.nonReflactionThreshold = nonReflactionThreshold;
+		this.ID = new SimpleObjectProperty<>(ID);
+        this.measureMode = new SimpleObjectProperty<>(measureMode);
+        this.optimizeMode = new SimpleObjectProperty<>(optimizeMode);
+        this.reflectionThreshold = new SimpleObjectProperty<>(reflectionThreshold);
+        this.enabledRefresh = new SimpleObjectProperty<>(enabledRefresh);
+        this.refreshCycle = new SimpleObjectProperty<>(refreshCycle);
+        this.testWaveLength = new SimpleObjectProperty<>(testWaveLength);
+        this.measuringRangeOfTest = new SimpleObjectProperty<>(measuringRangeOfTest);
+        this.testPulseWidth = new SimpleObjectProperty<>(testPulseWidth);
+        this.measuringTime = new SimpleObjectProperty<>(measuringTime);
+        this.refractiveIndex = new SimpleObjectProperty<>(refractiveIndex);
+        this.endThreshold = new SimpleObjectProperty<>(endThreshold);
+        this.nonReflactionThreshold = new SimpleObjectProperty<>(nonReflactionThreshold);
     }
 
     @Id
     @Basic(optional = false)
     @Column(name = "ID")
     public Long getID() {
-        return ID;
+        return ID.get();
     }
 
     public void setID(Long ID) {
-        this.ID = ID;
+        this.ID.set(ID);
     }
 
     @Basic(optional = false)
     @Column(name = "MEASURE_MODE")
   
-    public int getMeasureMode() {
-        return measureMode;
+    public Integer getMeasureMode() {
+        return measureMode.get();
     }
 
     public void setMeasureMode(int measureMode) {
-        this.measureMode = measureMode;
+        this.measureMode.set(measureMode);
     }
 
     @Basic(optional = false)
     @Column(name = "OPTIMIZE_MODE")
-    public int getOptimizeMode() {
-        return optimizeMode;
+    public Integer getOptimizeMode() {
+        return optimizeMode.get();
     }
 
     public void setOptimizeMode(int optimizeMode) {
-        this.optimizeMode = optimizeMode;
+        this.optimizeMode.set(optimizeMode);
     }
 
     @Basic(optional = false)
     @Column(name = "REFLECTION_THRESHOLD")
-    public float getReflectionThreshold() {
-        return reflectionThreshold;
+    public Float getReflectionThreshold() {
+        return reflectionThreshold.get();
     }
 
     public void setReflectionThreshold(float reflectionThreshold) {
-        this.reflectionThreshold = reflectionThreshold;
+        this.reflectionThreshold.set(reflectionThreshold);
     }
 
     @Basic(optional = false)
     @Column(name = "ENABLE_REFRESH")
-    public int getEnabledRefresh() {
-        return enabledRefresh;
+    public Integer getEnabledRefresh() {
+        return enabledRefresh.get();
     }
 
     public void setEnabledRefresh(int enabledRefresh) {
-        this.enabledRefresh = enabledRefresh;
+        this.enabledRefresh.set(enabledRefresh);
     }
 
     @Basic(optional = false)
     @Column(name = "REFRESH_CYCLE")
-    public int getRefreshCycle() {
-        return refreshCycle;
+    public Integer getRefreshCycle() {
+        return refreshCycle.get();
     }
 
     public void setRefreshCycle(int refreshCycle) {
-        this.refreshCycle = refreshCycle;
+        this.refreshCycle.set(refreshCycle);
     }
 
     @Basic(optional = false)
     @Column(name = "TEST_WAVE_LENGHT")
-    public int getTestWaveLength() {
-        return testWaveLength;
+    public Integer getTestWaveLength() {
+        return testWaveLength.get();
     }
 
     public void setTestWaveLength(int testWaveLength) {
-        this.testWaveLength = testWaveLength;
+        this.testWaveLength.set(testWaveLength);
     }
 
     @Basic(optional = false)
     @Column(name = "MEASURING_RANGE")
-    public int getMeasuringRangeOfTest() {
-        return measuringRangeOfTest;
+    public Integer getMeasuringRangeOfTest() {
+        return measuringRangeOfTest.get();
     }
 
     public void setMeasuringRangeOfTest(int measuringRangeOfTest) {
-        this.measuringRangeOfTest = measuringRangeOfTest;
+        this.measuringRangeOfTest.set(measuringRangeOfTest);
     }
 
     @Basic(optional = false)
     @Column(name = "TEST_PULSEWIDTH")
-    public int getTestPulseWidth() {
-        return testPulseWidth;
+    public Integer getTestPulseWidth() {
+        return testPulseWidth.get();
     }
 
     public void setTestPulseWidth(int testPulseWidth) {
-        this.testPulseWidth = testPulseWidth;
+        this.testPulseWidth.set(testPulseWidth);
     }
 
     @Basic(optional = false)
     @Column(name = "MEASURING_TIME")
-    public int getMeasuringTime() {
-        return measuringTime;
+    public Integer getMeasuringTime() {
+        return measuringTime.get();
     }
 
     public void setMeasuringTime(int measuringTime) {
-        this.measuringTime = measuringTime;
+        this.measuringTime.set(measuringTime);
     }
 
     @Basic(optional = false)
     @Column(name = "REFRACTIVE_INDEX")
-    public float getRefractiveIndex() {
-        return refractiveIndex;
+    public Float getRefractiveIndex() {
+        return refractiveIndex.get();
     }
 
     public void setRefractiveIndex(float refractiveIndex) {
-        this.refractiveIndex = refractiveIndex;
+        this.refractiveIndex.set(refractiveIndex);
     }
 
     @Basic(optional = false)
     @Column(name = "END_THRESHOLD")
-    public float getEndThreshold() {
-        return endThreshold;
+    public Float getEndThreshold() {
+        return endThreshold.get();
     }
 
     public void setEndThreshold(float endThreshold) {
-        this.endThreshold = endThreshold;
+        this.endThreshold.set(endThreshold);
     }
 
     @Basic(optional = false)
     @Column(name = "NONREFLACTION_THRESHOLD")
-    public float getNonReflactionThreshold() {
-        return nonReflactionThreshold;
+    public Float getNonReflactionThreshold() {
+        return nonReflactionThreshold.get();
     }
 
     public void setNonReflactionThreshold(float nonReflactionThreshold) {
-        this.nonReflactionThreshold = nonReflactionThreshold;
+        this.nonReflactionThreshold.set(nonReflactionThreshold);
     }
 
     public byte[] takeData() {
@@ -193,51 +208,51 @@ public class DataParameters implements Data, Serializable {
         int i = 0;
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(measureMode)[j];
+            b[i] = Utils.intToByteArray(measureMode.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(optimizeMode)[j];
+            b[i] = Utils.intToByteArray(optimizeMode.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.floatToByteArray(reflectionThreshold)[j];
+            b[i] = Utils.floatToByteArray(reflectionThreshold.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(enabledRefresh)[j];
+            b[i] = Utils.intToByteArray(enabledRefresh.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(refreshCycle)[j];
+            b[i] = Utils.intToByteArray(refreshCycle.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(testWaveLength)[j];
+            b[i] = Utils.intToByteArray(testWaveLength.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(measuringRangeOfTest)[j];
+            b[i] = Utils.intToByteArray(measuringRangeOfTest.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(testPulseWidth)[j];
+            b[i] = Utils.intToByteArray(testPulseWidth.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.intToByteArray(measuringTime)[j];
+            b[i] = Utils.intToByteArray(measuringTime.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.floatToByteArray(refractiveIndex)[j];
+            b[i] = Utils.floatToByteArray(refractiveIndex.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.floatToByteArray(endThreshold)[j];
+            b[i] = Utils.floatToByteArray(endThreshold.get())[j];
         }
 
         for (int j = 0; j < 4; j++, i++) {
-            b[i] = Utils.floatToByteArray(nonReflactionThreshold)[j];
+            b[i] = Utils.floatToByteArray(nonReflactionThreshold.get())[j];
         }
 
         return b;
