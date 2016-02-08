@@ -16,10 +16,11 @@ import com.net.multiway.background.send.SendStopTest;
 import com.net.multiway.background.send.SendDevice;
 import com.net.multiway.background.send.SendConfirmationSignal;
 import com.net.multiway.background.utils.Utils;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Host {
+public class DeviceComunicator {
 
     private int door;
     private String ip;
@@ -27,10 +28,15 @@ public class Host {
     private DataInputStream in;
     private DataOutputStream out;
     private Socket client;
+	private ReceiveStatus receiveStatusData;
+	private ArrayList<ReceiveValues> receiveValuesList;
+	private ReceiveParameters receiveParametersData;
 
-    public Host(String i, int d) {
+	
+    public DeviceComunicator(String i, int d) {
         this.door = d;
         this.ip = i;
+		receiveValuesList = new ArrayList<ReceiveValues>();
     }
 
     public int getDoor() {
@@ -56,7 +62,7 @@ public class Host {
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
         } catch (IOException ex) {
-            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -97,15 +103,15 @@ public class Host {
 
         // codigo de resposta padao
         if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
-            ReceiveStatus r = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
-            r.parser();
+            receiveStatusData = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
+            receiveStatusData.parser();
         } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
             ReceiveValues r = new ReceiveValues(this.in);
             r.parser();
-			r.print();
+			receiveValuesList.add(r);
         } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
-            ReceiveParameters r = new ReceiveParameters(this.in);
-            r.parser();
+            receiveParametersData = new ReceiveParameters(this.in);
+            receiveParametersData.parser();
         }
     }
 
@@ -125,7 +131,7 @@ public class Host {
             this.client.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -140,7 +146,7 @@ public class Host {
             this.client.close();
             
         } catch (IOException ex) {
-            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -154,8 +160,17 @@ public class Host {
             this.client.close();
         
         } catch (IOException ex) {
-            Logger.getLogger(Host.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+	public ArrayList<ReceiveValues> getReceiveValuesList()
+	{
+		return this.receiveValuesList;
+	}
+	public ReceiveParameters getReceiveParametersData() {
+		return receiveParametersData;
+	}
+	
+	
 
 }

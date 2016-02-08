@@ -79,7 +79,7 @@
                                  </children>
                               </GridPane>
                               <Button fx:id="buttonSave" layoutX="189.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="330.0" />
-                              <Button layoutX="119.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="330.0" />
+                              <Button fx:id="buttonEdit" layoutX="119.0" layoutY="330.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="330.0" />
                            </children>
                         </AnchorPane>
                     </items>

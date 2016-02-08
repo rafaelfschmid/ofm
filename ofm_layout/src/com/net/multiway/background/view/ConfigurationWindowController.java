@@ -9,6 +9,7 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
@@ -103,6 +104,8 @@ public class ConfigurationWindowController implements Initializable, IController
     private TableColumn<Result, Double> attenuationCoefficientColumn;
     @FXML
     private Button buttonSave;
+	@FXML
+	private Button buttonEdit;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -275,10 +278,9 @@ public class ConfigurationWindowController implements Initializable, IController
 
     @FXML
     private void onHandleExecute() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Implementar");
-        alert.setHeaderText("//TO DO");
-        alert.showAndWait();
+        DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
+		parameters.copy(new DataParameters(Long.parseLong("1"),1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
+		host.connect(parameters);
     }
 
     @FXML
