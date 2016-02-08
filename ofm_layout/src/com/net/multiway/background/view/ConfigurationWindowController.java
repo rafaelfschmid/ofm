@@ -6,7 +6,7 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.model.Device;
+import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
@@ -28,19 +29,21 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
-
 
 /**
  * FXML Controller class
  *
  * @author rafael
  */
-public class ConfigurationWindowController implements Initializable,IController {//implements Initializable {
+public class ConfigurationWindowController implements Initializable, IController {//implements Initializable {
 
     //device
     @FXML
-    private ListView<Device> devicesList;
+    private ListView<DataDevice> devicesList;
 
     // Gráfico
     @FXML
@@ -99,28 +102,7 @@ public class ConfigurationWindowController implements Initializable,IController 
      */
     @FXML
     public void initialize() {
-        devicesList.setCellFactory(new Callback<ListView<Device>, ListCell<Device>>() {
 
-            @Override
-            public ListCell<Device> call(ListView<Device> p) {
-
-                ListCell<Device> cell = new ListCell<Device>() {
-
-                    @Override
-                    protected void updateItem(Device t, boolean bln) {
-                        super.updateItem(t, bln);
-                        if (t != null) {
-                            setText(t.getIp());
-                        }
-                    }
-
-                };
-
-                return cell;
-            }
-        });
-
-        // Inicializa grafico
         // Inicializa a tabela de parametros
         measureModeField.setText("1");
         optimizeModeField.setText("2");
@@ -153,7 +135,6 @@ public class ConfigurationWindowController implements Initializable,IController 
         attenuationCoefficientColumn.setMinWidth(190);
 
     }
-
 
     private void alertToSaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -213,27 +194,8 @@ public class ConfigurationWindowController implements Initializable,IController 
         } else {
             alertDeviceSelection();
         }
-
-        devicesList.setCellFactory(new Callback<ListView<Device>, ListCell<Device>>() {
-
-            @Override
-            public ListCell<Device> call(ListView<Device> p) {
-
-                ListCell<Device> cell = new ListCell<Device>() {
-
-                    @Override
-                    protected void updateItem(Device t, boolean bln) {
-                        super.updateItem(t, bln);
-                        if (t != null) {
-                            setText(t.getIp());
-                        }
-                    }
-
-                };
-
-                return cell;
-            }
-        });
+        
+        updateDeviceList();
     }
 
     /**
@@ -241,21 +203,51 @@ public class ConfigurationWindowController implements Initializable,IController 
      */
     @FXML
     private void onHandleAddDevice() {
-//        Device tempDevice = new Device();
-//        boolean okClicked = MainApp.getInstance().openDeviceDialog(tempDevice);
-//        if (okClicked) {
-//            MainApp.getInstance().getDevicesData().add(tempDevice);
-//        }
+        DataDevice device = new DataDevice();
+        try {
+            // Carrega o arquivo fxml e cria um novo stage para a janela popup.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource(View.DeviceAddDialog.getResource()));
+            AnchorPane page;
+
+            page = (AnchorPane) loader.load();
+
+            // Cria o palco dialogStage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Editar dispositivo");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(MainApp.getInstance().getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Define o device no controller.
+            DeviceAddDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setDevice(device);
+
+            // Mostra a janela e espera até o usuário fechar.
+            dialogStage.showAndWait();
+
+            if (controller.isOkClicked()) {
+                MainApp.getInstance().getDevicesData().add(device);
+                devicesList.setItems(MainApp.getInstance().getDevicesData());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        updateDeviceList();
+
     }
 
     @FXML
     private void onHandleEditParameters() {
-       
+
     }
 
     @FXML
     private void onHandleSaveParameters() {
-        
+
     }
 
     @FXML
@@ -284,26 +276,52 @@ public class ConfigurationWindowController implements Initializable,IController 
 
     @FXML
     private void onHandleChangeToMonitor() throws IOException {
-		MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
+        MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
     }
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
+    private void updateDeviceList() {
+        devicesList.setCellFactory(new Callback<ListView<DataDevice>, ListCell<DataDevice>>() {
 
-	@Override
-	public void handleSave(ActionEvent event) {
+            @Override
+            public ListCell<DataDevice> call(ListView<DataDevice> p) {
 
-	}
+                ListCell<DataDevice> cell = new ListCell<DataDevice>() {
 
-	@Override
-	public void prepareForm(Mode mode) {
+                    @Override
+                    protected void updateItem(DataDevice t, boolean bln) {
+                        super.updateItem(t, bln);
+                        if (t != null) {
+                            setText(t.getIp());
+                        }
+                    }
 
-	}
+                };
 
-	@Override
-	public void prepareMenu(Mode mode) {
+                return cell;
+            }
+        });
+    }
 
-	}
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        devicesList.setItems(MainApp.getInstance().getDevicesData());
+
+        updateDeviceList();
+    }
+
+    @Override
+    public void handleSave(ActionEvent event) {
+
+    }
+
+    @Override
+    public void prepareForm(Mode mode) {
+
+    }
+
+    @Override
+    public void prepareMenu(Mode mode) {
+
+    }
 
 }

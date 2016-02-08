@@ -10,9 +10,11 @@ package com.net.multiway.background.model;
  * @author Phelipe
  */
 public enum View {
-	 ConfigurationWindow,
-	 MonitorWindow,
-	 MainScene;
+
+    ConfigurationWindow,
+    MonitorWindow,
+    MainScene,
+    DeviceAddDialog;
 
     /**
      * @return File path to FXML resource of the view
@@ -21,10 +23,12 @@ public enum View {
         switch (this) {
             case ConfigurationWindow:
                 return "view/ConfigurationWindow.fxml";
-				case MonitorWindow:
-                return "view/MonitorWindow.fxml";   
-				case MainScene:
-                return "view/MainScene.fxml";   
+            case MonitorWindow:
+                return "view/MonitorWindow.fxml";
+            case MainScene:
+                return "view/MainScene.fxml";
+            case DeviceAddDialog:
+                return "view/DeviceAddDialog.fxml";
             default:
                 return null;
         }

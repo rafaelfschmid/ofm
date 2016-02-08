@@ -5,10 +5,9 @@
  */
 package com.net.multiway.background.view;
 
-import com.net.multiway.background.model.Device;
+import com.net.multiway.background.data.DataDevice;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -26,7 +25,7 @@ public class DeviceAddDialogController {
     private TextField gatewayField;
 
     private Stage dialogStage;
-    private Device device;
+    private DataDevice device;
     private boolean okClicked = false;
 
     /**
@@ -51,7 +50,7 @@ public class DeviceAddDialogController {
      *
      * @param vehicle
      */
-    public void onHandlesetDevice(Device device) {
+    public void setDevice(DataDevice device) {
         this.device = device;
 
         ipField.setText(device.getIp());

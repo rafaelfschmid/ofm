@@ -6,15 +6,12 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.model.Device;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,8 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javax.jws.WebParam;
 
 /**
  * FXML Controller class
@@ -37,10 +32,6 @@ public class MonitorWindowController implements Initializable,IController {
 
 	 private IController centerController;
     //implements Initializable {
-   
-
-    private Stage stage;
-    private Device device;
 
     //device
     @FXML

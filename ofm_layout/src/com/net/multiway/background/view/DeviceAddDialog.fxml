@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="148.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.controller.DeviceAddController">
+<AnchorPane id="AnchorPane" prefHeight="148.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.DeviceAddDialogController">
    <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefWidth="574.0">
         <columnConstraints>
@@ -27,7 +27,7 @@
             <TextField fx:id="gatewayField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Button layoutX="443.0" layoutY="112.0" mnemonicParsing="false" onAction="#handleOk" prefHeight="26.0" prefWidth="62.0" text="OK" />
-      <Button layoutX="523.0" layoutY="112.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+      <Button layoutX="443.0" layoutY="112.0" mnemonicParsing="false" onAction="#onHandleOk" prefHeight="26.0" prefWidth="62.0" text="OK" />
+      <Button layoutX="523.0" layoutY="112.0" mnemonicParsing="false" onAction="#onHandleCancel" text="Cancel" />
    </children>
 </AnchorPane>
