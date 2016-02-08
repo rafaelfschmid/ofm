@@ -35,7 +35,8 @@ public class DeviceComunicator {
     public DeviceComunicator(String i, int d) {
         this.door = d;
         this.ip = i;
-        receiveValuesList = new ArrayList<ReceiveValues>();
+
+	receiveValuesList = new ArrayList<>();
     }
 
     public int getDoor() {
