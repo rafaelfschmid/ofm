@@ -1,18 +1,24 @@
 package com.net.multiway.background.receive;
 
 import com.net.multiway.background.data.DataReceiveParameters;
+import com.net.multiway.background.data.DataReceiveParametersEvents;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Vector;
 
 import com.net.multiway.background.model.Package;
 import com.net.multiway.background.utils.Utils;
+import java.util.ArrayList;
 
 /*Classe para recebimento de dados com o código: 0x9000000*/
 public class ReceiveParameters extends Package {
 
 	private DataInputStream in;
 	private DataReceiveParameters data;
+
+	public DataReceiveParameters getData() {
+		return data;
+	}
 
 	public ReceiveParameters(DataInputStream in) {
 		this.setIn(in);
@@ -68,7 +74,7 @@ public class ReceiveParameters extends Package {
 
 		in.read(d);
 		this.length = Utils.byte4ToInt(d);
-		Vector<Integer> dt = new Vector<Integer>(this.length);
+		ArrayList<Integer> dt = new ArrayList<Integer>(this.length);
 		byte[] b = new byte[2];
 
 		for (int i = 0; i < this.length; i++) {
@@ -83,36 +89,41 @@ public class ReceiveParameters extends Package {
 
 		in.read(d);
 		this.length = Utils.byte4ToInt(d);
-
+		System.out.println("Length = " + this.length);
 		byte[] b = new byte[4];
 
 		for (int i = 0; i < this.length; i++) {
+			DataReceiveParametersEvents dt = new DataReceiveParametersEvents();
 			in.read(d);
-			data.setDistance(Utils.byte4ToInt(d));
+			dt.setDistance(Utils.byte4ToInt(d));
 			in.read(d);
-			data.setType(Utils.byte4ToInt(d));
+			dt.setType(Utils.byte4ToInt(d));
 			in.read(d);
-			data.setEchoLoss(Utils.byte4ToFloat(d));
+			dt.setEchoLoss(Utils.byte4ToFloat(d));
 			in.read(d);
-			data.setInsertionLoss(Utils.byte4ToFloat(d));
+			dt.setInsertionLoss(Utils.byte4ToFloat(d));
 			in.read(d);
-			data.setAverageAttenuationCoefficient(Utils.byte4ToFloat(d));
+			dt.setAverageAttenuationCoefficient(Utils.byte4ToFloat(d));
 			in.read(d);
-			data.setAcumulativeLoss(Utils.byte4ToFloat(d));
+			dt.setAcumulativeLoss(Utils.byte4ToFloat(d));
+			data.addEvents(dt);
 		}
+
 	}
 
 	@Override
 	public void parser() throws IOException {
 		parserPartA();
-		printPartA();
+		//printPartA();
 		parserPartB();
 		parserPartC();
 		printPartC();
 		byte[] d = new byte[4];
 		in.read(d);
 	}
+
 	public void printPartA() {
+
 		System.out.println("SampleFrequency = " + data.getSampleFrequency());
 		System.out.println("RangeOfTest = " + data.getRangeOfTest());
 		System.out.println("PulseWidth = " + data.getPulseWidth());
@@ -126,14 +137,19 @@ public class ReceiveParameters extends Package {
 		System.out.println("EndThreshold = " + data.getEndThreshold());
 		System.out.println("TestMode = " + data.getTestMode());
 		System.out.println("TestWay = " + data.getTestWay());
+
 	}
+
 	public void printPartC() {
-		System.out.println("Distance = " + data.getDistance());
-		System.out.println("Type = " + data.getType());
-		System.out.println("Insertion Loss = " + data.getInsertionLoss());
-		System.out.println("Echo Loss = " + data.getEchoLoss());
-		System.out.println("Average Attenuation Coefficient = " + data.getAverageAttenuationCoefficient());
-		System.out.println("Acumulative Loss = " + data.getAcumulativeLoss());
+		ArrayList<DataReceiveParametersEvents> ar = data.getEvents();
+		for (int i = 0; i < ar.size(); i++) {
+			System.out.println("Distance = " + ar.get(i).getDistance());
+			System.out.println("Type = " + ar.get(i).getType());
+			System.out.println("Insertion Loss = " + ar.get(i).getInsertionLoss());
+			System.out.println("Echo Loss = " + ar.get(i).getEchoLoss());
+			System.out.println("Average Attenuation Coefficient = " + ar.get(i).getAverageAttenuationCoefficient());
+			System.out.println("Acumulative Loss = " + ar.get(i).getAcumulativeLoss());
+		}
 
 	}
 
