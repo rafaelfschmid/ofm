@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
@@ -96,13 +97,16 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <LineChart fx:id="grafico" disable="true" layoutX="-23.0" layoutY="-21.0" legendVisible="false" prefHeight="357.0" prefWidth="733.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <LineChart fx:id="grafico" animated="false" layoutX="-23.0" layoutY="-21.0" legendVisible="false" prefHeight="357.0" prefWidth="733.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <xAxis>
-                                  <NumberAxis side="BOTTOM" fx:id="xAxis" />
+                                  <NumberAxis side="BOTTOM" visible="false" fx:id="xAxis" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis fx:id="yAxis" side="LEFT" />
+                                  <NumberAxis fx:id="yAxis" side="LEFT" visible="false" />
                                 </yAxis>
+                                 <cursor>
+                                    <Cursor fx:constant="CROSSHAIR" />
+                                 </cursor>
                               </LineChart>
                            </children>
                         </AnchorPane>

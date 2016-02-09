@@ -63,7 +63,7 @@ public class ConfigurationWindowController implements Initializable, IController
 
     // Gráfico
     @FXML
-    private LineChart<Double, Double> grafico;
+    private LineChart<NumberAxis, NumberAxis> grafico;
     @FXML
     private NumberAxis xAxis;
     @FXML
