@@ -29,25 +29,30 @@ public class ReceiveValues extends Package {
         dataReceiveValues = new DataReceiveValues();
     }
 
+    public void setInputStream(DataInputStream in) {
+        this.in = in;
+    }
+
     @Override
     public void parser() throws IOException {
         byte[] d = new byte[4];
 
+        dataReceiveValues.setNumberOfCalls(dataReceiveValues.getNumberOfCalls() + 1);
+
         in.read(d);
-        this.length = Utils.byte4ToInt(d);
-        int[] data = new int[this.length];
+        if (dataReceiveValues.getLenght() == 0) {
+            this.length = Utils.byte4ToInt(d);
+            dataReceiveValues.setLenght(length);
+        }
 
         byte[] b = new byte[2];
 
         for (int i = 0; i < this.length; i++) {
             in.read(b);
-            data[i] = Utils.byte2ToInt(b);
+            dataReceiveValues.addValueDataIndex(i, Utils.byte2ToInt(b));
         }
 
         in.read(d);
-
-        dataReceiveValues.setLenght(length);
-        dataReceiveValues.setData(data);
     }
 
     public void print() {
@@ -66,5 +71,9 @@ public class ReceiveValues extends Package {
 
     public int[] getDataValues() {
         return this.dataReceiveValues.getData();
+    }
+
+    public void processData() {
+        this.dataReceiveValues.processData();
     }
 }

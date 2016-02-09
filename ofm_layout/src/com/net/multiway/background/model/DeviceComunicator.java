@@ -29,14 +29,14 @@ public class DeviceComunicator {
     private DataOutputStream out;
     private Socket client;
     private ReceiveStatus receiveStatusData;
-    private ArrayList<ReceiveValues> receiveValuesList;
+    private ReceiveValues receiveValues;
     private ReceiveParameters receiveParametersData;
 
     public DeviceComunicator(String i, int d) {
         this.door = d;
         this.ip = i;
 
-	receiveValuesList = new ArrayList<>();
+	receiveValues = new ReceiveValues(this.in);
     }
 
     public int getDoor() {
@@ -106,9 +106,9 @@ public class DeviceComunicator {
             receiveStatusData = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
             receiveStatusData.parser();
         } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
-            ReceiveValues r = new ReceiveValues(this.in);
-            r.parser();
-            receiveValuesList.add(r);
+            receiveValues.setInputStream(this.in);
+            receiveValues.parser();
+            
         } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
             receiveParametersData = new ReceiveParameters(this.in);
             receiveParametersData.parser();
@@ -164,8 +164,8 @@ public class DeviceComunicator {
         }
     }
 
-    public ArrayList<ReceiveValues> getReceiveValuesList() {
-        return this.receiveValuesList;
+    public ReceiveValues getReceiveValues() {
+        return this.receiveValues;
     }
 
     public ReceiveParameters getReceiveParametersData() {

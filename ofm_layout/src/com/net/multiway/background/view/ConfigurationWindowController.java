@@ -10,6 +10,7 @@ import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.model.DeviceComunicator;
+import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
@@ -27,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -287,24 +289,32 @@ public class ConfigurationWindowController implements Initializable, IController
         parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
         host.connect(parameters);
 
-        plotGraph(host.getReceiveValuesList());
+        plotGraph(host.getReceiveValues());
     }
 
-    private void plotGraph(ArrayList<ReceiveValues> receiveValuesList) {
-        ObservableList<XYChart.Series<Double, Double>> coord = FXCollections.observableArrayList();
-        XYChart.Series<Double, Double> series = new XYChart.Series<>();
-        for (ReceiveValues receiveValues : receiveValuesList) {
-            int[] data = receiveValues.getDataValues();
-            for (int i = 0; i < data.length; i++) {
-                series.getData().add(new XYChart.Data(i, data[i]));
-            }
-            coord.addAll(series);
-            break;
+    private void plotGraph(ReceiveValues receiveValues) {
+        receiveValues.processData();
+
+        ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
+
+        int[] data = receiveValues.getDataValues();
+        for (int i = 0; i < data.length; i++) {
+            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data[i]);
+            coordData.setNode(
+                    new HoveredThresholdNode(
+                            (i == 0) ? 0 : data[i - 1],
+                            data[i]
+                    )
+            );
+            dataset.add(coordData);
+
         }
 
-        grafico.getData().add(series);
+        grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
     }
 
+    
+    
     @FXML
     private void onHandleExport() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

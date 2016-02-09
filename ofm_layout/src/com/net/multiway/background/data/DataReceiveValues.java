@@ -27,8 +27,11 @@ public class DataReceiveValues implements Serializable {
     private int lenght;
     private int data[];
     private Long ID;
+    private int numberOfCalls;
 
     public DataReceiveValues() {
+        this.lenght = 0;
+        this.numberOfCalls = 0;
     }
 
     @Basic(optional = false)
@@ -39,6 +42,7 @@ public class DataReceiveValues implements Serializable {
 
     public void setLenght(int lenght) {
         this.lenght = lenght;
+        data = new int[this.lenght];
     }
 
     @OneToMany(mappedBy = "DATA0X9001", cascade = CascadeType.ALL)
@@ -57,6 +61,24 @@ public class DataReceiveValues implements Serializable {
 
     public void setID(Long ID) {
         this.ID = ID;
+    }
+
+    public int getNumberOfCalls() {
+        return numberOfCalls;
+    }
+
+    public void setNumberOfCalls(int numberOfCalls) {
+        this.numberOfCalls = numberOfCalls;
+    }
+
+    public void addValueDataIndex(int i, int value) {
+        this.data[i] += value;
+    }
+    
+    public void processData() {
+        for(int i = 0; i < data.length; i++){
+            data[i] = data[i]/numberOfCalls;
+        }
     }
 
     public void copy(DataReceiveValues data) {
