@@ -9,12 +9,15 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.DataReceiveParameters;
+import com.net.multiway.background.data.DataReceiveParametersEvents;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
+import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
 import java.io.IOException;
 import java.net.URL;
@@ -94,21 +97,21 @@ public class ConfigurationWindowController implements Initializable, IController
 
     //result
     @FXML
-    private TableView<Result> resultTable;
+    private TableView<DataReceiveParametersEvents> resultTable;
     @FXML
-    private TableColumn<Result, Integer> numeroColumn;
+    private TableColumn<DataReceiveParametersEvents, Long> numeroColumn;
     @FXML
-    private TableColumn<Result, Integer> typeColumn;
+    private TableColumn<DataReceiveParametersEvents, Integer> typeColumn;
     @FXML
-    private TableColumn<Result, Integer> distanceColumn;
+    private TableColumn<DataReceiveParametersEvents, Integer> distanceColumn;
     @FXML
-    private TableColumn<Result, Double> insertLossColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> insertLossColumn;
     @FXML
-    private TableColumn<Result, Double> reflectLossColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> reflectLossColumn;
     @FXML
-    private TableColumn<Result, Double> accumulationColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> accumulationColumn;
     @FXML
-    private TableColumn<Result, Double> attenuationCoefficientColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> attenuationCoefficientColumn;
     @FXML
     private Button buttonSave;
     @FXML
@@ -120,6 +123,7 @@ public class ConfigurationWindowController implements Initializable, IController
 
         devicesList.setItems(MainApp.getInstance().getDevicesData());
         updateDeviceList();
+        mappingParametersTable();
     }
 
     private void alertToSaveParameters() {
@@ -288,7 +292,8 @@ public class ConfigurationWindowController implements Initializable, IController
         DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
         parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
         host.connect(parameters);
-
+        ReceiveParameters r = host.getReceiveParametersData();
+        showReceiveParametersTable(r.getData().getEvents());
         plotGraph(host.getReceiveValues());
     }
 
@@ -313,8 +318,6 @@ public class ConfigurationWindowController implements Initializable, IController
         grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
     }
 
-    
-    
     @FXML
     private void onHandleExport() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -405,4 +408,21 @@ public class ConfigurationWindowController implements Initializable, IController
         });
     }
 
+    private void mappingParametersTable() {
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().distanceProperty());
+        insertLossColumn.setCellValueFactory(cellData -> cellData.getValue().insertLossProperty());
+        reflectLossColumn.setCellValueFactory(cellData -> cellData.getValue().echoLossProperty());
+        accumulationColumn.setCellValueFactory(cellData -> cellData.getValue().acumulativeLossProperty());
+        attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().averageAttenuationCoefficientProperty());
+    }
+
+    private void showReceiveParametersTable(ArrayList<DataReceiveParametersEvents> r) {
+
+        ObservableList<DataReceiveParametersEvents> value = FXCollections.observableArrayList();
+        for (int i = 0; i < r.size(); i++) {
+            value.add(r.get(i));
+        }
+        resultTable.setItems(value);
+    }
 }
