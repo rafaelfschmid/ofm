@@ -55,6 +55,7 @@ import javafx.util.Callback;
  */
 public class ConfigurationWindowController implements Initializable, IController {//implements Initializable {
 
+	
 	//device
 	@FXML
 	private ListView<DataDevice> devicesList;
@@ -63,7 +64,7 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	// Gráfico
 	@FXML
-	private LineChart<Double, Double> grafico;
+	private LineChart<NumberAxis, NumberAxis> grafico;
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
@@ -291,11 +292,10 @@ public class ConfigurationWindowController implements Initializable, IController
 	private void onHandleExecute() {
 		DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
 		parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
-		//host.connect(parameters);
-		//ReceiveParameters r = host.getReceiveParametersData();
-		//showReceiveParametersTable(r.getData().getEvents());
-		//host.runMonitor(10, parameters);
-		//plotGraph(host.getReceiveValues());
+		host.connect(parameters);
+		ReceiveParameters r = host.getReceiveParametersData();
+		showReceiveParametersTable(r.getData().getEvents());
+		plotGraph(host.getReceiveValues());
 	}
 
 	private void plotGraph(ReceiveValues receiveValues) {
@@ -426,4 +426,5 @@ public class ConfigurationWindowController implements Initializable, IController
 		}
 		resultTable.setItems(value);
 	}
+	
 }

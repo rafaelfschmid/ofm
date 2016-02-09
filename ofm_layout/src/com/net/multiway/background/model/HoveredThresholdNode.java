@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 public class HoveredThresholdNode extends StackPane {
     
     public HoveredThresholdNode(int priorValue, int value) {
-      setPrefSize(15, 15);
+      setPrefSize(1, 1);
 
       final Label label = createDataThresholdLabel(priorValue, value);
 
@@ -42,7 +42,7 @@ public class HoveredThresholdNode extends StackPane {
     private Label createDataThresholdLabel(int priorValue, int value) {
       final Label label = new Label(value + "");
       label.getStyleClass().addAll("default-color0", "chart-line-symbol", "chart-series-line");
-      label.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+      label.setStyle("-fx-font-size: 10; -fx-font-weight: bold;");
 
       if (priorValue == 0) {
         label.setTextFill(Color.DARKGRAY);
