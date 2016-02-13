@@ -122,6 +122,8 @@ public class ConfigurationWindowController implements Initializable, IController
 		devicesList.setItems(MainApp.getInstance().getDevicesData());
 		updateDeviceList();
 		mappingParametersTable();
+		grafico.setStyle(".default-color0.chart-series-line { -fx-stroke: #ff0000; }");
+
 	}
 
 	private void alertToSaveParameters() {
@@ -293,7 +295,12 @@ public class ConfigurationWindowController implements Initializable, IController
 		Task execute = new Task() {
 			@Override
 			protected String call() throws Exception {
+				if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
+					resultTable.getItems().remove(0, resultTable.getItems().size());
+				}
+
 				host.connect(parameters);
+
 				return "Conexão realizada";
 			}
 
@@ -301,14 +308,17 @@ public class ConfigurationWindowController implements Initializable, IController
 			protected void succeeded() {
 				ReceiveParameters r = host.getReceiveParametersData();
 				showReceiveParametersTable(r.getData().getEvents());
+
 				plotGraph(host.getReceiveValues());
+				grafico.setCreateSymbols(false);
+
 			}
 		};
 
-		
 		Thread tr = new Thread(execute);
+
 		tr.start();
-		
+
 	}
 
 	private void plotGraph(ReceiveValues receiveValues) {
@@ -438,6 +448,7 @@ public class ConfigurationWindowController implements Initializable, IController
 			value.add(r.get(i));
 		}
 		resultTable.setItems(value);
+
 	}
 
 }
