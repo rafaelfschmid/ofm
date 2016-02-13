@@ -36,6 +36,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -69,29 +70,23 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	//parameter
 	@FXML
-	private TextField measureModeField;
+	private ComboBox measureRangeField;
 	@FXML
-	private TextField optimizeModeField;
+	private ComboBox pulseWidthField;
 	@FXML
-	private TextField reflectionThresholdField;
+	private ComboBox measureTimeField;
 	@FXML
-	private TextField enabledRefreshField;
+	private ComboBox waveLengthField;
 	@FXML
-	private TextField refreshCycleField;
-	@FXML
-	private TextField testWaveLengthField;
-	@FXML
-	private TextField measuringRangeOfTestField;
-	@FXML
-	private TextField testPulseWidthField;
-	@FXML
-	private TextField measuringTimeField;
+	private ComboBox measureModeField;
 	@FXML
 	private TextField refractiveIndexField;
 	@FXML
+	private TextField nonReflactionThresholdField;
+	@FXML
 	private TextField endThresholdField;
 	@FXML
-	private TextField nonReflactionThresholdField;
+	private TextField reflectionThresholdField;
 
 	//result
 	@FXML
@@ -122,7 +117,17 @@ public class ConfigurationWindowController implements Initializable, IController
 		devicesList.setItems(MainApp.getInstance().getDevicesData());
 		updateDeviceList();
 		mappingParametersTable();
-		grafico.setStyle(".default-color0.chart-series-line { -fx-stroke: #ff0000; }");
+		updateParameters();
+		
+		measureRangeField.setValue("0");
+		pulseWidthField.setValue("0");
+		measureTimeField.setValue("15");
+		waveLengthField.setValue("1550");
+		measureModeField.setValue("1-Average");
+		refractiveIndexField.setText("1.4685");
+		nonReflactionThresholdField.setText("0");
+		endThresholdField.setText("5.0");
+		reflectionThresholdField.setText("65.0");
 
 	}
 
@@ -238,6 +243,14 @@ public class ConfigurationWindowController implements Initializable, IController
 		alert.showAndWait();
 	}
 
+	private void alertIncorrectRangeField(String text, int min, int max) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Campo Incorreto");
+		alert.setHeaderText("O campo " + text + " deve estar entre " + min + " e " + max);
+
+		alert.showAndWait();
+	}
+
 	@FXML
 	private void onHandleEditParameters() {
 		prepareForm(Mode.EDIT);
@@ -245,45 +258,48 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	@FXML
 	private void onHandleSaveParameters() {
-		if (measureModeField.getText().isEmpty()) {
-			alertIncorrectField("Measure Mode");
-		} else if (optimizeModeField.getText().isEmpty()) {
-			alertIncorrectField("Optimize Mode");
-		} else if (reflectionThresholdField.getText().isEmpty()) {
-			alertIncorrectField("Reflection Threshold");
-		} else if (enabledRefreshField.getText().isEmpty()) {
-			alertIncorrectField("Enabled Refresh");
-		} else if (refreshCycleField.getText().isEmpty()) {
-			alertIncorrectField("Refresh Cycle");
-		} else if (testWaveLengthField.getText().isEmpty()) {
-			alertIncorrectField("Test Wave Length");
-		} else if (measuringRangeOfTestField.getText().isEmpty()) {
+		if (measureRangeField.getValue() == null) {
 			alertIncorrectField("Measuring Range Of Test");
-		} else if (testPulseWidthField.getText().isEmpty()) {
+		} else if (pulseWidthField.getValue() == null) {
 			alertIncorrectField("Test Pulse Width");
-		} else if (measuringTimeField.getText().isEmpty()) {
+		} else if (measureTimeField.getValue() == null) {
 			alertIncorrectField("Measuring Time");
+		} else if (waveLengthField.getValue() == null) {
+			alertIncorrectField("Test Wave Length");
+		} else if (measureModeField.getValue() == null) {
+			alertIncorrectField("Measure Mode");
 		} else if (refractiveIndexField.getText().isEmpty()) {
 			alertIncorrectField("Refractive Index");
-		} else if (endThresholdField.getText().isEmpty()) {
-			alertIncorrectField("End Threshold");
 		} else if (nonReflactionThresholdField.getText().isEmpty()) {
 			alertIncorrectField("Non Reflaction Threshold");
-
+		} else if (endThresholdField.getText().isEmpty()) {
+			alertIncorrectField("End Threshold");
+		} else if (reflectionThresholdField.getText().isEmpty()) {
+			alertIncorrectField("Reflection Threshold");
 		} else {
-			parameters.setMeasureMode(Integer.parseInt(measureModeField.getText()));
-			parameters.setOptimizeMode(Integer.parseInt(optimizeModeField.getText()));
-			parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
-			parameters.setEnabledRefresh(Integer.parseInt(enabledRefreshField.getText()));
-			parameters.setRefreshCycle(Integer.parseInt(refreshCycleField.getText()));
-			parameters.setTestWaveLength(Integer.parseInt(testWaveLengthField.getText()));
-			parameters.setMeasuringRangeOfTest(Integer.parseInt(measuringRangeOfTestField.getText()));
-			parameters.setTestPulseWidth(Integer.parseInt(testPulseWidthField.getText()));
-			parameters.setMeasuringTime(Integer.parseInt(measuringTimeField.getText()));
-			parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
-			parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
-			parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
-			prepareForm(Mode.VIEW);
+			float nonReflThresh = Float.parseFloat(nonReflactionThresholdField.getText());
+			float endThresh = Float.parseFloat(endThresholdField.getText());
+			float reflectionThresh = Float.parseFloat(reflectionThresholdField.getText());
+
+			if (nonReflThresh < 0 || nonReflThresh > 10) {
+				alertIncorrectRangeField("NonReflaction Threshold", 0, 10);
+			} else if (endThresh < 0 || endThresh > 10) {
+				alertIncorrectRangeField("End Threshold", 0, 10);
+			} else if (reflectionThresh < 20 || reflectionThresh > 80) {
+				alertIncorrectRangeField("Reflaction Threshold", 20, 80);
+			} else {
+				parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
+				parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
+				parameters.setMeasuringTime(Integer.parseInt(measureTimeField.getValue().toString()));
+				parameters.setTestWaveLength(Integer.parseInt(waveLengthField.getValue().toString()));
+				parameters.setMeasureMode((measureModeField.getValue().toString() == "1-Average") ? 1 : 2);
+				parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
+				parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
+				parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
+				parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
+				prepareForm(Mode.VIEW);
+			}
+
 		}
 	}
 
@@ -372,33 +388,27 @@ public class ConfigurationWindowController implements Initializable, IController
 	public void prepareForm(Mode mode) {
 		switch (mode) {
 			case VIEW:
+				measureRangeField.setDisable(true);
+				pulseWidthField.setDisable(true);
+				measureTimeField.setDisable(true);
+				waveLengthField.setDisable(true);
 				measureModeField.setDisable(true);
-				optimizeModeField.setDisable(true);
-				reflectionThresholdField.setDisable(true);
-				enabledRefreshField.setDisable(true);
-				refreshCycleField.setDisable(true);
-				testWaveLengthField.setDisable(true);
-				measuringRangeOfTestField.setDisable(true);
-				testPulseWidthField.setDisable(true);
-				measuringTimeField.setDisable(true);
 				refractiveIndexField.setDisable(true);
-				endThresholdField.setDisable(true);
 				nonReflactionThresholdField.setDisable(true);
+				endThresholdField.setDisable(true);
+				reflectionThresholdField.setDisable(true);
 				buttonSave.setDisable(true);
 				break;
 			case EDIT:
+				measureRangeField.setDisable(false);
+				pulseWidthField.setDisable(false);
+				measureTimeField.setDisable(false);
+				waveLengthField.setDisable(false);
 				measureModeField.setDisable(false);
-				optimizeModeField.setDisable(false);
-				reflectionThresholdField.setDisable(false);
-				enabledRefreshField.setDisable(false);
-				refreshCycleField.setDisable(false);
-				testWaveLengthField.setDisable(false);
-				measuringRangeOfTestField.setDisable(false);
-				testPulseWidthField.setDisable(false);
-				measuringTimeField.setDisable(false);
 				refractiveIndexField.setDisable(false);
-				endThresholdField.setDisable(false);
 				nonReflactionThresholdField.setDisable(false);
+				endThresholdField.setDisable(false);
+				reflectionThresholdField.setDisable(false);
 				buttonSave.setDisable(false);
 
 				break;
@@ -408,6 +418,32 @@ public class ConfigurationWindowController implements Initializable, IController
 	@Override
 	public void prepareMenu(Mode mode) {
 
+	}
+
+	private void updateParameters() {
+
+		ObservableList<Integer> param1 = FXCollections.observableArrayList(new Integer[]{0, 1, 5, 10, 30, 60, 80, 120});
+		measureRangeField.setItems(param1);
+
+		ObservableList<Integer> param2 = FXCollections.observableArrayList(new Integer[]{10, 20, 50, 100, 200, 500, 1000, 2000, 10000, 20000});
+		pulseWidthField.setItems(param2);
+
+		ObservableList<Integer> param3 = FXCollections.observableArrayList(new Integer[]{15, 30, 60, 120, 180});
+		measureTimeField.setItems(param3);
+
+		ObservableList<Integer> param4 = FXCollections.observableArrayList(new Integer[]{1310, 1550});
+		waveLengthField.setItems(param4);
+
+		ObservableList<String> param5 = FXCollections.observableArrayList(new String[]{"1-Average", "2-Real Time"});
+		measureModeField.setItems(param5);
+
+		refractiveIndexField.setText("");
+
+		nonReflactionThresholdField.setText("");
+
+		endThresholdField.setText("");
+
+		reflectionThresholdField.setText("");
 	}
 
 	private void updateDeviceList() {
