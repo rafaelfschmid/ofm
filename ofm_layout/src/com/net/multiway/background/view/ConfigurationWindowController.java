@@ -9,13 +9,11 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReceiveParameters;
 import com.net.multiway.background.data.DataReceiveParametersEvents;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
-import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
@@ -27,11 +25,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -55,7 +53,6 @@ import javafx.util.Callback;
  */
 public class ConfigurationWindowController implements Initializable, IController {//implements Initializable {
 
-	
 	//device
 	@FXML
 	private ListView<DataDevice> devicesList;
@@ -292,10 +289,26 @@ public class ConfigurationWindowController implements Initializable, IController
 	private void onHandleExecute() {
 		DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
 		parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
-		host.connect(parameters);
-		ReceiveParameters r = host.getReceiveParametersData();
-		showReceiveParametersTable(r.getData().getEvents());
-		plotGraph(host.getReceiveValues());
+
+		Task execute = new Task() {
+			@Override
+			protected String call() throws Exception {
+				host.connect(parameters);
+				return "Conexão realizada";
+			}
+
+			@Override
+			protected void succeeded() {
+				ReceiveParameters r = host.getReceiveParametersData();
+				showReceiveParametersTable(r.getData().getEvents());
+				plotGraph(host.getReceiveValues());
+			}
+		};
+
+		
+		Thread tr = new Thread(execute);
+		tr.start();
+		
 	}
 
 	private void plotGraph(ReceiveValues receiveValues) {
@@ -426,5 +439,5 @@ public class ConfigurationWindowController implements Initializable, IController
 		}
 		resultTable.setItems(value);
 	}
-	
+
 }
