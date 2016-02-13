@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,9 +29,9 @@ import javafx.scene.control.TextField;
  *
  * @author rafael
  */
-public class MonitorWindowController implements Initializable,IController {
+public class MonitorWindowController implements Initializable, IController {
 
-	 private IController centerController;
+    private IController centerController;
     //implements Initializable {
 
     //device
@@ -51,29 +52,23 @@ public class MonitorWindowController implements Initializable,IController {
 
     //parameter
     @FXML
-    private TextField measureModeField;
+    private ComboBox measureRangeField;
     @FXML
-    private TextField optimizeModeField;
+    private ComboBox pulseWidthField;
     @FXML
-    private TextField reflectionThresholdField;
+    private ComboBox measureTimeField;
     @FXML
-    private TextField enabledRefreshField;
+    private ComboBox waveLengthField;
     @FXML
-    private TextField refreshCycleField;
-    @FXML
-    private TextField testWaveLengthField;
-    @FXML
-    private TextField measuringRangeOfTestField;
-    @FXML
-    private TextField testPulseWidthField;
-    @FXML
-    private TextField measuringTimeField;
+    private ComboBox measureModeField;
     @FXML
     private TextField refractiveIndexField;
     @FXML
+    private TextField nonReflactionThresholdField;
+    @FXML
     private TextField endThresholdField;
     @FXML
-    private TextField nonReflactionThresholdField;
+    private TextField reflectionThresholdField;
 
     //result
     @FXML
@@ -92,7 +87,7 @@ public class MonitorWindowController implements Initializable,IController {
     private TableColumn<Result, Double> accumulationColumn;
     @FXML
     private TableColumn<Result, Double> attenuationCoefficientColumn;
-    
+
     //result
 //    @FXML
 //    private TableView<Warning> warningsTable;
@@ -104,18 +99,13 @@ public class MonitorWindowController implements Initializable,IController {
 //    private TableColumn<Warning, String> descriptionColumn;
 //    @FXML
 //    private TableColumn<Warning, Date> dateHourColumn;
-
-
     /**
      * Initializes the controller class.
      */
     @FXML
     public void initialize() {
 
-
     }
-
-  
 
     private void alertToSaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -136,27 +126,27 @@ public class MonitorWindowController implements Initializable,IController {
 
     @FXML
     private void onHandleEditParameters() {
-       
+
     }
 
     @FXML
     private void onHandleSaveParameters() {
-        
+
     }
 
     @FXML
     private void onHandleExecute() {
-       
+
     }
 
     @FXML
     private void onHandleExport() {
-        
+
     }
 
     @FXML
     private void onHandleSetReference() {
-        
+
     }
 
     @FXML
@@ -164,24 +154,33 @@ public class MonitorWindowController implements Initializable,IController {
         MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
     }
 
-   
-	public void setCenterController(IController controller) {
+    public void setCenterController(IController controller) {
         this.centerController = controller;
     }
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
-	@Override
-	public void handleSave(ActionEvent event) {
-	}
+    @Override
+    public void handleSave(ActionEvent event) {
+    }
 
-	@Override
-	public void prepareForm(Mode mode) {
-	}
+    @Override
+    public void prepareForm(Mode mode) {
+        measureRangeField.setDisable(true);
+        pulseWidthField.setDisable(true);
+        measureTimeField.setDisable(true);
+        waveLengthField.setDisable(true);
+        measureModeField.setDisable(true);
+        refractiveIndexField.setDisable(true);
+        nonReflactionThresholdField.setDisable(true);
+        endThresholdField.setDisable(true);
+        reflectionThresholdField.setDisable(true);
 
-	@Override
-	public void prepareMenu(Mode mode) {
-	}
+    }
+
+    @Override
+    public void prepareMenu(Mode mode) {
+    }
 }
