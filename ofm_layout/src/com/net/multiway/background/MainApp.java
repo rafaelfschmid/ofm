@@ -5,8 +5,6 @@
  */
 package com.net.multiway.background;
 
-import com.net.multiway.background.data.DataDevice;
-
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
@@ -17,10 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -40,18 +34,12 @@ public class MainApp extends Application {
     private BorderPane rootLayout;
     private MainSceneController rootController;
 
-    private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
-
     public static MainApp getInstance() {
         return instance;
     }
 
     public MainApp() {
 
-    }
-
-    public ObservableList<DataDevice> getDevicesData() {
-        return devicesData;
     }
 
     /**
@@ -80,9 +68,6 @@ public class MainApp extends Application {
         this.primaryStage.setMaximized(true);
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
-
-        DataDevice x1 = new DataDevice(new Long(1), "192.168.4.2", "192.168.4.0", "192.168.4.1");
-        devicesData.add(x1);
     }
 
     private void initRootLayout() {
@@ -145,12 +130,12 @@ public class MainApp extends Application {
 
             rootController.setCenterController(controller);
             rootLayout.setCenter((AnchorPane) node);
-            
+
             return controller;
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
 

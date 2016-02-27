@@ -8,6 +8,8 @@ import javafx.beans.property.StringProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,19 +36,13 @@ public class DataDevice implements Data, Serializable {
         this.gateway = new SimpleStringProperty();
     }
 
-    public DataDevice(Long id, String ip, String mask, String gateway) {
-        this.ID = id;
-        this.ip = new SimpleStringProperty(Utils.fillAddress(ip));
-        this.mask = new SimpleStringProperty(Utils.fillAddress(mask));
-        this.gateway = new SimpleStringProperty(Utils.fillAddress(gateway));
-    }
-
     public String takeData() {
 
         return this.ip.get() + this.mask.get() + this.gateway.get();
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     public Long getID() {

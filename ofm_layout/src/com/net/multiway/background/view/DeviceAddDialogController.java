@@ -103,11 +103,11 @@ public class DeviceAddDialogController {
             device.setGateway(gatewayField.getText());
         }
 
+//        DataDeviceDAO dao = new DataDeviceDAO();
+//        dao.create(device);
+        
         okClicked = true;
         dialogStage.close();
-		
-		DataDeviceDAO dao = new DataDeviceDAO();
-		dao.create(device);
 
     }
 

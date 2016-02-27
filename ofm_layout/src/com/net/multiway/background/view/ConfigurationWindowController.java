@@ -11,7 +11,6 @@ import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveParametersEvents;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
-import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
@@ -66,6 +65,8 @@ public class ConfigurationWindowController implements Initializable, IController
 
     private DataDevice device;
 
+    ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
+
     // Gráfico
     @FXML
     private LineChart<NumberAxis, NumberAxis> grafico;
@@ -119,21 +120,16 @@ public class ConfigurationWindowController implements Initializable, IController
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-//		DataParametersDAO daop = new DataParametersDAO();
-//		parameters = daop.findData0x1000(Long.parseLong("1"));
+//        DataParametersDAO daop = new DataParametersDAO();
+//        parameters = daop.findData0x1000(Long.parseLong("1"));
 //
-//		if (parameters == null) {
-        parameters = new DataParameters();
-//		}
-//
-//		DataDeviceDAO dao = new DataDeviceDAO();
-//		device = dao.findData(Long.parseLong("1"));
-//
-//		if (device == null) {
-        device = new DataDevice();
-//		}
+//        if (parameters == null) {
+//            parameters = new DataParameters();
+//        }
+        DataDeviceDAO dao = new DataDeviceDAO();
+        devicesData.addAll(dao.getDevices());
+        devicesList.setItems(devicesData);
 
-        devicesList.setItems(MainApp.getInstance().getDevicesData());
         updateDeviceList();
         mappingParametersTable();
         updateParameters();
@@ -202,6 +198,8 @@ public class ConfigurationWindowController implements Initializable, IController
 
         if (selectedIndex >= 0) {
             if (alertDeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
+                DataDeviceDAO dao = new DataDeviceDAO();
+                dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
                 devicesList.getItems().remove(selectedIndex);
             }
 
@@ -243,8 +241,10 @@ public class ConfigurationWindowController implements Initializable, IController
             dialogStage.showAndWait();
 
             if (controller.isOkClicked()) {
-                MainApp.getInstance().getDevicesData().add(device);
-                devicesList.setItems(MainApp.getInstance().getDevicesData());
+                DataDeviceDAO dao = new DataDeviceDAO();
+                dao.create(device);
+                devicesData.add(device);
+                devicesList.setItems(devicesData);
             }
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -419,21 +419,21 @@ public class ConfigurationWindowController implements Initializable, IController
         int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
         //if (selectedIndex >= 0) {
-            MonitorWindowController controller
-                    = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
-            
-            DataDevice device = devicesList.getItems().get(0);//devicesList.getSelectionModel().getSelectedItem();
-            controller.setDevice(device);
-            
-            controller.setParameters(measureRangeField.getValue().toString(),
-                    pulseWidthField.getValue().toString(),
-                    measureTimeField.getValue().toString(),
-                    waveLengthField.getValue().toString(),
-                    measureModeField.getValue().toString(),
-                    refractiveIndexField.getText(),
-                    nonReflactionThresholdField.getText(),
-                    endThresholdField.getText(),
-                    reflectionThresholdField.getText());
+        MonitorWindowController controller
+                = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
+
+        DataDevice device = devicesList.getItems().get(0);//devicesList.getSelectionModel().getSelectedItem();
+        controller.setDevice(device);
+
+        controller.setParameters(measureRangeField.getValue().toString(),
+                pulseWidthField.getValue().toString(),
+                measureTimeField.getValue().toString(),
+                waveLengthField.getValue().toString(),
+                measureModeField.getValue().toString(),
+                refractiveIndexField.getText(),
+                nonReflactionThresholdField.getText(),
+                endThresholdField.getText(),
+                reflectionThresholdField.getText());
 //        } else {
 //            alertDeviceSelection();
 //        }
