@@ -6,6 +6,7 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
+import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
@@ -122,6 +123,29 @@ public class MonitorWindowController implements Initializable, IController {
         alert.setContentText(ex);
 
         alert.showAndWait();
+    }
+    
+    void setDevice(DataDevice device) {
+        ipLabel.setText(device.getIp());
+        maskLabel.setText(device.getMask());;
+        gatewayLabel.setText(device.getGateway());;
+    }
+
+    void setParameters(String measureRangeField, String pulseWidthField,
+            String measureTimeField, String waveLengthField,
+            String measureModeField, String refractiveIndexField,
+            String nonReflactionThresholdField,
+            String endThresholdField,
+            String reflectionThresholdField) {
+        this.measureRangeField.setValue(measureRangeField);
+        this.pulseWidthField.setValue(pulseWidthField);
+        this.measureTimeField.setValue(measureTimeField);
+        this.waveLengthField.setValue(waveLengthField);
+        this.measureModeField.setValue(measureModeField);
+        this.refractiveIndexField.setText(refractiveIndexField);
+        this.nonReflactionThresholdField.setText(nonReflactionThresholdField);
+        this.endThresholdField.setText(endThresholdField);
+        this.reflectionThresholdField.setText(reflectionThresholdField);
     }
 
     @FXML

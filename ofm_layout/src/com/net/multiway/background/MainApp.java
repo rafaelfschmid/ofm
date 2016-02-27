@@ -30,6 +30,7 @@ import javafx.scene.Node;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.stage.WindowEvent;
 
 public class MainApp extends Application {
@@ -75,8 +76,10 @@ public class MainApp extends Application {
         initRootLayout();
 // Shows the scene containing RootLayout
         Scene scene = new Scene(rootLayout);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.primaryStage.getIcons().add(new Image("file:monitor_graph.jpg"));
+        this.primaryStage.setMaximized(true);
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
 
         DataDevice x1 = new DataDevice(new Long(1), "192.168.4.2", "192.168.4.0", "192.168.4.1");
         devicesData.add(x1);
@@ -130,7 +133,7 @@ public class MainApp extends Application {
      * @param mode Preparation mode of view: NEW, EDIT or VIEW
      * @param view view to be shown
      */
-    public void showView(View view, Mode mode) {
+    public IController showView(View view, Mode mode) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(view.getResource()));
@@ -142,9 +145,13 @@ public class MainApp extends Application {
 
             rootController.setCenterController(controller);
             rootLayout.setCenter((AnchorPane) node);
+            
+            return controller;
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return null;
     }
 
     public static void main(String[] args) {
