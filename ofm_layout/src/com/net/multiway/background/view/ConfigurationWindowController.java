@@ -11,6 +11,7 @@ import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveParametersEvents;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
+import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
@@ -120,36 +121,42 @@ public class ConfigurationWindowController implements Initializable, IController
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-//        DataParametersDAO daop = new DataParametersDAO();
-//        parameters = daop.findData0x1000(Long.parseLong("1"));
-//
-//        if (parameters == null) {
-//            parameters = new DataParameters();
-//        }
         DataDeviceDAO dao = new DataDeviceDAO();
         devicesData.addAll(dao.getDevices());
         devicesList.setItems(devicesData);
-
         updateDeviceList();
+
         mappingParametersTable();
+        DataParametersDAO daop = new DataParametersDAO();
+
+        parameters = daop.findData(Long.parseLong("1"));
+
+        if (parameters == null) {
+            parameters = new DataParameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
+        }
+
         updateParameters();
 
-        measureRangeField.setValue("0");
-        pulseWidthField.setValue("0");
-        measureTimeField.setValue("15");
-        waveLengthField.setValue("1550");
-        measureModeField.setValue("1-Average");
-        refractiveIndexField.setText("1.4685");
-        nonReflactionThresholdField.setText("0");
-        endThresholdField.setText("5.0");
-        reflectionThresholdField.setText("65.0");
+        measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
+        pulseWidthField.setValue(parameters.getTestPulseWidth());
+        measureTimeField.setValue(parameters.getMeasuringTime());
+        waveLengthField.setValue(parameters.getTestWaveLength());
+        if (parameters.getMeasureMode() == 1) {
+            measureModeField.setValue("1-Average");
+        } else {
+            measureModeField.setValue("2-Real Time");
+        }
+        refractiveIndexField.setText(parameters.getRefractiveIndex().toString());
+        nonReflactionThresholdField.setText(parameters.getNonReflactionThreshold().toString());
+        endThresholdField.setText(parameters.getEndThreshold().toString());
+        reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
 
     }
 
     private void alertToSaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Parametros não salvos");
-        alert.setHeaderText("O parâmetros não foram salvos.");
+        alert.setHeaderText("Por favor, salvar os parâmetros antes de prosseguir.");
 
         alert.showAndWait();
     }
@@ -342,7 +349,6 @@ public class ConfigurationWindowController implements Initializable, IController
 
         host = new DeviceComunicator("192.168.4.4", 5000);
         if (validateParametersField()) {
-            parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
 
             Task execute = new Task() {
                 @Override
@@ -405,38 +411,45 @@ public class ConfigurationWindowController implements Initializable, IController
 
     @FXML
     private void onHandleSetReference() {
-//		if (validateParametersField()) {
-//			DataParametersDAO dao = new DataParametersDAO();
-//			if (host != null && parameters != null) {
-//				dao.create(parameters);
-//			}
-//
-//		}
+//        if (buttonSave.isDisabled()) {
+//            DataParametersDAO dao = new DataParametersDAO();
+//            if(parameters.getID() != null) {
+//                dao.deleteData(parameters);
+//            }
+//            dao.create(parameters);
+//        } else {
+//            alertToSaveParameters();
+//        }
     }
 
     @FXML
     private void onHandleChangeToMonitor() throws IOException {
-        int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
-        //if (selectedIndex >= 0) {
-        MonitorWindowController controller
-                = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
+        if (devicesList.getItems().size() > 0) {
+            int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
-        DataDevice device = devicesList.getItems().get(0);//devicesList.getSelectionModel().getSelectedItem();
-        controller.setDevice(device);
+            MonitorWindowController controller
+                    = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
 
-        controller.setParameters(measureRangeField.getValue().toString(),
-                pulseWidthField.getValue().toString(),
-                measureTimeField.getValue().toString(),
-                waveLengthField.getValue().toString(),
-                measureModeField.getValue().toString(),
-                refractiveIndexField.getText(),
-                nonReflactionThresholdField.getText(),
-                endThresholdField.getText(),
-                reflectionThresholdField.getText());
-//        } else {
-//            alertDeviceSelection();
-//        }
+            DataDevice device;
+            if (selectedIndex >= 0) {
+                device = devicesList.getSelectionModel().getSelectedItem();
+            } else {
+                device = devicesList.getItems().get(0);
+            }
+
+            controller.setDevice(device);
+
+            controller.setParameters(measureRangeField.getValue().toString(),
+                    pulseWidthField.getValue().toString(),
+                    measureTimeField.getValue().toString(),
+                    waveLengthField.getValue().toString(),
+                    measureModeField.getValue().toString(),
+                    refractiveIndexField.getText(),
+                    nonReflactionThresholdField.getText(),
+                    endThresholdField.getText(),
+                    reflectionThresholdField.getText());
+        }
     }
 
     @Override

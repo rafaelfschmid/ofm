@@ -17,68 +17,85 @@ import javax.persistence.Persistence;
  */
 public class DataParametersDAO implements Serializable {
 
-	private EntityManagerFactory emf = null;
+    private EntityManagerFactory emf = null;
 
-	public DataParametersDAO() {
-		emf = Persistence.createEntityManagerFactory("BackgroundDB");
-	}
+    public DataParametersDAO() {
+        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+    }
 
-	public EntityManager getEntityManager() {
-		return emf.createEntityManager();
-	}
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
 
-	public void create(DataParameters data) {
-		EntityManager em = null;
-		try {
-			em = getEntityManager();
-			em.getTransaction().begin();
+    public void create(DataParameters data) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
 
-			em.persist(data);
+            em.persist(data);
 
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			if (findData0x1000(data.getID()) != null) {
-				System.out.println("Data " + data.toString() + " already exists.");
-			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findData(data.getID()) != null) {
+                System.out.println("Data " + data.toString() + " already exists.");
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
-	public void edit(DataParameters data) {
-		EntityManager em = null;
+    public void edit(DataParameters data) {
+        EntityManager em = null;
 
-		try {
-			em = getEntityManager();
-			DataParameters d = em.find(DataParameters.class, data.getID());
-			em.getTransaction().begin();
-			d.copy(data);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			String msg = ex.getLocalizedMessage();
-			if (msg == null || msg.length() == 0) {
-				Long id = data.getID();
-				if (findData0x1000(id) == null) {
-					System.out.println("The data with id " + id + " no longer exists.");
-				}
-			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+        try {
+            em = getEntityManager();
+            DataParameters d = em.find(DataParameters.class, data.getID());
+            em.getTransaction().begin();
+            d.copy(data);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Long id = data.getID();
+                if (findData(id) == null) {
+                    System.out.println("The data with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
-	public DataParameters findData0x1000(Long id) {
-		EntityManager em = getEntityManager();
-		try {
-			return em.find(DataParameters.class, id);
-		} finally {
-			em.close();
-		}
-	}
+    public DataParameters findData(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(DataParameters.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public void deleteData(DataParameters parameters) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            em.remove(em.getReference(DataParameters.class, parameters.getID()));
+
+            em.getTransaction().commit();
+
+        } catch (Exception ex) {
+            System.out.println("Data " + parameters.toString() + " doesn't deleted.");
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }

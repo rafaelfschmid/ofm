@@ -101,9 +101,7 @@ public class DataDeviceDAO {
             em.getTransaction().commit();
 
         } catch (Exception ex) {
-            if (findData(device.getID()) != null) {
-                System.out.println("Data " + device.toString() + " already exists.");
-            }
+            System.out.println("Data " + device.toString() + " doesn't deleted.");
             throw ex;
         } finally {
             em.close();
