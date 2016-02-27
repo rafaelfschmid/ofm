@@ -42,7 +42,7 @@ public class DataReceiveParameters implements Serializable {
 	private ObjectProperty<Float> testMode;
 	private ObjectProperty<Integer> testWay;
 	private ObjectProperty<Integer> lenght_vec;
-	private ArrayList<Integer> data;
+	private ArrayList<Integer> graphData;
 	private ArrayList<DataReceiveParametersEvents> events;
 
 	private ObjectProperty<Long> ID;
@@ -62,7 +62,7 @@ public class DataReceiveParameters implements Serializable {
 		this.testMode = new SimpleObjectProperty<>();
 		this.testWay = new SimpleObjectProperty<>();
 		this.lenght_vec = new SimpleObjectProperty<>();
-		this.data = new ArrayList<>();
+		this.graphData = new ArrayList<>();
 		this.events = new ArrayList<>();
 	}
 
@@ -81,7 +81,7 @@ public class DataReceiveParameters implements Serializable {
 		this.testMode = new SimpleObjectProperty<>(testMode);
 		this.testWay = new SimpleObjectProperty<>(testWay);
 		this.lenght_vec = new SimpleObjectProperty<>(lenght_vec);
-		this.data = new ArrayList<>();
+		this.graphData = new ArrayList<>();
 		this.events = new ArrayList<>();
 
 	}
@@ -227,12 +227,12 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 //	@OneToMany(mappedBy = "DATA0X9000", cascade = CascadeType.ALL)
-	public ArrayList<Integer> getData() {
-		return data;
+	public ArrayList<Integer> getGraphData() {
+		return graphData;
 	}
 
-	public void setData(ArrayList<Integer> data) {
-		this.data = data;
+	public void setGraphData(ArrayList<Integer> graphData) {
+		this.graphData = graphData;
 	}
 
 	@Id
@@ -265,7 +265,7 @@ public class DataReceiveParameters implements Serializable {
 
 	public void copy(DataReceiveParameters data) {
 
-		setData(data.getData());
+		setGraphData(data.getGraphData());
 		setEvents(data.getEvents());
 		setEndThreshold(data.getEndThreshold());
 		setGroupRefractiveIndex(data.getGroupRefractiveIndex());

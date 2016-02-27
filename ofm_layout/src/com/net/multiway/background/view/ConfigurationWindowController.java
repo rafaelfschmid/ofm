@@ -549,8 +549,5 @@ public class ConfigurationWindowController implements Initializable, IController
 
     }
 
-    @FXML
-    private void onHandleStop(ActionEvent event) {
-    }
 
 }

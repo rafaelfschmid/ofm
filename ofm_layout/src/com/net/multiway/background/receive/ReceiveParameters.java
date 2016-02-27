@@ -81,7 +81,7 @@ public class ReceiveParameters extends Package {
 			in.read(b);
 			dt.add(Utils.byte2ToInt(b));
 		}
-		data.setData(dt);
+		data.setGraphData(dt);
 	}
 
 	public void parserPartC() throws IOException {
