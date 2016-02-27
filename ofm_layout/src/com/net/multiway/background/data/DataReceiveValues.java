@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATA0X9001")
+@Table(name = "DATARECEIVEVALUES")
 @XmlRootElement
 public class DataReceiveValues implements Serializable {
 
@@ -45,7 +45,7 @@ public class DataReceiveValues implements Serializable {
         data = new int[this.lenght];
     }
 
-    @OneToMany(mappedBy = "DATA0X9001", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "DATA0X9001", cascade = CascadeType.ALL)
     public int[] getData() {
         return data;
     }

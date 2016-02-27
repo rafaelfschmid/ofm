@@ -6,6 +6,7 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.dao.DataDeviceDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -104,6 +105,9 @@ public class DeviceAddDialogController {
 
         okClicked = true;
         dialogStage.close();
+		
+		DataDeviceDAO dao = new DataDeviceDAO();
+		dao.create(device);
 
     }
 

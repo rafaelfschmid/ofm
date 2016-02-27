@@ -32,6 +32,8 @@ public class DeviceComunicator {
 	private ReceiveValues receiveValues;
 	private ReceiveParameters receiveParametersData;
 
+	
+	
 	public DeviceComunicator(String i, int d) {
 		this.door = d;
 		this.ip = i;

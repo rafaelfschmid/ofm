@@ -36,7 +36,7 @@ public class DataDeviceDAO {
 
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-			if (findData0x1002(data.getID()) != null) {
+			if (findData(data.getID()) != null) {
 				System.out.println("Data " + data.toString() + " already exists.");
 			}
 			throw ex;
@@ -60,7 +60,7 @@ public class DataDeviceDAO {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findData0x1002(id) == null) {
+				if (findData(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -72,7 +72,7 @@ public class DataDeviceDAO {
 		}
 	}
 
-	public DataDevice findData0x1002(Long id) {
+	public DataDevice findData(Long id) {
 		EntityManager em = getEntityManager();
 		try {
 			return em.find(DataDevice.class, id);

@@ -226,7 +226,7 @@ public class DataReceiveParameters implements Serializable {
 		this.lenght_vec.set(lenght_vec);
 	}
 
-	@OneToMany(mappedBy = "DATA0X9000", cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "DATA0X9000", cascade = CascadeType.ALL)
 	public ArrayList<Integer> getData() {
 		return data;
 	}

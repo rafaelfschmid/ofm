@@ -10,6 +10,8 @@ import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveParametersEvents;
+import com.net.multiway.background.data.dao.DataDeviceDAO;
+import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
@@ -59,6 +61,10 @@ public class ConfigurationWindowController implements Initializable, IController
 	private ListView<DataDevice> devicesList;
 
 	private DataParameters parameters;
+
+	private DeviceComunicator host;
+
+	private DataDevice device;
 
 	// GrÃ¡fico
 	@FXML
@@ -112,13 +118,26 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		parameters = new DataParameters();
+		
+//		DataParametersDAO daop = new DataParametersDAO();
+//		parameters = daop.findData0x1000(Long.parseLong("1"));
+//
+//		if (parameters == null) {
+			parameters = new DataParameters();
+//		}
+//
+//		DataDeviceDAO dao = new DataDeviceDAO();
+//		device = dao.findData(Long.parseLong("1"));
+//
+//		if (device == null) {
+			device = new DataDevice();
+//		}
 
 		devicesList.setItems(MainApp.getInstance().getDevicesData());
 		updateDeviceList();
 		mappingParametersTable();
 		updateParameters();
-		
+
 		measureRangeField.setValue("0");
 		pulseWidthField.setValue("0");
 		measureTimeField.setValue("15");
@@ -256,27 +275,42 @@ public class ConfigurationWindowController implements Initializable, IController
 		prepareForm(Mode.EDIT);
 	}
 
-	@FXML
-	private void onHandleSaveParameters() {
+	private boolean validateParametersField() {
 		if (measureRangeField.getValue() == null) {
 			alertIncorrectField("Measuring Range Of Test");
+			return false;
 		} else if (pulseWidthField.getValue() == null) {
 			alertIncorrectField("Test Pulse Width");
+			return false;
 		} else if (measureTimeField.getValue() == null) {
 			alertIncorrectField("Measuring Time");
+			return false;
 		} else if (waveLengthField.getValue() == null) {
 			alertIncorrectField("Test Wave Length");
+			return false;
 		} else if (measureModeField.getValue() == null) {
 			alertIncorrectField("Measure Mode");
+			return false;
 		} else if (refractiveIndexField.getText().isEmpty()) {
 			alertIncorrectField("Refractive Index");
+			return false;
 		} else if (nonReflactionThresholdField.getText().isEmpty()) {
 			alertIncorrectField("Non Reflaction Threshold");
+			return false;
 		} else if (endThresholdField.getText().isEmpty()) {
 			alertIncorrectField("End Threshold");
+			return false;
 		} else if (reflectionThresholdField.getText().isEmpty()) {
 			alertIncorrectField("Reflection Threshold");
+			return false;
 		} else {
+			return true;
+		}
+	}
+
+	@FXML
+	private void onHandleSaveParameters() {
+		if (validateParametersField()) {
 			float nonReflThresh = Float.parseFloat(nonReflactionThresholdField.getText());
 			float endThresh = Float.parseFloat(endThresholdField.getText());
 			float reflectionThresh = Float.parseFloat(reflectionThresholdField.getText());
@@ -305,35 +339,38 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	@FXML
 	private void onHandleExecute() {
-		DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
-		parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
 
-		Task execute = new Task() {
-			@Override
-			protected String call() throws Exception {
-				if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
-					resultTable.getItems().remove(0, resultTable.getItems().size());
+		host = new DeviceComunicator("192.168.4.4", 5000);
+		if (validateParametersField()) {
+			parameters.copy(new DataParameters(Long.parseLong("1"), 1, 0, 65.0f, 1, 1, 1550, 0, 0, 15000, 1.4685f, 5.0f, 0));
+
+			Task execute = new Task() {
+				@Override
+				protected String call() throws Exception {
+					if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
+						resultTable.getItems().remove(0, resultTable.getItems().size());
+					}
+
+					host.connect(parameters);
+
+					return "Conexão realizada";
 				}
 
-				host.connect(parameters);
+				@Override
+				protected void succeeded() {
+					ReceiveParameters r = host.getReceiveParametersData();
+					showReceiveParametersTable(r.getData().getEvents());
 
-				return "Conexão realizada";
-			}
+					plotGraph(host.getReceiveValues());
+					grafico.setCreateSymbols(false);
 
-			@Override
-			protected void succeeded() {
-				ReceiveParameters r = host.getReceiveParametersData();
-				showReceiveParametersTable(r.getData().getEvents());
+				}
+			};
 
-				plotGraph(host.getReceiveValues());
-				grafico.setCreateSymbols(false);
+			Thread tr = new Thread(execute);
 
-			}
-		};
-
-		Thread tr = new Thread(execute);
-
-		tr.start();
+			tr.start();
+		}
 
 	}
 
@@ -368,14 +405,18 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	@FXML
 	private void onHandleSetReference() {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("Implementar");
-		alert.setHeaderText("//TO DO");
-		alert.showAndWait();
+//		if (validateParametersField()) {
+//			DataParametersDAO dao = new DataParametersDAO();
+//			if (host != null && parameters != null) {
+//				dao.create(parameters);
+//			}
+//
+//		}
 	}
 
 	@FXML
 	private void onHandleChangeToMonitor() throws IOException {
+
 		MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
 	}
 
@@ -485,6 +526,10 @@ public class ConfigurationWindowController implements Initializable, IController
 		}
 		resultTable.setItems(value);
 
+	}
+
+	@FXML
+	private void onHandleStop(ActionEvent event) {
 	}
 
 }
