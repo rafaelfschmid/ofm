@@ -7,17 +7,28 @@ package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.DataReceiveParametersEvents;
+import com.net.multiway.background.model.DeviceComunicator;
+import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
+import com.net.multiway.background.receive.ReceiveParameters;
+import com.net.multiway.background.receive.ReceiveValues;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -33,7 +44,10 @@ import javafx.scene.control.TextField;
 public class MonitorWindowController implements Initializable, IController {
 
     private IController centerController;
-    //implements Initializable {
+
+    private DataDevice device;
+
+    private DataParameters parameters;
 
     //device
     @FXML
@@ -73,21 +87,21 @@ public class MonitorWindowController implements Initializable, IController {
 
     //result
     @FXML
-    private TableView<Result> resultTable;
+    private TableView<DataReceiveParametersEvents> resultTable;
     @FXML
-    private TableColumn<Result, Integer> numeroColumn;
+    private TableColumn<DataReceiveParametersEvents, Long> numeroColumn;
     @FXML
-    private TableColumn<Result, Integer> typeColumn;
+    private TableColumn<DataReceiveParametersEvents, Integer> typeColumn;
     @FXML
-    private TableColumn<Result, Integer> distanceColumn;
+    private TableColumn<DataReceiveParametersEvents, Integer> distanceColumn;
     @FXML
-    private TableColumn<Result, Double> insertLossColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> insertLossColumn;
     @FXML
-    private TableColumn<Result, Double> reflectLossColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> reflectLossColumn;
     @FXML
-    private TableColumn<Result, Double> accumulationColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> accumulationColumn;
     @FXML
-    private TableColumn<Result, Double> attenuationCoefficientColumn;
+    private TableColumn<DataReceiveParametersEvents, Float> attenuationCoefficientColumn;
 
     //result
 //    @FXML
@@ -100,6 +114,7 @@ public class MonitorWindowController implements Initializable, IController {
 //    private TableColumn<Warning, String> descriptionColumn;
 //    @FXML
 //    private TableColumn<Warning, Date> dateHourColumn;
+
     /**
      * Initializes the controller class.
      */
@@ -124,28 +139,27 @@ public class MonitorWindowController implements Initializable, IController {
 
         alert.showAndWait();
     }
-    
+
     void setDevice(DataDevice device) {
+        this.device = device;
+
         ipLabel.setText(device.getIp());
         maskLabel.setText(device.getMask());;
         gatewayLabel.setText(device.getGateway());;
     }
 
-    void setParameters(String measureRangeField, String pulseWidthField,
-            String measureTimeField, String waveLengthField,
-            String measureModeField, String refractiveIndexField,
-            String nonReflactionThresholdField,
-            String endThresholdField,
-            String reflectionThresholdField) {
-        this.measureRangeField.setValue(measureRangeField);
-        this.pulseWidthField.setValue(pulseWidthField);
-        this.measureTimeField.setValue(measureTimeField);
-        this.waveLengthField.setValue(waveLengthField);
-        this.measureModeField.setValue(measureModeField);
-        this.refractiveIndexField.setText(refractiveIndexField);
-        this.nonReflactionThresholdField.setText(nonReflactionThresholdField);
-        this.endThresholdField.setText(endThresholdField);
-        this.reflectionThresholdField.setText(reflectionThresholdField);
+    void setParameters(DataParameters parameters) {
+        this.parameters = parameters;
+
+        this.measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
+        this.pulseWidthField.setValue(parameters.getTestPulseWidth());
+        this.measureTimeField.setValue(parameters.getMeasuringTime());
+        this.waveLengthField.setValue(parameters.getTestWaveLength());
+        this.measureModeField.setValue(parameters.getMeasureMode());
+        this.refractiveIndexField.setText(parameters.getRefractiveIndex().toString());
+        this.nonReflactionThresholdField.setText(parameters.getReflectionThreshold().toString());
+        this.endThresholdField.setText(parameters.getEndThreshold().toString());
+        this.reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
     }
 
     @FXML
@@ -160,6 +174,64 @@ public class MonitorWindowController implements Initializable, IController {
 
     @FXML
     private void onHandleExecute() {
+        DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText(), 5000);
+
+        Task execute = new Task() {
+            @Override
+            protected String call() throws Exception {
+                if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
+                    resultTable.getItems().remove(0, resultTable.getItems().size());
+                }
+
+                host.connect(parameters);
+
+                return "Conexcao realizada";
+            }
+
+            @Override
+            protected void succeeded() {
+                ReceiveParameters r = host.getReceiveParametersData();
+                showReceiveParametersTable(r.getData().getEvents());
+
+                plotGraph(host.getReceiveValues());
+                grafico.setCreateSymbols(false);
+
+            }
+        };
+
+        Thread tr = new Thread(execute);
+
+        tr.start();
+    }
+
+    private void plotGraph(ReceiveValues receiveValues) {
+        receiveValues.processData();
+
+        ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
+
+        int[] data = receiveValues.getDataValues();
+        for (int i = 0; i < data.length; i++) {
+            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data[i]);
+            coordData.setNode(
+                    new HoveredThresholdNode(
+                            (i == 0) ? 0 : data[i - 1],
+                            data[i]
+                    )
+            );
+            dataset.add(coordData);
+
+        }
+
+        grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
+    }
+
+    private void showReceiveParametersTable(ArrayList<DataReceiveParametersEvents> r) {
+
+        ObservableList<DataReceiveParametersEvents> value = FXCollections.observableArrayList();
+        for (int i = 0; i < r.size(); i++) {
+            value.add(r.get(i));
+        }
+        resultTable.setItems(value);
 
     }
 
@@ -207,4 +279,5 @@ public class MonitorWindowController implements Initializable, IController {
     @Override
     public void prepareMenu(Mode mode) {
     }
+
 }

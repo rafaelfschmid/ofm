@@ -62,8 +62,6 @@ public class ConfigurationWindowController implements Initializable, IController
 
     private DataParameters parameters;
 
-    private DeviceComunicator host;
-
     private DataDevice device;
 
     ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
@@ -347,7 +345,7 @@ public class ConfigurationWindowController implements Initializable, IController
     @FXML
     private void onHandleExecute() {
 
-        host = new DeviceComunicator("192.168.4.4", 5000);
+        DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
         if (validateParametersField()) {
 
             Task execute = new Task() {
@@ -439,16 +437,7 @@ public class ConfigurationWindowController implements Initializable, IController
             }
 
             controller.setDevice(device);
-
-            controller.setParameters(measureRangeField.getValue().toString(),
-                    pulseWidthField.getValue().toString(),
-                    measureTimeField.getValue().toString(),
-                    waveLengthField.getValue().toString(),
-                    measureModeField.getValue().toString(),
-                    refractiveIndexField.getText(),
-                    nonReflactionThresholdField.getText(),
-                    endThresholdField.getText(),
-                    reflectionThresholdField.getText());
+            controller.setParameters(parameters);
         }
     }
 
