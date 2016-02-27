@@ -56,6 +56,7 @@ import javafx.util.Callback;
  */
 public class ConfigurationWindowController implements Initializable, IController {//implements Initializable {
 
+
 	//device
 	@FXML
 	private ListView<DataDevice> devicesList;
@@ -527,6 +528,7 @@ public class ConfigurationWindowController implements Initializable, IController
 		resultTable.setItems(value);
 
 	}
+
 
 	@FXML
 	private void onHandleStop(ActionEvent event) {
