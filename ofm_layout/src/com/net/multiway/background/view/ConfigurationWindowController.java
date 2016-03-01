@@ -9,7 +9,7 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReceiveParametersEvents;
+import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.model.DeviceComunicator;
@@ -96,21 +96,21 @@ public class ConfigurationWindowController implements Initializable, IController
 
     //result
     @FXML
-    private TableView<DataReceiveParametersEvents> resultTable;
+    private TableView<DataReceiveEvents> resultTable;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Long> numeroColumn;
+    private TableColumn<DataReceiveEvents, Long> numeroColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Integer> typeColumn;
+    private TableColumn<DataReceiveEvents, Integer> typeColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Integer> distanceColumn;
+    private TableColumn<DataReceiveEvents, Integer> distanceColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Float> insertLossColumn;
+    private TableColumn<DataReceiveEvents, Float> insertLossColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Float> reflectLossColumn;
+    private TableColumn<DataReceiveEvents, Float> reflectLossColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Float> accumulationColumn;
+    private TableColumn<DataReceiveEvents, Float> accumulationColumn;
     @FXML
-    private TableColumn<DataReceiveParametersEvents, Float> attenuationCoefficientColumn;
+    private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
     @FXML
     private Button buttonSave;
     @FXML
@@ -363,7 +363,7 @@ public class ConfigurationWindowController implements Initializable, IController
                 @Override
                 protected void succeeded() {
                     ReceiveParameters r = host.getReceiveParametersData();
-                    showReceiveParametersTable(r.getData().getEvents());
+                    showReceiveParametersTable((ArrayList<DataReceiveEvents>)r.getData().getEvents());
 
                     plotGraph(host.getReceiveValues());
                     grafico.setCreateSymbols(false);
@@ -539,9 +539,9 @@ public class ConfigurationWindowController implements Initializable, IController
         attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().averageAttenuationCoefficientProperty());
     }
 
-    private void showReceiveParametersTable(ArrayList<DataReceiveParametersEvents> r) {
+    private void showReceiveParametersTable(ArrayList<DataReceiveEvents> r) {
 
-        ObservableList<DataReceiveParametersEvents> value = FXCollections.observableArrayList();
+        ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
         for (int i = 0; i < r.size(); i++) {
             value.add(r.get(i));
         }

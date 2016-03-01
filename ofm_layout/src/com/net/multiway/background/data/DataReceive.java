@@ -7,15 +7,21 @@ package com.net.multiway.background.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,9 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATARECEIVEPARAMETERS")
+@Table(name = "DATARECEIVE")
 @XmlRootElement
-public class DataReceiveParameters implements Serializable {
+public class DataReceive implements Serializable {
 
 	private ObjectProperty<Integer> sampleFrequency;
 	private ObjectProperty<Integer> rangeOfTest;
@@ -42,12 +48,12 @@ public class DataReceiveParameters implements Serializable {
 	private ObjectProperty<Float> testMode;
 	private ObjectProperty<Integer> testWay;
 	private ObjectProperty<Integer> lenght_vec;
-	private ArrayList<Integer> graphData;
-	private ArrayList<DataReceiveParametersEvents> events;
+	private List<Integer> graphData;
+	private List<DataReceiveEvents> events;
 
 	private ObjectProperty<Long> ID;
 
-	public DataReceiveParameters() {
+	public DataReceive() {
 		this.sampleFrequency = new SimpleObjectProperty<>();
 		this.rangeOfTest = new SimpleObjectProperty<>();
 		this.pulseWidth = new SimpleObjectProperty<>();
@@ -66,7 +72,7 @@ public class DataReceiveParameters implements Serializable {
 		this.events = new ArrayList<>();
 	}
 
-	public DataReceiveParameters(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
+	public DataReceive(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
 		this.sampleFrequency = new SimpleObjectProperty<>(sampleFrequency);
 		this.rangeOfTest = new SimpleObjectProperty<>(rangeOfTest);
 		this.pulseWidth = new SimpleObjectProperty<>(pulseWidth);
@@ -87,7 +93,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "SampleFrequency")
+	@Column(name = "SAMPLEFREQUENCY")
 	public Integer getSampleFrequency() {
 		return sampleFrequency.get();
 	}
@@ -97,7 +103,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "RangeOfTest")
+	@Column(name = "RANGEOFTEST")
 	public Integer getRangeOfTest() {
 		return rangeOfTest.get();
 	}
@@ -107,7 +113,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "PulseWidth")
+	@Column(name = "PULSEWIDTH")
 	public Integer getPulseWidth() {
 		return pulseWidth.get();
 	}
@@ -117,7 +123,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "WaveLength")
+	@Column(name = "WAVELENGTH")
 	public Integer getWaveLength() {
 		return waveLength.get();
 	}
@@ -127,7 +133,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "TestTime")
+	@Column(name = "TESTTIME")
 	public Integer getTestTime() {
 		return testTime.get();
 	}
@@ -137,7 +143,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "GroupRefractiveIndex")
+	@Column(name = "GROUPREFRACTIVEINDEX")
 	public Float getGroupRefractiveIndex() {
 		return groupRefractiveIndex.get();
 	}
@@ -147,7 +153,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "LinkLength")
+	@Column(name = "LINKLENGTH")
 	public Float getLinkLength() {
 		return linkLength.get();
 	}
@@ -157,7 +163,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "LinkLoss")
+	@Column(name = "LINKLOSS")
 	public Float getLinkLoss() {
 		return linkLoss.get();
 	}
@@ -167,7 +173,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "LinkAttenuation")
+	@Column(name = "LINKATTENUATION")
 	public Float getLinkAttenuation() {
 		return linkAttenuation.get();
 	}
@@ -177,7 +183,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "NonReflectingThreshold")
+	@Column(name = "NONREFLECTINGTHRESHOLD")
 	public Float getNonReflectingThreshold() {
 		return nonReflectingThreshold.get();
 	}
@@ -187,7 +193,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "EndThreshold")
+	@Column(name = "ENDTHRESHOLD")
 	public Float getEndThreshold() {
 		return endThreshold.get();
 	}
@@ -197,7 +203,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "TestMode")
+	@Column(name = "TESTMODE")
 	public Float getTestMode() {
 		return testMode.get();
 	}
@@ -207,7 +213,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "TestWay")
+	@Column(name = "TESTWAY")
 	public Integer getTestWay() {
 		return testWay.get();
 	}
@@ -217,7 +223,7 @@ public class DataReceiveParameters implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "Lenght_vec")
+	@Column(name = "LENGHT_VEC")
 	public Integer getLenght_vec() {
 		return lenght_vec.get();
 	}
@@ -226,8 +232,13 @@ public class DataReceiveParameters implements Serializable {
 		this.lenght_vec.set(lenght_vec);
 	}
 
-//	@OneToMany(mappedBy = "DATA0X9000", cascade = CascadeType.ALL)
-	public ArrayList<Integer> getGraphData() {
+	@ElementCollection
+	@CollectionTable(
+			name = "GRAPH",
+			joinColumns = @JoinColumn(name = "OWNER_ID")
+	)
+	@Column(name = "GRAPH_DATA")
+	public List<Integer> getGraphData() {
 		return graphData;
 	}
 
@@ -251,22 +262,24 @@ public class DataReceiveParameters implements Serializable {
 		return ID;
 	}
 
-	public ArrayList<DataReceiveParametersEvents> getEvents() {
+	@OneToMany
+	@JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")
+	public List<DataReceiveEvents> getEvents() {
 		return events;
 	}
 
-	public void addEvents(DataReceiveParametersEvents events) {
+	public void addEvents(DataReceiveEvents events) {
 		this.events.add(events);
 	}
-	private void setEvents(ArrayList<DataReceiveParametersEvents> events) {
+
+	private void setEvents(ArrayList<DataReceiveEvents> events) {
 		this.events = events;
 	}
-	
 
-	public void copy(DataReceiveParameters data) {
+	public void copy(DataReceive data) {
 
-		setGraphData(data.getGraphData());
-		setEvents(data.getEvents());
+		setGraphData((ArrayList<Integer>) data.getGraphData());
+		setEvents((ArrayList<DataReceiveEvents>)data.getEvents());
 		setEndThreshold(data.getEndThreshold());
 		setGroupRefractiveIndex(data.getGroupRefractiveIndex());
 		setID(data.getID());
@@ -283,7 +296,5 @@ public class DataReceiveParameters implements Serializable {
 		setTestWay(data.getTestWay());
 		setWaveLength(data.getWaveLength());
 	}
-
-	
 
 }

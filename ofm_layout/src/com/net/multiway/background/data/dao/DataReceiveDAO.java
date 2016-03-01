@@ -5,7 +5,7 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataReceiveParameters;
+import com.net.multiway.background.data.DataReceive;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,11 +14,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DataReceiveParametersDAO {
+public class DataReceiveDAO {
 	
 	private EntityManagerFactory emf = null;
 
-	public DataReceiveParametersDAO() {
+	public DataReceiveDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
 
@@ -26,7 +26,7 @@ public class DataReceiveParametersDAO {
 		return emf.createEntityManager();
 	}
 
-	public void create(DataReceiveParameters data) {
+	public void create(DataReceive data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
@@ -47,12 +47,12 @@ public class DataReceiveParametersDAO {
 		}
 	}
 
-	public void edit(DataReceiveParameters data) {
+	public void edit(DataReceive data) {
 		EntityManager em = null;
 
 		try {
 			em = getEntityManager();
-			DataReceiveParameters d = em.find(DataReceiveParameters.class, data.getID());
+			DataReceive d = em.find(DataReceive.class, data.getID());
 			em.getTransaction().begin();
 			d.copy(data);
 			em.getTransaction().commit();
@@ -72,10 +72,10 @@ public class DataReceiveParametersDAO {
 		}
 	}
 
-	public DataReceiveParameters findData0x9000(Long id) {
+	public DataReceive findData0x9000(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(DataReceiveParameters.class, id);
+			return em.find(DataReceive.class, id);
 		} finally {
 			em.close();
 		}

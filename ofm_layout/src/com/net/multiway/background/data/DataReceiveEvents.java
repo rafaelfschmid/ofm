@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATARECEIVEPARAMETERSEVENTS")
+@Table(name = "DATARECEIVEEVENTS")
 @XmlRootElement
-public class DataReceiveParametersEvents implements Serializable {
+public class DataReceiveEvents implements Serializable {
 
 	private ObjectProperty<Integer> distance;
 	private ObjectProperty<Integer> type;
@@ -32,8 +32,9 @@ public class DataReceiveParametersEvents implements Serializable {
 	private ObjectProperty<Float> averageAttenuationCoefficient;
 	private ObjectProperty<Float> acumulativeLoss;
 	private Long ID;
+	private Long event_id;
 
-	public DataReceiveParametersEvents() {
+	public DataReceiveEvents() {
 
 		this.distance = new SimpleObjectProperty<>();
 		this.type = new SimpleObjectProperty<>();
@@ -44,7 +45,7 @@ public class DataReceiveParametersEvents implements Serializable {
 
 	}
 
-	public DataReceiveParametersEvents(int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
+	public DataReceiveEvents(int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
 
 		this.distance = new SimpleObjectProperty<>(distance);
 		this.type = new SimpleObjectProperty<>(type);
@@ -55,7 +56,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "Distance")
+	@Column(name = "DISTANCE")
 	public Integer getDistance() {
 		return distance.get();
 	}
@@ -69,7 +70,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "Type")
+	@Column(name = "TYPE")
 	public Integer getType() {
 		return type.get();
 	}
@@ -83,7 +84,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "EchoLoss")
+	@Column(name = "ECHOLOSS")
 	public Float getEchoLoss() {
 		return echoLoss.get();
 	}
@@ -97,7 +98,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "InsertionLoss")
+	@Column(name = "INSERTIONLOSS")
 	public Float getInsertionLoss() {
 		return insertionLoss.get();
 	}
@@ -111,7 +112,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "AverageAttenuationCoefficient")
+	@Column(name = "AVERAGEATTENUATIONCOEFFICIENT")
 	public Float getAverageAttenuationCoefficient() {
 		return averageAttenuationCoefficient.get();
 	}
@@ -125,7 +126,7 @@ public class DataReceiveParametersEvents implements Serializable {
 	}
 
 	@Basic(optional = false)
-	@Column(name = "AcumulativeLoss")
+	@Column(name = "ACUMULATIVELOSS")
 	public Float getAcumulativeLoss() {
 		return acumulativeLoss.get();
 	}
@@ -138,7 +139,17 @@ public class DataReceiveParametersEvents implements Serializable {
 		return this.acumulativeLoss;
 	}
 
-	public void copy(DataReceiveParametersEvents data) {
+	@Basic(optional = false)
+	@Column(name = "EVENT_ID")
+	public Long getEvent_id() {
+		return event_id;
+	}
+
+	public void setEvent_id(Long event_id) {
+		this.event_id = event_id;
+	}
+
+	public void copy(DataReceiveEvents data) {
 		setAcumulativeLoss(data.getAcumulativeLoss());
 		setAverageAttenuationCoefficient(data.getAverageAttenuationCoefficient());
 		setDistance(data.getDistance());

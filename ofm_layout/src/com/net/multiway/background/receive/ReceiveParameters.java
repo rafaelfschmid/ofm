@@ -1,7 +1,7 @@
 package com.net.multiway.background.receive;
 
-import com.net.multiway.background.data.DataReceiveParameters;
-import com.net.multiway.background.data.DataReceiveParametersEvents;
+import com.net.multiway.background.data.DataReceive;
+import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Vector;
@@ -14,15 +14,15 @@ import java.util.ArrayList;
 public class ReceiveParameters extends Package {
 
 	private DataInputStream in;
-	private DataReceiveParameters data;
+	private DataReceive data;
 
-	public DataReceiveParameters getData() {
+	public DataReceive getData() {
 		return data;
 	}
 
 	public ReceiveParameters(DataInputStream in) {
 		this.setIn(in);
-		data = new DataReceiveParameters();
+		data = new DataReceive();
 	}
 
 	public DataInputStream getIn() {
@@ -93,7 +93,7 @@ public class ReceiveParameters extends Package {
 		byte[] b = new byte[4];
 
 		for (int i = 0; i < this.length; i++) {
-			DataReceiveParametersEvents dt = new DataReceiveParametersEvents();
+			DataReceiveEvents dt = new DataReceiveEvents();
 			in.read(d);
 			dt.setDistance(Utils.byte4ToInt(d));
 			in.read(d);
@@ -141,7 +141,7 @@ public class ReceiveParameters extends Package {
 	}
 
 	public void printPartC() {
-		ArrayList<DataReceiveParametersEvents> ar = data.getEvents();
+		ArrayList<DataReceiveEvents> ar = (ArrayList<DataReceiveEvents>)data.getEvents();
 		for (int i = 0; i < ar.size(); i++) {
 			System.out.println("Distance = " + ar.get(i).getDistance());
 			System.out.println("Type = " + ar.get(i).getType());
