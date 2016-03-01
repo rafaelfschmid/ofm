@@ -174,8 +174,8 @@ public class MonitorWindowController implements Initializable, IController {
 
     @FXML
     private void onHandleExecute() {
-        DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText(), 5000);
-
+        DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText().trim(), 5000);
+		System.out.println(this.ipLabel.getText().trim());
         Task execute = new Task() {
             @Override
             protected String call() throws Exception {
