@@ -5,6 +5,8 @@
  */
 package com.net.multiway.background.data.dao;
 
+import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReference;
 import javax.persistence.EntityManager;
@@ -26,8 +28,19 @@ public class DataReferenceDAO {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+	private void create(DataReceive dr, DataDevice dd, DataParameters dp)
+	{
+		DataReceiveDAO daor = new DataReceiveDAO();
+		daor.create(dr);
+		DataDeviceDAO daod = new DataDeviceDAO();
+		daod.create(dd);
+		DataParametersDAO daop = new DataParametersDAO();
+		daop.create(dp);
+	}
 
     public void create(DataReference data) {
+		create(data.getDataReceive(),data.getDevice(),data.getParameters());
+		
         EntityManager em = null;
         try {
             em = getEntityManager();
