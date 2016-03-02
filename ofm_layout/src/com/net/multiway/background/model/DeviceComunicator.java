@@ -16,7 +16,6 @@ import com.net.multiway.background.send.SendStopTest;
 import com.net.multiway.background.send.SendDevice;
 import com.net.multiway.background.send.SendConfirmationSignal;
 import com.net.multiway.background.utils.Utils;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
