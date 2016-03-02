@@ -92,19 +92,26 @@ public class DataDeviceDAO {
     }
 
     public void deleteData(DataDevice device) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
 
-            em.remove(em.getReference(DataDevice.class, device.getID()));
+        if (device.getID() != null) {
+            EntityManager em = getEntityManager();
+            try {
+                em.getTransaction().begin();
 
-            em.getTransaction().commit();
+                em.remove(em.getReference(DataDevice.class, device.getID()));
 
-        } catch (Exception ex) {
-            System.out.println("Data " + device.toString() + " doesn't deleted.");
-            throw ex;
-        } finally {
-            em.close();
+                em.getTransaction().commit();
+
+            } catch (Exception ex) {
+                System.out.println("Data " + device.toString() + " doesn't deleted.");
+                throw ex;
+            } finally {
+                em.close();
+            }
+        }
+        else
+        {
+            System.out.println("Data " + device.toString() + " doesn't found.");
         }
     }
 

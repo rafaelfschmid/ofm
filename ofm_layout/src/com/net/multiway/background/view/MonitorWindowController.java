@@ -13,7 +13,6 @@ import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
-import com.net.multiway.background.model.Result;
 import com.net.multiway.background.model.View;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
@@ -44,10 +43,10 @@ import javafx.scene.control.TextField;
 public class MonitorWindowController implements Initializable, IController {
 
     private IController centerController;
-
     private DataDevice device;
-
     private DataParameters parameters;
+    private ReceiveParameters receiveParameters;
+    private ReceiveValues receiveValues;
 
     //device
     @FXML
@@ -114,7 +113,6 @@ public class MonitorWindowController implements Initializable, IController {
 //    private TableColumn<Warning, String> descriptionColumn;
 //    @FXML
 //    private TableColumn<Warning, Date> dateHourColumn;
-
     /**
      * Initializes the controller class.
      */
@@ -175,7 +173,7 @@ public class MonitorWindowController implements Initializable, IController {
     @FXML
     private void onHandleExecute() {
         DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText().trim(), 5000);
-		System.out.println(this.ipLabel.getText().trim());
+        System.out.println(this.ipLabel.getText().trim());
         Task execute = new Task() {
             @Override
             protected String call() throws Exception {
@@ -191,7 +189,7 @@ public class MonitorWindowController implements Initializable, IController {
             @Override
             protected void succeeded() {
                 ReceiveParameters r = host.getReceiveParametersData();
-                showReceiveParametersTable((ArrayList<DataReceiveEvents>)r.getData().getEvents());
+                showReceiveParametersTable((ArrayList<DataReceiveEvents>) r.getData().getEvents());
 
                 plotGraph(host.getReceiveValues());
                 grafico.setCreateSymbols(false);
@@ -205,21 +203,18 @@ public class MonitorWindowController implements Initializable, IController {
     }
 
     private void plotGraph(ReceiveValues receiveValues) {
-        receiveValues.processData();
 
         ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
 
-        int[] data = receiveValues.getDataValues();
-        for (int i = 0; i < data.length; i++) {
-            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data[i]);
+        //int[] data = receiveValues.getDataValues();
+        int i = 0;
+        Integer dataPrevious = 0;
+        for (Integer data : receiveParameters.getData().getGraphData()) {
+            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data);
             coordData.setNode(
-                    new HoveredThresholdNode(
-                            (i == 0) ? 0 : data[i - 1],
-                            data[i]
-                    )
-            );
+                    new HoveredThresholdNode(dataPrevious, data));
             dataset.add(coordData);
-
+            dataPrevious = data;
         }
 
         grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));

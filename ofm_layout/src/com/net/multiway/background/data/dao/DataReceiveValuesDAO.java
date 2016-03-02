@@ -51,9 +51,9 @@ public class DataReceiveValuesDAO {
 
 		try {
 			em = getEntityManager();
-			DataReceiveValues d = em.find(DataReceiveValues.class, data.getID());
 			em.getTransaction().begin();
-			d.copy(data);
+                        DataReceiveValues d = em.find(DataReceiveValues.class, data.getID());
+			//d.copy(data);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			String msg = ex.getLocalizedMessage();

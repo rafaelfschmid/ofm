@@ -62,7 +62,7 @@ public class MainApp extends Application {
             }
         });
         initRootLayout();
-// Shows the scene containing RootLayout
+        // Shows the scene containing RootLayout
         Scene scene = new Scene(rootLayout);
         this.primaryStage.getIcons().add(new Image("file:monitor_graph.jpg"));
         this.primaryStage.setMaximized(true);
@@ -81,6 +81,8 @@ public class MainApp extends Application {
             rootController = rootLoader.getController();
             rootController.prepareForm(null);
             rootController.prepareMenu(null);
+            String msg = "MainScene inicializada...";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
             // Loads Configuration view
             FXMLLoader loader = new FXMLLoader();
@@ -91,6 +93,9 @@ public class MainApp extends Application {
             controller.prepareMenu(Mode.VIEW);
             rootController.setCenterController(controller);
             rootLayout.setCenter((AnchorPane) node);
+
+            msg = "ConfigurationWindow inicializada...";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -130,6 +135,8 @@ public class MainApp extends Application {
 
             rootController.setCenterController(controller);
             rootLayout.setCenter((AnchorPane) node);
+            String msg = "showView inicializando nova tela...";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
             return controller;
         } catch (IOException ex) {
