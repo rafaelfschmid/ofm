@@ -7,10 +7,8 @@ import java.io.IOException;
 import com.net.multiway.background.model.Package;
 import com.net.multiway.background.utils.Utils;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,15 +57,29 @@ public class ReceiveValues extends Package {
 
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ResultTest.txt", true)));
-            out.println("Frame");
-            for (int i = 0; i < this.length; i++) {
-                out.println(dataReceiveValues.getData()[i]);
+            out.println("");
+            for (int value : dataReceiveValues.getData()) {
+                out.println(value);
             }
             out.flush();
         } catch (IOException ex) {
             Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+//    public void print() {
+//
+//        try {
+//            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ResultTest.txt", true)));
+//            out.println("Frame");
+//            for (int value : dataReceiveValues.getData()) {
+//                out.println(value);
+//            }
+//            out.flush();
+//        } catch (IOException ex) {
+//            Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public int[] getDataValues() {
         return this.dataReceiveValues.getData();
