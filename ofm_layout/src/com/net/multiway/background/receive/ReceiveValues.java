@@ -9,22 +9,27 @@ import com.net.multiway.background.utils.Utils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*Classe para recebimento de dados com o código: 0x9000001*/
 public class ReceiveValues extends Package {
 
-    private DataReceiveValues dataReceiveValues;
     private DataInputStream in;
+    private List<int[]> lstValues;
+    //private DataReceiveValues dataReceiveValues;
 
     public ReceiveValues(DataInputStream in) {
         this.in = in;
-        dataReceiveValues = new DataReceiveValues();
+        lstValues = new ArrayList<>();
+        //dataReceiveValues = new DataReceiveValues();
     }
 
     public ReceiveValues() {
-        dataReceiveValues = new DataReceiveValues();
+        //dataReceiveValues = new DataReceiveValues();
+        lstValues = new ArrayList<>();
     }
 
     public void setInputStream(DataInputStream in) {
@@ -35,57 +40,57 @@ public class ReceiveValues extends Package {
     public void parser() throws IOException {
         byte[] d = new byte[4];
 
-        dataReceiveValues.setNumberOfCalls(dataReceiveValues.getNumberOfCalls() + 1);
-
         in.read(d);
-        if (dataReceiveValues.getLenght() == 0) {
-            this.length = Utils.byte4ToInt(d);
-            dataReceiveValues.setLenght(length);
-        }
+        this.length = Utils.byte4ToInt(d);
+        int[] values = new int[length];
 
         byte[] b = new byte[2];
 
         for (int i = 0; i < this.length; i++) {
             in.read(b);
-            dataReceiveValues.addValueDataIndex(i, Utils.byte2ToInt(b));
+            values[i] = Utils.byte2ToInt(b);
         }
 
+        //this.dataReceiveValues.add(values);
+        this.lstValues.add(values);
         in.read(d);
     }
 
     public void print() {
 
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ResultTest.txt", true)));
-            out.println("");
-            for (int value : dataReceiveValues.getData()) {
-                out.println(value);
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("0x9000001.txt", false)));
+            int i = 1;
+            //for (int[] values : this.dataReceiveValues.getData()) {
+            for (int[] values : this.lstValues) {
+                out.println("Frame " + i);
+                for (int value : values) {
+                    out.println(value);
+                }
+                out.flush();
+                i++;
             }
-            out.flush();
+            out.println();
         } catch (IOException ex) {
             Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-//    public void print() {
-//
-//        try {
-//            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ResultTest.txt", true)));
-//            out.println("Frame");
-//            for (int value : dataReceiveValues.getData()) {
-//                out.println(value);
-//            }
-//            out.flush();
-//        } catch (IOException ex) {
-//            Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-
     public int[] getDataValues() {
-        return this.dataReceiveValues.getData();
-    }
+        int[] mediaValues = new int[this.length];
+        int count = 0;
 
-    public void processData() {
-        this.dataReceiveValues.processData();
+        for (int[] values : this.lstValues) {
+            for (int i = 0; i < this.length; i++) {
+                mediaValues[i] += values[i];
+            }
+            count++;
+        }
+
+        for (int i = 0; i < this.length; i++) {
+            mediaValues[i] = mediaValues[i] / count;
+        }
+
+        return mediaValues;
     }
 }

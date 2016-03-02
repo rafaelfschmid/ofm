@@ -10,10 +10,9 @@ import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
-import com.net.multiway.background.data.dao.DataReceiveDAO;
-import com.net.multiway.background.data.dao.DataReceiveValuesDAO;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.IController;
@@ -61,12 +60,11 @@ public class ConfigurationWindowController implements Initializable, IController
     //device
     @FXML
     private ListView<DataDevice> devicesList;
-
     private DataParameters parameters;
-
     private DataDevice device;
-
     ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
+    private ReceiveParameters receiveParameters;
+    private ReceiveValues receiveValues;
 
     // Gráfico
     @FXML
@@ -126,6 +124,13 @@ public class ConfigurationWindowController implements Initializable, IController
         devicesList.setItems(devicesData);
         updateDeviceList();
 
+        if (devicesList.getItems().size() > 0) {
+            device = devicesList.getItems().get(0);
+        }
+
+        String msg = "Devices carregados na tela...";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+
         mappingParametersTable();
         DataParametersDAO daop = new DataParametersDAO();
 
@@ -139,7 +144,7 @@ public class ConfigurationWindowController implements Initializable, IController
 
         measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
         pulseWidthField.setValue(parameters.getTestPulseWidth());
-        measureTimeField.setValue(parameters.getMeasuringTime());
+        measureTimeField.setValue(parameters.getMeasuringTime()/1000);
         waveLengthField.setValue(parameters.getTestWaveLength());
         if (parameters.getMeasureMode() == 1) {
             measureModeField.setValue("1-Average");
@@ -151,6 +156,8 @@ public class ConfigurationWindowController implements Initializable, IController
         endThresholdField.setText(parameters.getEndThreshold().toString());
         reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
 
+        msg = "Parâmetros carregados na tela...";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     private void alertToSaveParameters() {
@@ -195,6 +202,21 @@ public class ConfigurationWindowController implements Initializable, IController
         return true;
     }
 
+    private boolean alertNothingToExport() {
+        // Nada selecionado.
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Nada a ser exportado.");
+        alert.setHeaderText("Os objetos estão vazios. Execute antes de exportar.");
+
+        alert.showAndWait();
+
+        if (alert.getResult() == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Chamado quando o usuário clica no botão delete.
      */
@@ -208,6 +230,10 @@ public class ConfigurationWindowController implements Initializable, IController
                 DataDeviceDAO dao = new DataDeviceDAO();
                 dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
                 devicesList.getItems().remove(selectedIndex);
+
+                if (devicesList.getItems().size() > 0) {
+                    device = devicesList.getItems().get(0);
+                }
             }
 
         } else {
@@ -252,6 +278,7 @@ public class ConfigurationWindowController implements Initializable, IController
 //                dao.create(device);
                 devicesData.add(device);
                 devicesList.setItems(devicesData);
+                this.device = device;
             }
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -331,7 +358,7 @@ public class ConfigurationWindowController implements Initializable, IController
             } else {
                 parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
                 parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
-                parameters.setMeasuringTime(Integer.parseInt(measureTimeField.getValue().toString()));
+                parameters.setMeasuringTime(Integer.parseInt(measureTimeField.getValue().toString())*1000);
                 parameters.setTestWaveLength(Integer.parseInt(waveLengthField.getValue().toString()));
                 parameters.setMeasureMode((measureModeField.getValue().toString() == "1-Average") ? 1 : 2);
                 parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
@@ -347,7 +374,8 @@ public class ConfigurationWindowController implements Initializable, IController
     @FXML
     private void onHandleExecute() {
 
-        DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
+        //DeviceComunicator host = new DeviceComunicator("192.168.4.4", 5000);
+        DeviceComunicator host = new DeviceComunicator(device.getIp().trim(), 5000);
         if (validateParametersField()) {
 
             Task execute = new Task() {
@@ -360,16 +388,24 @@ public class ConfigurationWindowController implements Initializable, IController
 
                     host.connect(parameters);
 
-                    return "Conexcao realizada";
+                    String msg = "Envio de dados finalizado.";
+                    Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                    return "Conexao realizada";
                 }
 
                 @Override
                 protected void succeeded() {
-                    ReceiveParameters r = host.getReceiveParametersData();
-                    showReceiveParametersTable((ArrayList<DataReceiveEvents>) r.getData().getEvents());
+                    receiveParameters = host.getReceiveParametersData();
+                    showReceiveParametersTable((ArrayList<DataReceiveEvents>) receiveParameters.getData().getEvents());
+                    String msg = "Parametros atualizados na tela de configuração.";
+                    Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+
+                    receiveValues = host.getReceiveValues();
                     grafico.getData().clear();
-                    plotGraph(host.getReceiveValues());
+                    plotGraph();
                     grafico.setCreateSymbols(false);
+                    msg = "Gráfico plotado na tela de configuração.";
+                    Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
                 }
             };
@@ -381,22 +417,19 @@ public class ConfigurationWindowController implements Initializable, IController
 
     }
 
-    private void plotGraph(ReceiveValues receiveValues) {
-        receiveValues.processData();
+    private void plotGraph() {
 
         ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
 
-        int[] data = receiveValues.getDataValues();
-        for (int i = 0; i < data.length; i++) {
-            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data[i]);
+        //int[] data = receiveValues.getDataValues();
+        int i = 1;
+        Integer dataPrevious = 0;
+        for (Integer data : receiveParameters.getData().getGraphData()) {
+            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i++, data);
             coordData.setNode(
-                    new HoveredThresholdNode(
-                            (i == 0) ? 0 : data[i - 1],
-                            data[i]
-                    )
-            );
+                    new HoveredThresholdNode(dataPrevious, data));
             dataset.add(coordData);
-
+            dataPrevious = data;
         }
 
         grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
@@ -404,18 +437,29 @@ public class ConfigurationWindowController implements Initializable, IController
 
     @FXML
     private void onHandleExport() {
-        
+        if ((receiveParameters == null) || (receiveValues == null)) {
+            alertNothingToExport();
+        } else {
+            receiveParameters.print();
+            receiveValues.print();
+        }
     }
 
     @FXML
     private void onHandleSetReference() {
-        if (buttonSave.isDisabled()) {
-            DataParametersDAO daoP = new DataParametersDAO();
-            DataDeviceDAO daoR = new DataDeviceDAO();
-            daoP.create(parameters);
-            daoR.create(device);
+        if (receiveParameters != null && (receiveValues != null)) {
+//            DataParametersDAO daoP = new DataParametersDAO();
+//            DataDeviceDAO daoR = new DataDeviceDAO();
+//            daoP.create(parameters);
+//            daoR.create(device);
+            DataReference reference = new DataReference();
+            reference.setDataReceive(receiveParameters.getData());
+            reference.setDevice(device);
+            reference.setParameters(parameters);
+
+            //DataReferenceDAO
         } else {
-            alertToSaveParameters();
+            alertNothingToExport();
         }
     }
 

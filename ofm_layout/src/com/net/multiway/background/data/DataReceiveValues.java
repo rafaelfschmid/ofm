@@ -88,3 +88,39 @@ public class DataReceiveValues implements Serializable {
         this.setData(data.getData());
     }
 }
+
+//@Entity
+//@Table(name = "DATARECEIVEVALUES")
+//@XmlRootElement
+//public class DataReceiveValues implements Serializable {
+//
+//    private List<int[]> lstValues;
+//    private Long ID;
+//
+//    public DataReceiveValues() {
+//        lstValues = new ArrayList<>();
+//    }
+//
+//    public List<int[]> getData() {
+//        return lstValues;
+//    }
+//
+//    public void setData(List<int[]> data) {
+//        this.lstValues = data;
+//    }
+//
+//    @Id
+//    @Basic(optional = false)
+//    @Column(name = "ID")
+//    public Long getID() {
+//        return ID;
+//    }
+//
+//    public void setID(Long ID) {
+//        this.ID = ID;
+//    }
+//
+//    public void add(int[] data) {
+//        this.lstValues.add(data);
+//    }
+//}
