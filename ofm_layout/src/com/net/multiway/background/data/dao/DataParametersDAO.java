@@ -37,7 +37,7 @@ public class DataParametersDAO implements Serializable {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findData(data.getID()) != null) {
+            if (findDataParameters(data.getID()) != null) {
                 System.out.println("Data " + data.toString() + " already exists.");
             }
             throw ex;
@@ -61,7 +61,7 @@ public class DataParametersDAO implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findData(id) == null) {
+                if (findDataParameters(id) == null) {
                     System.out.println("The data with id " + id + " no longer exists.");
                 }
             }
@@ -73,7 +73,7 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public DataParameters findData(Long id) {
+    public DataParameters findDataParameters(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataParameters.class, id);

@@ -292,4 +292,8 @@ public class DataReceive implements Serializable {
 //		setTestWay(data.getTestWay());
 //		setWaveLength(data.getWaveLength());
 //	}
+
+	public void copy(DataReceive data) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

@@ -5,8 +5,8 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataDevice;
-import java.util.List;
+import com.net.multiway.background.data.DataReceive;
+import com.net.multiway.background.data.DataReference;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,11 +15,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DataDeviceDAO {
+public class DataReferenceDAO {
+	
+	private EntityManagerFactory emf = null;
 
-    private EntityManagerFactory emf = null;
-
-    public DataDeviceDAO() {
+    public DataReferenceDAO() {
         emf = Persistence.createEntityManagerFactory("BackgroundDB");
     }
 
@@ -27,7 +27,7 @@ public class DataDeviceDAO {
         return emf.createEntityManager();
     }
 
-    public void create(DataDevice data) {
+    public void create(DataReference data) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -37,7 +37,7 @@ public class DataDeviceDAO {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataDevice(data.getID()) != null) {
+            if (findDataReference(data.getID()) != null) {
                 System.out.println("Data " + data.toString() + " already exists.");
             }
             throw ex;
@@ -48,12 +48,12 @@ public class DataDeviceDAO {
         }
     }
 
-    public void edit(DataDevice data) {
+    public void edit(DataReference data) {
         EntityManager em = null;
 
         try {
             em = getEntityManager();
-            DataDevice d = em.find(DataDevice.class, data.getID());
+            DataReference d = em.find(DataReference.class, data.getID());
             em.getTransaction().begin();
             d.copy(data);
             em.getTransaction().commit();
@@ -61,7 +61,7 @@ public class DataDeviceDAO {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataDevice(id) == null) {
+                if (findDataReference(id) == null) {
                     System.out.println("The data with id " + id + " no longer exists.");
                 }
             }
@@ -73,46 +73,12 @@ public class DataDeviceDAO {
         }
     }
 
-    public DataDevice findDataDevice(Long id) {
+    public DataReference findDataReference(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataDevice.class, id);
+            return em.find(DataReference.class, id);
         } finally {
             em.close();
         }
     }
-
-    public List<DataDevice> getDevices() {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT e FROM DataDevice e").getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public void deleteData(DataDevice device) {
-
-        if (device.getID() != null) {
-            EntityManager em = getEntityManager();
-            try {
-                em.getTransaction().begin();
-
-                em.remove(em.getReference(DataDevice.class, device.getID()));
-
-                em.getTransaction().commit();
-
-            } catch (Exception ex) {
-                System.out.println("Data " + device.toString() + " doesn't deleted.");
-                throw ex;
-            } finally {
-                em.close();
-            }
-        }
-        else
-        {
-            System.out.println("Data " + device.toString() + " doesn't found.");
-        }
-    }
-
 }

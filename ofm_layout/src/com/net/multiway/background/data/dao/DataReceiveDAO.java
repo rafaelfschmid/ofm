@@ -36,7 +36,7 @@ public class DataReceiveDAO {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findData0x9000(data.getID()) != null) {
+            if (findDataReceive(data.getID()) != null) {
                 System.out.println("Data " + data.toString() + " already exists.");
             }
             throw ex;
@@ -60,7 +60,7 @@ public class DataReceiveDAO {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findData0x9000(id) == null) {
+                if (findDataReceive(id) == null) {
                     System.out.println("The data with id " + id + " no longer exists.");
                 }
             }
@@ -72,7 +72,7 @@ public class DataReceiveDAO {
         }
     }
 
-    public DataReceive findData0x9000(Long id) {
+    public DataReceive findDataReceive(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataReceive.class, id);

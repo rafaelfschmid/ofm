@@ -68,4 +68,10 @@ public class DataReference implements Serializable {
 		this.ID = ID;
 	}
 
+	public void copy(DataReference data) {
+		setDataReceive(data.getDataReceive());
+		setDevice(data.getDevice());
+		setParameters(data.getParameters());
+	}
+
 }
