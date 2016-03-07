@@ -59,18 +59,20 @@ public class ReceiveValues extends Package {
     public void print() {
 
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("0x9000001.txt", false)));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("DadosExportados.txt", true)));
             int i = 1;
-            //for (int[] values : this.dataReceiveValues.getData()) {
+            out.println("/**************************************************************/");
+            out.println("/**********************REAL TIME VALUES************************/");
+            out.println("/**************************************************************/");
             for (int[] values : this.lstValues) {
                 out.println("Frame " + i);
                 for (int value : values) {
                     out.println(value);
                 }
-                out.flush();
                 i++;
             }
             out.println();
+            out.close();
         } catch (IOException ex) {
             Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
         }

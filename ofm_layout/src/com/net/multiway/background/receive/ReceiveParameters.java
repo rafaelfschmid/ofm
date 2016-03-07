@@ -69,7 +69,7 @@ public class ReceiveParameters extends Package {
         in.read(d);
         data.setEndThreshold(Utils.byte4ToFloat(d));
         in.read(d);
-        data.setTestMode(Utils.byte4ToFloat(d));
+        data.setTestMode(Utils.byte4ToInt(d));
         in.read(d);
         data.setTestWay(Utils.byte4ToInt(d));
 
@@ -112,7 +112,7 @@ public class ReceiveParameters extends Package {
             dt.setAverageAttenuationCoefficient(Utils.byte4ToFloat(d));
             in.read(d);
             dt.setAcumulativeLoss(Utils.byte4ToFloat(d));
-			dt.setDataReceive(data);
+            dt.setDataReceive(data);
             data.addEvents(dt);
         }
 
@@ -129,16 +129,19 @@ public class ReceiveParameters extends Package {
 
     public void print() {
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("0x9000000.txt", false)));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("DadosExportados.txt", false)));
             printPartA(out);
             printPartC(out);
             printPartB(out);
+            out.close();
         } catch (IOException ex) {
             Logger.getLogger(ReceiveValues.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void printPartA(PrintWriter out) {
+        out.println("/**************************************************************/");
+        out.println("/**********************INPUT PARAMETERS************************/");
         out.println("/**************************************************************/");
         out.println("SampleFrequency = " + data.getSampleFrequency());
         out.println("RangeOfTest = " + data.getRangeOfTest());
@@ -153,12 +156,15 @@ public class ReceiveParameters extends Package {
         out.println("EndThreshold = " + data.getEndThreshold());
         out.println("TestMode = " + data.getTestMode());
         out.println("TestWay = " + data.getTestWay());
-        out.println("/**************************************************************/");
         out.println();
     }
 
     public void printPartB(PrintWriter out) {
 
+        out.println("/**************************************************************/");
+        out.println("/************************MEAN VALUES***************************/");
+        out.println("/**************************************************************/");
+        
         for (Integer value : data.getGraphData()) {
             out.println(value);
         }
@@ -168,9 +174,11 @@ public class ReceiveParameters extends Package {
     public void printPartC(PrintWriter out) {
         List<DataReceiveEvents> ar = data.getEvents();
         out.println("/**************************************************************/");
+        out.println("/***********************OUTPUT EVENTS**************************/");
+        out.println("/**************************************************************/");
         int i = 1;
         for (DataReceiveEvents data : ar) {
-            out.println("Event " + i++);
+            out.println("EVENT " + i++);
             out.println("Distance = " + data.getDistance());
             out.println("Type = " + data.getType());
             out.println("Insertion Loss = " + data.getInsertionLoss());
@@ -179,7 +187,5 @@ public class ReceiveParameters extends Package {
             out.println("Acumulative Loss = " + data.getAcumulativeLoss());
             out.println();
         }
-        out.println("/**************************************************************/");
-        out.println();
     }
 }
