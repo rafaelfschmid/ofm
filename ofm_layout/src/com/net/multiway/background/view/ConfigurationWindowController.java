@@ -150,7 +150,7 @@ public class ConfigurationWindowController implements Initializable, IController
 		parameters = daop.findDataParameters(Long.parseLong("1"));
 
 		if (parameters == null) {
-			parameters = new DataParameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
+			parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
 		}
 
 		updateParameters();
@@ -236,7 +236,7 @@ public class ConfigurationWindowController implements Initializable, IController
 		// Nada selecionado.
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle("Nada a ser referenciado.");
-		alert.setHeaderText("Realize uma execução antes de ter uma referencia!");
+		alert.setHeaderText("Realize uma execucao antes de ter uma referencia!");
 
 		alert.showAndWait();
 
@@ -495,14 +495,14 @@ public class ConfigurationWindowController implements Initializable, IController
 			
 			DataReceive dtR = new DataReceive();
 			dtR = reference.getDataReceive();
-			dtR.setEvents(null);
-			dtR.setID(null);
+//			dtR.setEvents(null);
+//			dtR.setID(null);
 			
 			DataReceiveDAO rdao = new DataReceiveDAO();
 			rdao.create(dtR);
 			
 			DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
-			for (DataReceiveEvents receiveEvents : reference.getDataReceive().getEvents()) {
+			for (DataReceiveEvents receiveEvents : dtR.getEvents()) {
 				edao.create(receiveEvents);
 			}
 			DataReferenceDAO dao = new DataReferenceDAO();

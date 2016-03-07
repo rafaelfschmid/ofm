@@ -237,7 +237,6 @@ public class DataReceive implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "ID")
-
 	public Long getID() {
 		return ID;
 	}
@@ -263,7 +262,7 @@ public class DataReceive implements Serializable {
 //	@OneToMany
 //	@JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")
 	@OneToMany( mappedBy = "dataReceive")
-	@XmlTransient
+	//@XmlTransient
 	public List<DataReceiveEvents> getEvents() {
 		return events;
 	}

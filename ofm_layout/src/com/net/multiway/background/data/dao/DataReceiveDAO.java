@@ -5,11 +5,14 @@
  */
 package com.net.multiway.background.data.dao;
 
+import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -20,80 +23,86 @@ import javax.persistence.Persistence;
  */
 public class DataReceiveDAO implements Serializable {
 
-	private EntityManagerFactory emf = null;
+    private EntityManagerFactory emf = null;
 
-	public DataReceiveDAO() {
-		emf = Persistence.createEntityManagerFactory("BackgroundDB");
-	}
+    public DataReceiveDAO() {
+        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+    }
 
-	public EntityManager getEntityManager() {
-		return emf.createEntityManager();
-	}
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
 
-	public void create(DataReceive data) {
-		if (data.getEvents() == null) {
-			data.setEvents(new ArrayList<DataReceiveEvents>());
-		}
-		EntityManager em = null;
-		try {
-			em = getEntityManager();
-			em.getTransaction().begin();
+    public void create(DataReceive data) {
+        String msg = "Iniciando insercao do DataReceive...";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
-			List<DataReceiveEvents> list = new ArrayList<DataReceiveEvents>();
-			DataReceiveEventsDAO dao = new DataReceiveEventsDAO();
-			for (DataReceiveEvents receiveEvents : data.getEvents()) {
-				receiveEvents = em.getReference(receiveEvents.getClass(), receiveEvents.getID());
-				list.add(receiveEvents);
-			}
-			data.setEvents(list);
+        if (data.getEvents() == null) {
+            data.setEvents(new ArrayList<DataReceiveEvents>());
+        }
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
 
-			em.persist(data);
+//			List<DataReceiveEvents> list = new ArrayList<DataReceiveEvents>();
+//			DataReceiveEventsDAO dao = new DataReceiveEventsDAO();
+//			for (DataReceiveEvents receiveEvents : data.getEvents()) {
+//				receiveEvents = em.getReference(receiveEvents.getClass(), receiveEvents.getID());
+//				list.add(receiveEvents);
+//			}
+//			data.setEvents(list);
+            em.persist(data);
+            msg = "ID inserido " + data.getID().toString();
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
-			em.getTransaction().commit();
-		} catch (Exception ex) {
+            em.getTransaction().commit();
+        } catch (Exception ex) {
 //			if (findDataReceive(data.getID()) != null) {
 //				System.out.println("Data " + data.toString() + " already exists.");
 //			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        msg = "DataReceive inserido com sucesso...";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+    }
 
-	public void edit(DataReceive data) {
-		EntityManager em = null;
+    public void edit(DataReceive data) {
+        EntityManager em = null;
 
-		try {
-			em = getEntityManager();
-			DataReceive d = em.find(DataReceive.class, data.getID());
-			em.getTransaction().begin();
-			//d.copy(data);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			String msg = ex.getLocalizedMessage();
-			if (msg == null || msg.length() == 0) {
-				Long id = data.getID();
-				if (findDataReceive(id) == null) {
-					System.out.println("The data with id " + id + " no longer exists.");
-				}
-			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+        try {
+            em = getEntityManager();
+            DataReceive d = em.find(DataReceive.class, data.getID());
+            em.getTransaction().begin();
+            //d.copy(data);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Long id = data.getID();
+                if (findDataReceive(id) == null) {
+                    System.out.println("The data with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
-	public DataReceive findDataReceive(Long id) {
-		EntityManager em = getEntityManager();
-		try {
-			return em.find(DataReceive.class, id);
-		} finally {
-			em.close();
-		}
-	}
+    public DataReceive findDataReceive(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(DataReceive.class, id);
+        } finally {
+            em.close();
+        }
+    }
 
 }
