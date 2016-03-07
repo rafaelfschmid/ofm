@@ -9,10 +9,13 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 
 import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
+import com.net.multiway.background.data.dao.DataReceiveDAO;
+import com.net.multiway.background.data.dao.DataReceiveEventsDAO;
 import com.net.multiway.background.data.dao.DataReferenceDAO;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
@@ -66,13 +69,13 @@ public class ConfigurationWindowController implements Initializable, IController
 
 	private DataDevice device;
 
-	ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
+	private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
 
 	private ReceiveParameters receiveParameters;
 
 	private ReceiveValues receiveValues;
 
-	DataReference reference;
+	private DataReference reference;
 
 	// Gráfico
 	@FXML
@@ -228,6 +231,7 @@ public class ConfigurationWindowController implements Initializable, IController
 
 		return true;
 	}
+
 	private void alertNothingToReference() {
 		// Nada selecionado.
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -487,10 +491,22 @@ public class ConfigurationWindowController implements Initializable, IController
 			reference.setDevice(device);
 			reference.setParameters(parameters);
 
-			if (reference.getDataReceive().getID() != null && reference.getDevice().getID() != null && reference.getParameters().getID() != null) {
-				DataReferenceDAO dao = new DataReferenceDAO();
-				dao.create(reference);
+			Logger.getLogger(MainApp.class.getName()).log(Level.INFO, reference.getDevice().getIp());
+			
+			DataReceive dtR = new DataReceive();
+			dtR = reference.getDataReceive();
+			dtR.setEvents(null);
+			dtR.setID(null);
+			
+			DataReceiveDAO rdao = new DataReceiveDAO();
+			rdao.create(dtR);
+			
+			DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
+			for (DataReceiveEvents receiveEvents : reference.getDataReceive().getEvents()) {
+				edao.create(receiveEvents);
 			}
+			DataReferenceDAO dao = new DataReferenceDAO();
+			dao.create(reference);
 
 		} else {
 			alertNothingToReference();

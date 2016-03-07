@@ -2,6 +2,7 @@ package com.net.multiway.background.receive;
 
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.data.dao.DataReceiveEventsDAO;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -111,6 +112,7 @@ public class ReceiveParameters extends Package {
             dt.setAverageAttenuationCoefficient(Utils.byte4ToFloat(d));
             in.read(d);
             dt.setAcumulativeLoss(Utils.byte4ToFloat(d));
+			dt.setDataReceive(data);
             data.addEvents(dt);
         }
 

@@ -12,7 +12,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,6 +36,8 @@ public class DataReceiveEvents implements Serializable {
 	private ObjectProperty<Float> insertionLoss;
 	private ObjectProperty<Float> averageAttenuationCoefficient;
 	private ObjectProperty<Float> acumulativeLoss;
+	private DataReceive dataReceive;
+
 	private Long ID;
 	private Long event_id;
 
@@ -159,12 +166,25 @@ public class DataReceiveEvents implements Serializable {
 	}
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Basic(optional = false)
+	@Column(name = "ID")
 	public Long getID() {
 		return ID;
 	}
 
 	public void setID(Long ID) {
 		this.ID = ID;
+	}
+
+	@JoinColumn(name = "DATA_RECEIVE")
+	@ManyToOne(fetch=FetchType.LAZY)
+	public DataReceive getDataReceive() {
+		return dataReceive;
+	}
+
+	public void setDataReceive(DataReceive dataReceive) {
+		this.dataReceive = dataReceive;
 	}
 
 }

@@ -5,11 +5,10 @@
  */
 package com.net.multiway.background.data.dao;
 
+import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,42 +17,37 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DataReceiveDAO implements Serializable {
+public class DataReceiveEventsDAO implements Serializable {
 
 	private EntityManagerFactory emf = null;
-
-	public DataReceiveDAO() {
+	
+	public DataReceiveEventsDAO() {
 		emf = Persistence.createEntityManagerFactory("BackgroundDB");
 	}
-
+	
 	public EntityManager getEntityManager() {
 		return emf.createEntityManager();
 	}
-
-	public void create(DataReceive data) {
-		if (data.getEvents() == null) {
-			data.setEvents(new ArrayList<DataReceiveEvents>());
-		}
+	
+	public void create(DataReceiveEvents data) {
 		EntityManager em = null;
 		try {
 			em = getEntityManager();
 			em.getTransaction().begin();
-
-			List<DataReceiveEvents> list = new ArrayList<DataReceiveEvents>();
-			DataReceiveEventsDAO dao = new DataReceiveEventsDAO();
-			for (DataReceiveEvents receiveEvents : data.getEvents()) {
-				receiveEvents = em.getReference(receiveEvents.getClass(), receiveEvents.getID());
-				list.add(receiveEvents);
+			
+			DataReceive d = data.getDataReceive();
+			if (d != null) {
+				d = em.getReference(d.getClass(), d.getID());
+				data.setDataReceive(d);
 			}
-			data.setEvents(list);
-
+			
 			em.persist(data);
-
+			
 			em.getTransaction().commit();
 		} catch (Exception ex) {
-//			if (findDataReceive(data.getID()) != null) {
-//				System.out.println("Data " + data.toString() + " already exists.");
-//			}
+			if (findDataEvents(data.getID()) != null) {
+				System.out.println("Data " + data.toString() + " already exists.");
+			}
 			throw ex;
 		} finally {
 			if (em != null) {
@@ -61,21 +55,21 @@ public class DataReceiveDAO implements Serializable {
 			}
 		}
 	}
-
-	public void edit(DataReceive data) {
+	
+	public void edit(DataReceiveEvents data) {
 		EntityManager em = null;
-
+		
 		try {
 			em = getEntityManager();
-			DataReceive d = em.find(DataReceive.class, data.getID());
+			DataReceiveEvents d = em.find(DataReceiveEvents.class, data.getID());
 			em.getTransaction().begin();
-			//d.copy(data);
+			d.copy(data);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			String msg = ex.getLocalizedMessage();
 			if (msg == null || msg.length() == 0) {
 				Long id = data.getID();
-				if (findDataReceive(id) == null) {
+				if (findDataEvents(id) == null) {
 					System.out.println("The data with id " + id + " no longer exists.");
 				}
 			}
@@ -86,14 +80,30 @@ public class DataReceiveDAO implements Serializable {
 			}
 		}
 	}
-
-	public DataReceive findDataReceive(Long id) {
+	
+	public DataReceiveEvents findDataEvents(Long id) {
 		EntityManager em = getEntityManager();
 		try {
-			return em.find(DataReceive.class, id);
+			return em.find(DataReceiveEvents.class, id);
 		} finally {
 			em.close();
 		}
 	}
-
+	
+	public void deleteData(DataReceiveEvents parameters) {
+		EntityManager em = getEntityManager();
+		try {
+			em.getTransaction().begin();
+			
+			em.remove(em.getReference(DataReceiveEvents.class, parameters.getID()));
+			
+			em.getTransaction().commit();
+			
+		} catch (Exception ex) {
+			System.out.println("Data " + parameters.toString() + " doesn't deleted.");
+			throw ex;
+		} finally {
+			em.close();
+		}
+	}
 }
