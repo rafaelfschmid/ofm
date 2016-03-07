@@ -124,23 +124,6 @@ public class MonitorWindowController implements Initializable, IController {
 
     }
 
-    private void alertToSaveParameters() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Parametros não salvos");
-        alert.setHeaderText("O parâmetros não foram salvos.");
-
-        alert.showAndWait();
-    }
-
-    private void alertIncorrectTypeParameters(String ex) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Tipo incorreto");
-        alert.setHeaderText("Por favor, verifique os parâmetros.");
-        alert.setContentText(ex);
-
-        alert.showAndWait();
-    }
-
     void setDevice(DataDevice device) {
         this.device = device;
 

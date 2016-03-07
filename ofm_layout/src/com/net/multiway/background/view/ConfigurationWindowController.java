@@ -7,6 +7,7 @@ package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.utils.AlertDialog;
 
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
@@ -38,7 +39,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -172,76 +172,6 @@ public class ConfigurationWindowController implements Initializable, IController
         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
-    private void alertToSaveParameters() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Parametros não salvos");
-        alert.setHeaderText("Por favor, salvar os parâmetros antes de prosseguir.");
-
-        alert.showAndWait();
-    }
-
-    private void alertIncorrectTypeParameters(String ex) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Tipo incorreto");
-        alert.setHeaderText("Por favor, verifique os parâmetros.");
-        alert.setContentText(ex);
-
-        alert.showAndWait();
-    }
-
-    private void alertDeviceSelection() {
-        // Nada selecionado.
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Nenhuma seleção");
-        alert.setHeaderText("Nenhum dispositivo foi selecionado");
-        alert.setContentText("Por favor, selecione um dispositivo.");
-
-        alert.showAndWait();
-    }
-
-    private boolean alertDeviceDeletion(String device) {
-        // Nada selecionado.
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Exclusão de dispositivo");
-        alert.setHeaderText("Deseja excluir o dispositivo: " + device + "?");
-
-        alert.showAndWait();
-
-        if (alert.getResult() == null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private void alertNothingToExport() {
-        // Nada selecionado.
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Nada a ser exportado.");
-        alert.setHeaderText("Os objetos estão vazios. Execute antes de exportar.");
-
-        alert.showAndWait();
-    }
-
-    private void alertExportSuccess() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Exportação.");
-        alert.setHeaderText("Dados exportados com sucesso.");
-        alert.setContentText("Arquivo 'DadosExportados.txt' gerado com sucesso.");
-
-        alert.showAndWait();
-    }
-
-    private void alertNothingToReference() {
-        // Nada selecionado.
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Nada a ser referenciado.");
-        alert.setHeaderText("Realize uma execucao antes de ter uma referencia!");
-
-        alert.showAndWait();
-
-    }
-
     /**
      * Chamado quando o usuário clica no botão delete.
      */
@@ -251,7 +181,7 @@ public class ConfigurationWindowController implements Initializable, IController
         int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex >= 0) {
-            if (alertDeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
+            if (AlertDialog.alertDeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
                 DataDeviceDAO dao = new DataDeviceDAO();
                 dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
                 devicesList.getItems().remove(selectedIndex);
@@ -262,7 +192,7 @@ public class ConfigurationWindowController implements Initializable, IController
             }
 
         } else {
-            alertDeviceSelection();
+            AlertDialog.alertDeviceSelection();
         }
 
         updateDeviceList();
@@ -313,30 +243,6 @@ public class ConfigurationWindowController implements Initializable, IController
 
     }
 
-    private void alertIncorrectField(String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Campo Incorreto");
-        alert.setHeaderText("Por favor, verifique o campo " + text + ".");
-
-        alert.showAndWait();
-    }
-
-    private void alertDeviceNotFound() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Device Not Found");
-        alert.setHeaderText("Por favor, adicione um dispositivo antes de continuar.");
-
-        alert.showAndWait();
-    }
-
-    private void alertIncorrectRangeField(String text, int min, int max) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Campo Incorreto");
-        alert.setHeaderText("O campo " + text + " deve estar entre " + min + " e " + max);
-
-        alert.showAndWait();
-    }
-
     @FXML
     private void onHandleEditParameters() {
         prepareForm(Mode.EDIT);
@@ -344,31 +250,31 @@ public class ConfigurationWindowController implements Initializable, IController
 
     private boolean validateParametersField() {
         if (measureRangeField.getValue() == null) {
-            alertIncorrectField("Measuring Range Of Test");
+            AlertDialog.alertIncorrectField("Measuring Range Of Test");
             return false;
         } else if (pulseWidthField.getValue() == null) {
-            alertIncorrectField("Test Pulse Width");
+            AlertDialog.alertIncorrectField("Test Pulse Width");
             return false;
         } else if (measureTimeField.getValue() == null) {
-            alertIncorrectField("Measuring Time");
+            AlertDialog.alertIncorrectField("Measuring Time");
             return false;
         } else if (waveLengthField.getValue() == null) {
-            alertIncorrectField("Test Wave Length");
+            AlertDialog.alertIncorrectField("Test Wave Length");
             return false;
         } else if (measureModeField.getValue() == null) {
-            alertIncorrectField("Measure Mode");
+            AlertDialog.alertIncorrectField("Measure Mode");
             return false;
         } else if (refractiveIndexField.getText().isEmpty()) {
-            alertIncorrectField("Refractive Index");
+            AlertDialog.alertIncorrectField("Refractive Index");
             return false;
         } else if (nonReflactionThresholdField.getText().isEmpty()) {
-            alertIncorrectField("Non Reflaction Threshold");
+            AlertDialog.alertIncorrectField("Non Reflaction Threshold");
             return false;
         } else if (endThresholdField.getText().isEmpty()) {
-            alertIncorrectField("End Threshold");
+            AlertDialog.alertIncorrectField("End Threshold");
             return false;
         } else if (reflectionThresholdField.getText().isEmpty()) {
-            alertIncorrectField("Reflection Threshold");
+            AlertDialog.alertIncorrectField("Reflection Threshold");
             return false;
         } else {
             return true;
@@ -383,11 +289,11 @@ public class ConfigurationWindowController implements Initializable, IController
             float reflectionThresh = Float.parseFloat(reflectionThresholdField.getText());
 
             if (nonReflThresh < 0 || nonReflThresh > 10) {
-                alertIncorrectRangeField("NonReflaction Threshold", 0, 10);
+                AlertDialog.alertIncorrectRangeField("NonReflaction Threshold", 0, 10);
             } else if (endThresh < 0 || endThresh > 10) {
-                alertIncorrectRangeField("End Threshold", 0, 10);
+                AlertDialog.alertIncorrectRangeField("End Threshold", 0, 10);
             } else if (reflectionThresh < 20 || reflectionThresh > 80) {
-                alertIncorrectRangeField("Reflaction Threshold", 20, 80);
+                AlertDialog.alertIncorrectRangeField("Reflaction Threshold", 20, 80);
             } else {
                 parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
                 parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
@@ -450,7 +356,7 @@ public class ConfigurationWindowController implements Initializable, IController
                 tr.start();
             }
         } else {
-            alertDeviceNotFound();
+            AlertDialog.alertDeviceNotFound();
 
         }
 
@@ -477,11 +383,11 @@ public class ConfigurationWindowController implements Initializable, IController
     @FXML
     private void onHandleExport() {
         if ((receiveParameters == null) || (receiveValues == null)) {
-            alertNothingToExport();
+            AlertDialog.alertNothingToExport();
         } else {
             receiveParameters.print();
             receiveValues.print();
-            alertExportSuccess();
+            AlertDialog.alertExportSuccess();
         }
     }
 
@@ -498,7 +404,7 @@ public class ConfigurationWindowController implements Initializable, IController
             dao.create(reference);
 
         } else {
-            alertNothingToReference();
+            AlertDialog.alertNothingToReference();
         }
     }
 
