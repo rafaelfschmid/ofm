@@ -8,6 +8,7 @@ package com.net.multiway.background.data.dao;
 import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
+import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,6 +33,12 @@ public class DataReferenceDAO {
 	private void create(DataReceive dr, DataDevice dd, DataParameters dp) {
 		DataReceiveDAO daor = new DataReceiveDAO();
 		daor.create(dr);
+
+		DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
+		for (DataReceiveEvents receiveEvents : dr.getEvents()) {
+			edao.create(receiveEvents);
+		}
+		
 		DataDeviceDAO daod = new DataDeviceDAO();
 		daod.create(dd);
 		DataParametersDAO daop = new DataParametersDAO();
@@ -51,18 +58,18 @@ public class DataReferenceDAO {
 				data.setDataReceive(r);
 			}
 			DataParameters dp = data.getParameters();
-			
+
 			if (dp != null) {
 				dp = em.getReference(dp.getClass(), dp.getID());
 				data.setParameters(dp);
 			}
 			DataDevice d = data.getDevice();
-			
+
 			if (d != null) {
 				d = em.getReference(d.getClass(), d.getID());
 				data.setDevice(d);
 			}
-					
+
 			em.persist(data);
 
 			em.getTransaction().commit();

@@ -45,13 +45,7 @@ public class DataReceiveDAO implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
 
-//			List<DataReceiveEvents> list = new ArrayList<DataReceiveEvents>();
-//			DataReceiveEventsDAO dao = new DataReceiveEventsDAO();
-//			for (DataReceiveEvents receiveEvents : data.getEvents()) {
-//				receiveEvents = em.getReference(receiveEvents.getClass(), receiveEvents.getID());
-//				list.add(receiveEvents);
-//			}
-//			data.setEvents(list);
+
             em.persist(data);
             msg = "ID inserido " + data.getID().toString();
             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);

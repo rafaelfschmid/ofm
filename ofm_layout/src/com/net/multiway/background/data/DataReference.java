@@ -34,7 +34,7 @@ public class DataReference implements Serializable {
 	private DataReceive dataReceive;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
+	@JoinColumn(name = "DATADEVICE_ID")
 	public DataDevice getDevice() {
 		return device;
 	}
@@ -44,7 +44,7 @@ public class DataReference implements Serializable {
 	}
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
+	@JoinColumn(name = "DATAPARAMETERS_ID")
 	public DataParameters getParameters() {
 		return parameters;
 	}
@@ -54,7 +54,7 @@ public class DataReference implements Serializable {
 	}
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
+	@JoinColumn(name = "DATARECEIVE_ID")
 	public DataReceive getDataReceive() {
 		return dataReceive;
 	}

@@ -148,15 +148,6 @@ public class DataReceiveEvents implements Serializable {
         return this.acumulativeLoss;
     }
 
-//	@Basic(optional = false)
-//	@Column(name = "EVENT_ID")
-//	public Long getEvent_id() {
-//		return event_id;
-//	}
-//
-//	public void setEvent_id(Long event_id) {
-//		this.event_id = event_id;
-//	}
     public void copy(DataReceiveEvents data) {
         setAcumulativeLoss(data.getAcumulativeLoss());
         setAverageAttenuationCoefficient(data.getAverageAttenuationCoefficient());
@@ -178,12 +169,8 @@ public class DataReceiveEvents implements Serializable {
         this.ID = ID;
     }
 
-    //@JoinColumn(name = "DATA_RECEIVE")
-//	@ManyToOne
-//        @PrimaryKeyJoinColumn(name="OWNER_ID", referencedColumnName="EMP_ID")
+  
     @ManyToOne
-//    @Id
-//    @JoinColumn(name = "DATA_ID", referencedColumnName = "ID")
     public DataReceive getDataReceive() {
         return dataReceive;
     }

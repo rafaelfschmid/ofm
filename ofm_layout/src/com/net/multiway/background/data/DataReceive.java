@@ -48,7 +48,7 @@ public class DataReceive implements Serializable {
 	private ObjectProperty<Float> endThreshold;
 	private ObjectProperty<Float> testMode;
 	private ObjectProperty<Integer> testWay;
-//	private ObjectProperty<Integer> lenght_vec;
+
 	private List<Integer> graphData;
 	private List<DataReceiveEvents> events;
 
@@ -68,7 +68,6 @@ public class DataReceive implements Serializable {
 		this.endThreshold = new SimpleObjectProperty<>();
 		this.testMode = new SimpleObjectProperty<>();
 		this.testWay = new SimpleObjectProperty<>();
-//		this.lenght_vec = new SimpleObjectProperty<>();
 		this.graphData = new ArrayList<>();
 		this.events = new ArrayList<>();
 	}
@@ -87,7 +86,6 @@ public class DataReceive implements Serializable {
 		this.endThreshold = new SimpleObjectProperty<>(endThreshold);
 		this.testMode = new SimpleObjectProperty<>(testMode);
 		this.testWay = new SimpleObjectProperty<>(testWay);
-//		this.lenght_vec = new SimpleObjectProperty<>(lenght_vec);
 		this.graphData = new ArrayList<>();
 		this.events = new ArrayList<>();
 
@@ -223,16 +221,6 @@ public class DataReceive implements Serializable {
 		this.testWay.set(testWay);
 	}
 
-//	@Basic(optional = false)
-//	@Column(name = "LENGHT_VEC")
-//	public Integer getLenght_vec() {
-//		return lenght_vec.get();
-//	}
-//
-//	public void setLenght_vec(int lenght_vec) {
-//		this.lenght_vec.set(lenght_vec);
-//	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -259,10 +247,8 @@ public class DataReceive implements Serializable {
 		this.graphData = graphData;
 	}
 
-//	@OneToMany
-//	@JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")
 	@OneToMany( mappedBy = "dataReceive")
-	//@XmlTransient
+
 	public List<DataReceiveEvents> getEvents() {
 		return events;
 	}
