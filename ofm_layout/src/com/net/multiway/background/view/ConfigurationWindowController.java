@@ -217,20 +217,23 @@ public class ConfigurationWindowController implements Initializable, IController
 		return true;
 	}
 
-	private boolean alertNothingToExport() {
+	private void alertNothingToExport() {
 		// Nada selecionado.
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setTitle("Nada a ser exportado.");
 		alert.setHeaderText("Os objetos estão vazios. Execute antes de exportar.");
 
 		alert.showAndWait();
-
-		if (alert.getResult() == null) {
-			return false;
-		}
-
-		return true;
 	}
+        
+        private void alertExportSuccess() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Exportação.");
+		alert.setHeaderText("Dados exportados com sucesso.");
+                alert.setContentText("Arquivo 'DadosExportados.txt' gerado com sucesso.");
+
+		alert.showAndWait();
+        }
 
 	private void alertNothingToReference() {
 		// Nada selecionado.
@@ -481,6 +484,7 @@ public class ConfigurationWindowController implements Initializable, IController
 		} else {
 			receiveParameters.print();
 			receiveValues.print();
+                        alertExportSuccess();
 		}
 	}
 
@@ -630,5 +634,7 @@ public class ConfigurationWindowController implements Initializable, IController
 		resultTable.setItems(value);
 
 	}
+
+
 
 }
