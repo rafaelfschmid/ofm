@@ -9,9 +9,9 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
-import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
 import com.net.multiway.background.receive.ReceiveParameters;
@@ -24,11 +24,9 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -40,13 +38,7 @@ import javafx.scene.control.TextField;
  *
  * @author rafael
  */
-public class MonitorWindowController implements Initializable, IController {
-
-    private IController centerController;
-    private DataDevice device;
-    private DataParameters parameters;
-    private ReceiveParameters receiveParameters;
-    private ReceiveValues receiveValues;
+public class MonitorWindowController extends ControllerExec {
 
     //device
     @FXML
@@ -229,10 +221,6 @@ public class MonitorWindowController implements Initializable, IController {
     @FXML
     private void onHandleChangeToConfiguration() {
         MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
-    }
-
-    public void setCenterController(IController controller) {
-        this.centerController = controller;
     }
 
     @Override

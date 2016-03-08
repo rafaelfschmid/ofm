@@ -15,9 +15,9 @@ import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.data.dao.DataReferenceDAO;
+import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
-import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
 import com.net.multiway.background.receive.ReceiveParameters;
@@ -34,7 +34,6 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -56,32 +55,22 @@ import javafx.util.Callback;
  *
  * @author rafael
  */
-public class ConfigurationWindowController implements Initializable, IController {//implements Initializable {
+public class ConfigurationWindowController extends ControllerExec {
+
+    private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
+    private DataReference reference;
 
     //device
     @FXML
     private ListView<DataDevice> devicesList;
 
-    private DataParameters parameters;
-
-    private DataDevice device;
-
-    private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
-
-    private ReceiveParameters receiveParameters;
-
-    private ReceiveValues receiveValues;
-
-    private DataReference reference;
-
-    // Gráfico
-    @FXML
-    private LineChart<NumberAxis, NumberAxis> grafico;
-    @FXML
-    private NumberAxis xAxis;
-    @FXML
-    private NumberAxis yAxis;
-
+//    // Gráfico
+//    @FXML
+//    private LineChart<NumberAxis, NumberAxis> grafico;
+//    @FXML
+//    private NumberAxis xAxis;
+//    @FXML
+//    private NumberAxis yAxis;
     //parameter
     @FXML
     private ComboBox measureRangeField;
@@ -102,23 +91,7 @@ public class ConfigurationWindowController implements Initializable, IController
     @FXML
     private TextField reflectionThresholdField;
 
-    //result
-    @FXML
-    private TableView<DataReceiveEvents> resultTable;
-    @FXML
-    private TableColumn<DataReceiveEvents, Long> numeroColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Integer> typeColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Integer> distanceColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> insertLossColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> reflectLossColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> accumulationColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+    
     @FXML
     private Button buttonSave;
     @FXML
@@ -151,8 +124,6 @@ public class ConfigurationWindowController implements Initializable, IController
         }
 
         updateParameters();
-
-        reference = new DataReference();
 
         measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
         pulseWidthField.setValue(parameters.getTestPulseWidth());
@@ -337,7 +308,7 @@ public class ConfigurationWindowController implements Initializable, IController
                     @Override
                     protected void succeeded() {
                         receiveParameters = host.getReceiveParametersData();
-                        showReceiveParametersTable((ArrayList<DataReceiveEvents>) receiveParameters.getData().getEvents());
+                        showReceiveEventsTable((ArrayList<DataReceiveEvents>) receiveParameters.getData().getEvents());
                         String msg = "Parametros atualizados na tela de configuração.";
                         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
@@ -362,24 +333,6 @@ public class ConfigurationWindowController implements Initializable, IController
 
     }
 
-    private void plotGraph() {
-
-        ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
-
-        //int[] data = receiveValues.getDataValues();
-        int i = 1;
-        Integer dataPrevious = 0;
-        for (Integer data : receiveParameters.getData().getGraphData()) {
-            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i++, data);
-            coordData.setNode(
-                    new HoveredThresholdNode(dataPrevious, data));
-            dataset.add(coordData);
-            dataPrevious = data;
-        }
-
-        grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
-    }
-
     @FXML
     private void onHandleExport() {
         if ((receiveParameters == null) || (receiveValues == null)) {
@@ -393,7 +346,8 @@ public class ConfigurationWindowController implements Initializable, IController
 
     @FXML
     private void onHandleSetReference() {
-        if (receiveParameters != null && (receiveValues != null) && device != null) {
+        if (receiveParameters != null && receiveValues != null && device != null) {
+            reference = new DataReference();
             reference.setDataReceive(receiveParameters.getData());
             reference.setDevice(device);
             reference.setParameters(parameters);
@@ -525,16 +479,6 @@ public class ConfigurationWindowController implements Initializable, IController
         reflectLossColumn.setCellValueFactory(cellData -> cellData.getValue().echoLossProperty());
         accumulationColumn.setCellValueFactory(cellData -> cellData.getValue().acumulativeLossProperty());
         attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().averageAttenuationCoefficientProperty());
-    }
-
-    private void showReceiveParametersTable(ArrayList<DataReceiveEvents> r) {
-
-        ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
-        for (int i = 0; i < r.size(); i++) {
-            value.add(r.get(i));
-        }
-        resultTable.setItems(value);
-
     }
 
 }

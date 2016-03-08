@@ -5,7 +5,9 @@
  */
 package com.net.multiway.background.model;
 
+import com.net.multiway.background.model.Mode;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 
 /**
  *
