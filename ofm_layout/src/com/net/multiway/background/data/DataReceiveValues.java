@@ -54,7 +54,7 @@ public class DataReceiveValues implements Serializable {
     }
 
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     public Long getID() {

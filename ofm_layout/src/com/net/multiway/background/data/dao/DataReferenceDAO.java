@@ -20,102 +20,102 @@ import javax.persistence.Persistence;
  */
 public class DataReferenceDAO {
 
-	private EntityManagerFactory emf = null;
+    private EntityManagerFactory emf = null;
 
-	public DataReferenceDAO() {
-		emf = Persistence.createEntityManagerFactory("BackgroundDB");
-	}
+    public DataReferenceDAO() {
+        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+    }
 
-	public EntityManager getEntityManager() {
-		return emf.createEntityManager();
-	}
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
 
-	private void create(DataReceive dr, DataDevice dd, DataParameters dp) {
-		DataReceiveDAO daor = new DataReceiveDAO();
-		daor.create(dr);
+    private void create(DataReceive dr, DataDevice dd, DataParameters dp) {
+        DataReceiveDAO daor = new DataReceiveDAO();
+        daor.create(dr);
 
-		DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
-		for (DataReceiveEvents receiveEvents : dr.getEvents()) {
-			edao.create(receiveEvents);
-		}
-		
-		DataDeviceDAO daod = new DataDeviceDAO();
-		daod.create(dd);
-		DataParametersDAO daop = new DataParametersDAO();
-		daop.create(dp);
-	}
+        DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
+        for (DataReceiveEvents receiveEvents : dr.getEvents()) {
+            edao.create(receiveEvents);
+        }
 
-	public void create(DataReference data) {
-		create(data.getDataReceive(), data.getDevice(), data.getParameters());
+        DataDeviceDAO daod = new DataDeviceDAO();
+        daod.create(dd);
+        DataParametersDAO daop = new DataParametersDAO();
+        daop.create(dp);
+    }
 
-		EntityManager em = null;
-		try {
-			em = getEntityManager();
-			em.getTransaction().begin();
-			DataReceive r = data.getDataReceive();
-			if (r != null) {
-				r = em.getReference(r.getClass(), r.getID());
-				data.setDataReceive(r);
-			}
-			DataParameters dp = data.getParameters();
+    public void create(DataReference data) {
+        create(data.getDataReceive(), data.getDevice(), data.getParameters());
 
-			if (dp != null) {
-				dp = em.getReference(dp.getClass(), dp.getID());
-				data.setParameters(dp);
-			}
-			DataDevice d = data.getDevice();
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            DataReceive r = data.getDataReceive();
+            if (r != null) {
+                r = em.getReference(r.getClass(), r.getID());
+                data.setDataReceive(r);
+            }
+            DataParameters dp = data.getParameters();
 
-			if (d != null) {
-				d = em.getReference(d.getClass(), d.getID());
-				data.setDevice(d);
-			}
+            if (dp != null) {
+                dp = em.getReference(dp.getClass(), dp.getID());
+                data.setParameters(dp);
+            }
+            DataDevice d = data.getDevice();
 
-			em.persist(data);
+            if (d != null) {
+                d = em.getReference(d.getClass(), d.getID());
+                data.setDevice(d);
+            }
 
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			if (findDataReference(data.getID()) != null) {
-				System.out.println("Data " + data.toString() + " already exists.");
-			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+            em.persist(data);
 
-	public void edit(DataReference data) {
-		EntityManager em = null;
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findDataReference(data.getID()) != null) {
+                System.out.println("Data " + data.toString() + " already exists.");
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
-		try {
-			em = getEntityManager();
-			DataReference d = em.find(DataReference.class, data.getID());
-			em.getTransaction().begin();
-			d.copy(data);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			String msg = ex.getLocalizedMessage();
-			if (msg == null || msg.length() == 0) {
-				Long id = data.getID();
-				if (findDataReference(id) == null) {
-					System.out.println("The data with id " + id + " no longer exists.");
-				}
-			}
-			throw ex;
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+    public void edit(DataReference data) {
+        EntityManager em = null;
 
-	public DataReference findDataReference(Long id) {
-		EntityManager em = getEntityManager();
-		try {
-			return em.find(DataReference.class, id);
-		} finally {
-			em.close();
-		}
-	}
+        try {
+            em = getEntityManager();
+            DataReference d = em.find(DataReference.class, data.getID());
+            em.getTransaction().begin();
+            d.copy(data);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Long id = data.getID();
+                if (findDataReference(id) == null) {
+                    System.out.println("The data with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public DataReference findDataReference(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(DataReference.class, id);
+        } finally {
+            em.close();
+        }
+    }
 }

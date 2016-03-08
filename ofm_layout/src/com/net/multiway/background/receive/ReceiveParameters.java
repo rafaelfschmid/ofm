@@ -2,7 +2,6 @@ package com.net.multiway.background.receive;
 
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
-import com.net.multiway.background.data.dao.DataReceiveEventsDAO;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -164,7 +163,7 @@ public class ReceiveParameters extends Package {
         out.println("/**************************************************************/");
         out.println("/************************MEAN VALUES***************************/");
         out.println("/**************************************************************/");
-        
+
         for (Integer value : data.getGraphData()) {
             out.println(value);
         }

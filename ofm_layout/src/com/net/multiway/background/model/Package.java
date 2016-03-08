@@ -4,22 +4,20 @@ import java.io.IOException;
 
 public abstract class Package {
 
-	protected int length;
-	
-	public Package()
-	{
-		
-	}
+    protected int length;
 
-	public int getLength() {
-		return length;
-	}
+    public Package() {
 
-	public void setLength(int length) {
-		this.length = length;
-	}
+    }
 
-	
-	public abstract void parser() throws IOException;
-	
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public abstract void parser() throws IOException;
+
 }

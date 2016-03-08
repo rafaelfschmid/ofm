@@ -10,7 +10,8 @@ package com.net.multiway.background.model;
  * @author Phelipe
  */
 public enum Mode {
-	/**
+
+    /**
      * Represents a screen being opened in order to view operations <br />
      * Intended to Read-only operations
      */

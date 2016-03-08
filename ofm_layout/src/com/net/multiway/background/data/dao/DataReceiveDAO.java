@@ -10,7 +10,6 @@ import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -44,7 +43,6 @@ public class DataReceiveDAO implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-
 
             em.persist(data);
             msg = "ID inserido " + data.getID().toString();

@@ -9,50 +9,51 @@ import com.net.multiway.background.utils.Utils;
 
 /*Classe para envio de dados do código: 0x10000002*/
 public class SendDevice {
-	private DataOutputStream os;
-	private Header header;
-	private DataDevice data;
 
-	public SendDevice(DataOutputStream out, DataDevice data) {
-		this.os = out;
-		this.header = new Header(0x00000068, 0x10000002, 0x00000030);
-		this.data = data;
-	}
+    private DataOutputStream os;
+    private Header header;
+    private DataDevice data;
 
-	public void sender() throws IOException {
-		// strpkstr_16
-		os.writeBytes(this.header.getSTPKSTR_s16());
+    public SendDevice(DataOutputStream out, DataDevice data) {
+        this.os = out;
+        this.header = new Header(0x00000068, 0x10000002, 0x00000030);
+        this.data = data;
+    }
 
-		// pklen_4
-		os.write(Utils.intToByteArray(this.header.getPKLEN_ui4()));
-		// rev_4
-		os.write(Utils.intToByteArray(this.header.getREV_ui4()));
+    public void sender() throws IOException {
+        // strpkstr_16
+        os.writeBytes(this.header.getSTPKSTR_s16());
 
-		// pktpy_4
-		os.write(Utils.intToByteArray(this.header.getPKTPY_ui4()));
+        // pklen_4
+        os.write(Utils.intToByteArray(this.header.getPKLEN_ui4()));
+        // rev_4
+        os.write(Utils.intToByteArray(this.header.getREV_ui4()));
 
-		// src_4
-		os.write(Utils.intToByteArray(this.header.getSRC_ui4()));
+        // pktpy_4
+        os.write(Utils.intToByteArray(this.header.getPKTPY_ui4()));
 
-		// dst_4
-		os.write(Utils.intToByteArray(this.header.getDST_ui4()));
+        // src_4
+        os.write(Utils.intToByteArray(this.header.getSRC_ui4()));
 
-		// pkid_4
-		os.write(Utils.intToByteArray(this.header.getPKID_ui4()));
+        // dst_4
+        os.write(Utils.intToByteArray(this.header.getDST_ui4()));
 
-		// rsvd_4
-		os.write(Utils.intToByteArray(this.header.getRSVD1_ui4()));
+        // pkid_4
+        os.write(Utils.intToByteArray(this.header.getPKID_ui4()));
 
-		// cmcode_4
-		os.write(Utils.intToByteArray(this.header.getCMDCODE_ui4()));
+        // rsvd_4
+        os.write(Utils.intToByteArray(this.header.getRSVD1_ui4()));
 
-		// datalen_4
-		os.write(Utils.intToByteArray(this.header.getDATALEN_4()));
+        // cmcode_4
+        os.write(Utils.intToByteArray(this.header.getCMDCODE_ui4()));
 
-		// data
-		os.writeBytes(this.data.takeData());
+        // datalen_4
+        os.write(Utils.intToByteArray(this.header.getDATALEN_4()));
 
-		// rsvd_4
-		os.write(Utils.intToByteArray(this.header.getRSVD2_ui4()));
-	}
+        // data
+        os.writeBytes(this.data.takeData());
+
+        // rsvd_4
+        os.write(Utils.intToByteArray(this.header.getRSVD2_ui4()));
+    }
 }

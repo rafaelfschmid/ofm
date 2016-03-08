@@ -20,62 +20,62 @@ import javafx.fxml.Initializable;
  */
 public class MainSceneController implements Initializable, IController {
 
-	private IController centerController;
+    private IController centerController;
 
-	/**
-	 * Initializes the controller class.
-	 */
-	@Override
-	public void initialize(URL url, ResourceBundle rb) {
-		// TODO
-	}
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }
 
-	public void setCenterController(IController controller) {
-		this.centerController = controller;
-	}
+    public void setCenterController(IController controller) {
+        this.centerController = controller;
+    }
 
-	@Override
-	public void handleSave(ActionEvent event) {
+    @Override
+    public void handleSave(ActionEvent event) {
 
-	}
+    }
 
-	@Override
-	public void prepareForm(Mode mode) {
+    @Override
+    public void prepareForm(Mode mode) {
 
-	}
+    }
 
-	@Override
-	public void prepareMenu(Mode mode) {
+    @Override
+    public void prepareMenu(Mode mode) {
 
-	}
+    }
 
-	@FXML
-	private void onMenuPrint(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuPrint(ActionEvent event) {
+    }
 
-	@FXML
-	private void onMenuExit(ActionEvent event) {
-		System.exit(0);
-	}
+    @FXML
+    private void onMenuExit(ActionEvent event) {
+        System.exit(0);
+    }
 
-	@FXML
-	private void onMenuExportLastRead(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuExportLastRead(ActionEvent event) {
+    }
 
-	@FXML
-	private void onMenuExportEventsList(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuExportEventsList(ActionEvent event) {
+    }
 
-	@FXML
-	private void onMenuExportOcurrencesList(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuExportOcurrencesList(ActionEvent event) {
+    }
 
-	@FXML
-	private void onMenuHelp(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuHelp(ActionEvent event) {
+    }
 
-	@FXML
-	private void onMenuAbout(ActionEvent event) {
-	}
+    @FXML
+    private void onMenuAbout(ActionEvent event) {
+    }
 
 }

@@ -108,9 +108,7 @@ public class DataDeviceDAO {
             } finally {
                 em.close();
             }
-        }
-        else
-        {
+        } else {
             System.out.println("Data " + device.toString() + " doesn't found.");
         }
     }

@@ -83,7 +83,7 @@ public class MonitorWindowController implements Initializable, IController {
     private TextField endThresholdField;
     @FXML
     private TextField reflectionThresholdField;
-    
+
     @FXML
     private TextField cycleTimeField;
 

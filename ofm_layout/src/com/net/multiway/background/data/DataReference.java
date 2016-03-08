@@ -27,58 +27,58 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DataReference implements Serializable {
 
-	private Long ID;
+    private Long ID;
 
-	private DataDevice device;
-	private DataParameters parameters;
-	private DataReceive dataReceive;
+    private DataDevice device;
+    private DataParameters parameters;
+    private DataReceive dataReceive;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DATADEVICE_ID")
-	public DataDevice getDevice() {
-		return device;
-	}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DATADEVICE_ID")
+    public DataDevice getDevice() {
+        return device;
+    }
 
-	public void setDevice(DataDevice device) {
-		this.device = device;
-	}
+    public void setDevice(DataDevice device) {
+        this.device = device;
+    }
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DATAPARAMETERS_ID")
-	public DataParameters getParameters() {
-		return parameters;
-	}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DATAPARAMETERS_ID")
+    public DataParameters getParameters() {
+        return parameters;
+    }
 
-	public void setParameters(DataParameters parameters) {
-		this.parameters = parameters;
-	}
+    public void setParameters(DataParameters parameters) {
+        this.parameters = parameters;
+    }
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DATARECEIVE_ID")
-	public DataReceive getDataReceive() {
-		return dataReceive;
-	}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DATARECEIVE_ID")
+    public DataReceive getDataReceive() {
+        return dataReceive;
+    }
 
-	public void setDataReceive(DataReceive dataReceive) {
-		this.dataReceive = dataReceive;
-	}
+    public void setDataReceive(DataReceive dataReceive) {
+        this.dataReceive = dataReceive;
+    }
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Basic(optional = false)
-	@Column(name = "ID")
-	public Long getID() {
-		return ID;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID")
+    public Long getID() {
+        return ID;
+    }
 
-	public void setID(Long ID) {
-		this.ID = ID;
-	}
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
 
-	public void copy(DataReference data) {
-		setDataReceive(data.getDataReceive());
-		setDevice(data.getDevice());
-		setParameters(data.getParameters());
-	}
+    public void copy(DataReference data) {
+        setDataReceive(data.getDataReceive());
+        setDevice(data.getDevice());
+        setParameters(data.getParameters());
+    }
 
 }
