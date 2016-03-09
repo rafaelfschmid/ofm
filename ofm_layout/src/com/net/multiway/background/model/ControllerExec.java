@@ -5,14 +5,20 @@
  */
 package com.net.multiway.background.model;
 
+import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
+import com.net.multiway.background.utils.AlertDialog;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -77,13 +83,4 @@ public abstract class ControllerExec implements Initializable, IController {
         grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
     }
 
-    protected void showReceiveEventsTable(ArrayList<DataReceiveEvents> r) {
-
-        ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
-        for (int i = 0; i < r.size(); i++) {
-            value.add(r.get(i));
-        }
-        resultTable.setItems(value);
-
-    }
 }

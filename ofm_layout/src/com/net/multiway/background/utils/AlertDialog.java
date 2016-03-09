@@ -12,7 +12,7 @@ import javafx.scene.control.Alert;
  * @author rafael
  */
 public class AlertDialog {
-    public static void alertToSaveParameters() {
+    public static void SaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Parametros não salvos");
         alert.setHeaderText("Por favor, salvar os parâmetros antes de prosseguir.");
@@ -20,7 +20,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertIncorrectTypeParameters(String ex) {
+    public static void IncorrectTypeParameters(String ex) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Tipo incorreto");
         alert.setHeaderText("Por favor, verifique os parâmetros.");
@@ -29,7 +29,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertDeviceSelection() {
+    public static void DeviceSelection() {
         // Nada selecionado.
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Nenhuma seleção");
@@ -39,7 +39,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static boolean alertDeviceDeletion(String device) {
+    public static boolean DeviceDeletion(String device) {
         // Nada selecionado.
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Exclusão de dispositivo");
@@ -54,7 +54,7 @@ public class AlertDialog {
         return true;
     }
 
-    public static void alertNothingToExport() {
+    public static void NothingToExport() {
         // Nada selecionado.
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Nada a ser exportado.");
@@ -63,7 +63,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertExportSuccess() {
+    public static void ExportSuccess() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exportação.");
         alert.setHeaderText("Dados exportados com sucesso.");
@@ -72,7 +72,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertNothingToReference() {
+    public static void NothingToReference() {
         // Nada selecionado.
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Nada a ser referenciado.");
@@ -82,7 +82,7 @@ public class AlertDialog {
 
     }
     
-    public static void alertIncorrectField(String text) {
+    public static void IncorrectField(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Campo Incorreto");
         alert.setHeaderText("Por favor, verifique o campo " + text + ".");
@@ -90,7 +90,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertDeviceNotFound() {
+    public static void DeviceNotFound() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Device Not Found");
         alert.setHeaderText("Por favor, adicione um dispositivo antes de continuar.");
@@ -98,7 +98,7 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
-    public static void alertIncorrectRangeField(String text, int min, int max) {
+    public static void IncorrectRangeField(String text, int min, int max) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Campo Incorreto");
         alert.setHeaderText("O campo " + text + " deve estar entre " + min + " e " + max);

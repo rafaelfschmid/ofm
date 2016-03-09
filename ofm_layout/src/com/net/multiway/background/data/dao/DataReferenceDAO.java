@@ -5,11 +5,14 @@
  */
 package com.net.multiway.background.data.dao;
 
+import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,16 +36,25 @@ public class DataReferenceDAO {
     private void create(DataReceive dr, DataDevice dd, DataParameters dp) {
         DataReceiveDAO daor = new DataReceiveDAO();
         daor.create(dr);
+        String msg = "DataReceive inserido na base.";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
         for (DataReceiveEvents receiveEvents : dr.getEvents()) {
             edao.create(receiveEvents);
         }
+        msg = "DataReceiveEvents inserido na base.";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         DataDeviceDAO daod = new DataDeviceDAO();
         daod.create(dd);
+        msg = "DataDevice inserido na base.";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+
         DataParametersDAO daop = new DataParametersDAO();
         daop.create(dp);
+        msg = "DataParameters inserido na base.";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public void create(DataReference data) {
@@ -83,6 +95,8 @@ public class DataReferenceDAO {
                 em.close();
             }
         }
+        String msg = "DataReference inserido na base.";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public void edit(DataReference data) {

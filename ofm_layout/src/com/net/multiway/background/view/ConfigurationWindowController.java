@@ -17,11 +17,8 @@ import com.net.multiway.background.data.dao.DataParametersDAO;
 import com.net.multiway.background.data.dao.DataReferenceDAO;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
-import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
-import com.net.multiway.background.receive.ReceiveParameters;
-import com.net.multiway.background.receive.ReceiveValues;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,15 +32,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -64,14 +56,6 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private ListView<DataDevice> devicesList;
 
-//    // Gráfico
-//    @FXML
-//    private LineChart<NumberAxis, NumberAxis> grafico;
-//    @FXML
-//    private NumberAxis xAxis;
-//    @FXML
-//    private NumberAxis yAxis;
-    //parameter
     @FXML
     private ComboBox measureRangeField;
     @FXML
@@ -91,11 +75,22 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private TextField reflectionThresholdField;
 
-    
+    @FXML
+    private TextField cycleTimeField;
+
     @FXML
     private Button buttonSave;
     @FXML
     private Button buttonEdit;
+
+    @FXML
+    private Button buttonExecutar;
+    @FXML
+    private Button buttonExport;
+    @FXML
+    private Button buttonReference;
+    @FXML
+    private Button buttonMonitor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,6 +136,8 @@ public class ConfigurationWindowController extends ControllerExec {
 
         msg = "Parâmetros carregados na tela...";
         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+
+        cycleTimeField.setText("10");
     }
 
     /**
@@ -152,18 +149,23 @@ public class ConfigurationWindowController extends ControllerExec {
         int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex >= 0) {
-            if (AlertDialog.alertDeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
+            if (AlertDialog.DeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
                 DataDeviceDAO dao = new DataDeviceDAO();
                 dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
                 devicesList.getItems().remove(selectedIndex);
+                String msg = "Device removido com sucesso.";
+                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
                 if (devicesList.getItems().size() > 0) {
                     device = devicesList.getItems().get(0);
                 }
+
             }
 
         } else {
-            AlertDialog.alertDeviceSelection();
+            String msg = "Nenhum device selecionado para deletar.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.DeviceSelection();
         }
 
         updateDeviceList();
@@ -221,31 +223,31 @@ public class ConfigurationWindowController extends ControllerExec {
 
     private boolean validateParametersField() {
         if (measureRangeField.getValue() == null) {
-            AlertDialog.alertIncorrectField("Measuring Range Of Test");
+            AlertDialog.IncorrectField("Measuring Range Of Test");
             return false;
         } else if (pulseWidthField.getValue() == null) {
-            AlertDialog.alertIncorrectField("Test Pulse Width");
+            AlertDialog.IncorrectField("Test Pulse Width");
             return false;
         } else if (measureTimeField.getValue() == null) {
-            AlertDialog.alertIncorrectField("Measuring Time");
+            AlertDialog.IncorrectField("Measuring Time");
             return false;
         } else if (waveLengthField.getValue() == null) {
-            AlertDialog.alertIncorrectField("Test Wave Length");
+            AlertDialog.IncorrectField("Test Wave Length");
             return false;
         } else if (measureModeField.getValue() == null) {
-            AlertDialog.alertIncorrectField("Measure Mode");
+            AlertDialog.IncorrectField("Measure Mode");
             return false;
         } else if (refractiveIndexField.getText().isEmpty()) {
-            AlertDialog.alertIncorrectField("Refractive Index");
+            AlertDialog.IncorrectField("Refractive Index");
             return false;
         } else if (nonReflactionThresholdField.getText().isEmpty()) {
-            AlertDialog.alertIncorrectField("Non Reflaction Threshold");
+            AlertDialog.IncorrectField("Non Reflaction Threshold");
             return false;
         } else if (endThresholdField.getText().isEmpty()) {
-            AlertDialog.alertIncorrectField("End Threshold");
+            AlertDialog.IncorrectField("End Threshold");
             return false;
         } else if (reflectionThresholdField.getText().isEmpty()) {
-            AlertDialog.alertIncorrectField("Reflection Threshold");
+            AlertDialog.IncorrectField("Reflection Threshold");
             return false;
         } else {
             return true;
@@ -260,11 +262,11 @@ public class ConfigurationWindowController extends ControllerExec {
             float reflectionThresh = Float.parseFloat(reflectionThresholdField.getText());
 
             if (nonReflThresh < 0 || nonReflThresh > 10) {
-                AlertDialog.alertIncorrectRangeField("NonReflaction Threshold", 0, 10);
+                AlertDialog.IncorrectRangeField("NonReflaction Threshold", 0, 10);
             } else if (endThresh < 0 || endThresh > 10) {
-                AlertDialog.alertIncorrectRangeField("End Threshold", 0, 10);
+                AlertDialog.IncorrectRangeField("End Threshold", 0, 10);
             } else if (reflectionThresh < 20 || reflectionThresh > 80) {
-                AlertDialog.alertIncorrectRangeField("Reflaction Threshold", 20, 80);
+                AlertDialog.IncorrectRangeField("Reflaction Threshold", 20, 80);
             } else {
                 parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
                 parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
@@ -288,7 +290,7 @@ public class ConfigurationWindowController extends ControllerExec {
         if (device != null) {
             host = new DeviceComunicator(device.getIp().trim(), 5000);
 
-            if (validateParametersField()) {
+            if (buttonSave.isDisable()) {
 
                 Task execute = new Task() {
                     @Override
@@ -299,7 +301,6 @@ public class ConfigurationWindowController extends ControllerExec {
                         }
 
                         host.connect(parameters);
-
                         String msg = "Envio de dados finalizado.";
                         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                         return "Conexao realizada";
@@ -308,17 +309,21 @@ public class ConfigurationWindowController extends ControllerExec {
                     @Override
                     protected void succeeded() {
                         receiveParameters = host.getReceiveParametersData();
-                        showReceiveEventsTable((ArrayList<DataReceiveEvents>) receiveParameters.getData().getEvents());
-                        String msg = "Parametros atualizados na tela de configuração.";
-                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                        if (receiveParameters != null) {
+                            resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
 
-                        receiveValues = host.getReceiveValues();
-                        grafico.getData().clear();
-                        plotGraph();
-                        grafico.setCreateSymbols(false);
-                        msg = "Gráfico plotado na tela de configuração.";
-                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                            String msg = "Eventos atualizados na tela de configuração.";
+                            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
+                            receiveValues = host.getReceiveValues();
+                            grafico.getData().clear();
+                            plotGraph();
+                            grafico.setCreateSymbols(false);
+                            msg = "Gráfico plotado na tela de configuração.";
+                            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                            buttonExport.setDisable(false);
+                            buttonReference.setDisable(false);
+                        }
                     }
                 };
 
@@ -327,8 +332,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 tr.start();
             }
         } else {
-            AlertDialog.alertDeviceNotFound();
-
+            AlertDialog.SaveParameters();
         }
 
     }
@@ -336,11 +340,15 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onHandleExport() {
         if ((receiveParameters == null) || (receiveValues == null)) {
-            AlertDialog.alertNothingToExport();
+            String msg = "Não há dados a serem exportados.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.NothingToExport();
         } else {
             receiveParameters.print();
             receiveValues.print();
-            AlertDialog.alertExportSuccess();
+            String msg = "Dados exportados com sucesso.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.ExportSuccess();
         }
     }
 
@@ -352,13 +360,14 @@ public class ConfigurationWindowController extends ControllerExec {
             reference.setDevice(device);
             reference.setParameters(parameters);
 
-            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, reference.getDevice().getIp());
-
             DataReferenceDAO dao = new DataReferenceDAO();
             dao.create(reference);
 
+            buttonReference.setDisable(true);
         } else {
-            AlertDialog.alertNothingToReference();
+            String msg = "Não há dados a serem salvos como referência.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.NothingToReference();
         }
     }
 
