@@ -140,7 +140,8 @@
                   <Button fx:id="buttonReference" disable="true" layoutX="253.0" layoutY="475.0" mnemonicParsing="false" onAction="#onHandleSetReference" prefHeight="26.0" prefWidth="88.0" text="Referencia" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="105.0" />
                   <Button fx:id="buttonExport" disable="true" layoutX="146.0" layoutY="472.0" mnemonicParsing="false" onAction="#onHandleExport" prefHeight="26.0" prefWidth="88.0" text="Exportar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="205.0" />
                   <Button fx:id="buttonMonitor" layoutX="413.0" layoutY="478.0" mnemonicParsing="false" onAction="#onHandleChangeToMonitor" prefHeight="26.0" prefWidth="88.0" text="Monitor" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-                  <Button fx:id="buttonExecutar" layoutX="341.0" layoutY="577.0" mnemonicParsing="false" onAction="#onHandleExecute" prefHeight="26.0" prefWidth="88.0" text="Executar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="305.0" />
+                  <Button fx:id="buttonExecute" layoutX="341.0" layoutY="577.0" mnemonicParsing="false" onAction="#onHandleExecute" prefHeight="26.0" prefWidth="88.0" text="Executar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="305.0" />
+                  <Label fx:id="executionLabel" layoutX="14.0" layoutY="703.0" text="Execution..." AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
                </children>
             </AnchorPane>
         </items>

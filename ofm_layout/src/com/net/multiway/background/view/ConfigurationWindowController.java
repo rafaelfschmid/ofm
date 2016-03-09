@@ -34,6 +34,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -84,7 +85,7 @@ public class ConfigurationWindowController extends ControllerExec {
     private Button buttonEdit;
 
     @FXML
-    private Button buttonExecutar;
+    private Button buttonExecute;
     @FXML
     private Button buttonExport;
     @FXML
@@ -92,8 +93,17 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private Button buttonMonitor;
 
+    @FXML
+    private Label executionLabel;
+
+    public void setExecutionLabel(String msg) {
+        executionLabel.setText(msg);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        executionLabel.setVisible(false);
 
         DataDeviceDAO dao = new DataDeviceDAO();
         devicesData.addAll(dao.getDevices());
@@ -291,7 +301,10 @@ public class ConfigurationWindowController extends ControllerExec {
             host = new DeviceComunicator(device.getIp().trim(), 5000);
 
             if (buttonSave.isDisable()) {
-
+                executionLabel.setVisible(true);
+                String msg = "Receiving data from OTDR...";
+                executionLabel.setText(msg);
+                
                 Task execute = new Task() {
                     @Override
                     protected String call() throws Exception {
@@ -299,21 +312,25 @@ public class ConfigurationWindowController extends ControllerExec {
                             resultTable.getItems().remove(0, resultTable.getItems().size());
 
                         }
-
+                        buttonExecute.setDisable(true);
+                        buttonMonitor.setDisable(true);
                         host.connect(parameters);
-                        String msg = "Envio de dados finalizado.";
-                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                         return "Conexao realizada";
                     }
 
                     @Override
                     protected void succeeded() {
+                        String msg = "Envio de dados finalizado.";
+                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                        executionLabel.setText(msg);
+                        
                         receiveParameters = host.getReceiveParametersData();
                         if (receiveParameters != null) {
                             resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
 
-                            String msg = "Eventos atualizados na tela de configuração.";
+                            msg = "Eventos atualizados na tela de configuração.";
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                            executionLabel.setText(msg);
 
                             receiveValues = host.getReceiveValues();
                             grafico.getData().clear();
@@ -321,8 +338,13 @@ public class ConfigurationWindowController extends ControllerExec {
                             grafico.setCreateSymbols(false);
                             msg = "Gráfico plotado na tela de configuração.";
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                            executionLabel.setText(msg);
+
                             buttonExport.setDisable(false);
                             buttonReference.setDisable(false);
+                            buttonExecute.setDisable(false);
+                            buttonMonitor.setDisable(false);
+                            executionLabel.setVisible(false);
                         }
                     }
                 };

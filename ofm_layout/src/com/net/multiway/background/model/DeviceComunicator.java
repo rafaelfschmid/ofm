@@ -17,8 +17,10 @@ import com.net.multiway.background.send.SendStopTest;
 import com.net.multiway.background.send.SendDevice;
 import com.net.multiway.background.send.SendConfirmationSignal;
 import com.net.multiway.background.utils.Utils;
+import com.net.multiway.background.view.ConfigurationWindowController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Label;
 
 public class DeviceComunicator {
 
@@ -119,31 +121,24 @@ public class DeviceComunicator {
             return false;
         }
     }
-
+    
     public void connect(DataParameters data) {
 
         this.initialize();
         try {
-//			sendPackage(data);
-//
-//			for (int i = 0; i < 10; i++) {
-//				receivePackage();
-//				sendPackage();
-//
-//				System.out.println(i + 1);
-//			}
-
             sendPackage(data);
             boolean flag = true;
             int i = 0;
             while (flag) {
+                String msg = "Receiving frame " + i + ".";
+                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                i++;
+                
                 flag = receivePackage();
 
                 sendPackage();
 
-                String msg = "Frame " + i + " " + flag;
-                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-                i++;
+                
             }
 
             this.client.close();
