@@ -83,4 +83,17 @@ public abstract class ControllerExec implements Initializable, IController {
         grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
     }
 
+    protected void exportData() {
+        if ((receiveParameters == null) || (receiveValues == null)) {
+            String msg = "Não há dados a serem exportados.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.NothingToExport();
+        } else {
+            receiveParameters.print();
+            receiveValues.print();
+            String msg = "Dados exportados com sucesso.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.ExportSuccess();
+        }
+    }
 }

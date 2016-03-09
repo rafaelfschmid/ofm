@@ -339,17 +339,7 @@ public class ConfigurationWindowController extends ControllerExec {
 
     @FXML
     private void onHandleExport() {
-        if ((receiveParameters == null) || (receiveValues == null)) {
-            String msg = "Não há dados a serem exportados.";
-            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-            AlertDialog.NothingToExport();
-        } else {
-            receiveParameters.print();
-            receiveValues.print();
-            String msg = "Dados exportados com sucesso.";
-            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-            AlertDialog.ExportSuccess();
-        }
+        exportData();
     }
 
     @FXML
