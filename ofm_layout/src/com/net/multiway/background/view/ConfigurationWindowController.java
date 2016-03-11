@@ -160,8 +160,10 @@ public class ConfigurationWindowController extends ControllerExec {
 
         if (selectedIndex >= 0) {
             if (AlertDialog.DeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
-                DataDeviceDAO dao = new DataDeviceDAO();
-                dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
+                //DataDeviceDAO dao = new DataDeviceDAO();
+                //dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
+//                DataReferenceDAO dao = new DataReferenceDAO();
+//                dao.delet
                 devicesList.getItems().remove(selectedIndex);
                 String msg = "Device removido com sucesso.";
                 Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
@@ -300,61 +302,77 @@ public class ConfigurationWindowController extends ControllerExec {
         if (device != null) {
             host = new DeviceComunicator(device.getIp().trim(), 5000);
 
+//            if(host.connect(device)) {
+//                
+//            }
+//            else 
             if (buttonSave.isDisable()) {
                 executionLabel.setVisible(true);
                 String msg = "Receiving data from OTDR...";
                 executionLabel.setText(msg);
-                
+
                 Task execute = new Task() {
                     @Override
-                    protected String call() throws Exception {
+                    protected Boolean call() throws Exception {
                         if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
                             resultTable.getItems().remove(0, resultTable.getItems().size());
 
                         }
                         buttonExecute.setDisable(true);
                         buttonMonitor.setDisable(true);
-                        host.connect(parameters);
-                        return "Conexao realizada";
+                        try {
+                            host.connect(parameters);
+                        } catch (Exception ex) {
+                            buttonExecute.setDisable(false);
+                            buttonMonitor.setDisable(false);
+                        }
+
+                        return buttonExecute.isDisable();
                     }
 
                     @Override
                     protected void succeeded() {
-                        String msg = "Envio de dados finalizado.";
-                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-                        executionLabel.setText(msg);
-                        
-                        receiveParameters = host.getReceiveParametersData();
-                        if (receiveParameters != null) {
-                            resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
-
-                            msg = "Eventos atualizados na tela de configuração.";
+                        if (!buttonExecute.isDisable()) {
+                            AlertDialog.timeOut(device.getIp());
+                        } else {
+                            String msg = "Envio de dados finalizado.";
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                             executionLabel.setText(msg);
 
-                            receiveValues = host.getReceiveValues();
-                            grafico.getData().clear();
-                            plotGraph();
-                            grafico.setCreateSymbols(false);
-                            msg = "Gráfico plotado na tela de configuração.";
-                            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-                            executionLabel.setText(msg);
+                            receiveParameters = host.getReceiveParametersData();
+                            if (receiveParameters != null) {
+                                resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
 
-                            buttonExport.setDisable(false);
-                            buttonReference.setDisable(false);
-                            buttonExecute.setDisable(false);
-                            buttonMonitor.setDisable(false);
-                            executionLabel.setVisible(false);
+                                msg = "Eventos atualizados na tela de configuração.";
+                                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                                executionLabel.setText(msg);
+
+                                receiveValues = host.getReceiveValues();
+                                grafico.getData().clear();
+                                plotGraph();
+                                grafico.setCreateSymbols(false);
+                                msg = "Gráfico plotado na tela de configuração.";
+                                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                                executionLabel.setText(msg);
+
+                                buttonExport.setDisable(false);
+                                buttonReference.setDisable(false);
+                                buttonExecute.setDisable(false);
+                                buttonMonitor.setDisable(false);
+                                executionLabel.setVisible(false);
+                            }
                         }
                     }
                 };
 
                 Thread tr = new Thread(execute);
-
                 tr.start();
+
+            } else {
+                AlertDialog.SaveParameters();
             }
         } else {
-            AlertDialog.SaveParameters();
+            AlertDialog.DeviceNotFound();
         }
 
     }

@@ -16,8 +16,11 @@ import com.net.multiway.background.send.SendParameters;
 import com.net.multiway.background.send.SendStopTest;
 import com.net.multiway.background.send.SendDevice;
 import com.net.multiway.background.send.SendConfirmationSignal;
+import com.net.multiway.background.utils.AlertDialog;
 import com.net.multiway.background.utils.Utils;
 import com.net.multiway.background.view.ConfigurationWindowController;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Label;
@@ -57,15 +60,16 @@ public class DeviceComunicator {
         this.ip = ip;
     }
 
-    public void initialize() {
-        try {
-            this.client = new Socket(this.ip, this.door);
+    public void initialize() throws IOException {
+//        try {
+            this.client = new Socket();
+            this.client.connect(new InetSocketAddress(this.ip, this.door), 2000);
             System.out.println("O cliente se conectou ao OTDR!");
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (Exception ex) {
+//            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     private void sendPackage(DataParameters data) throws IOException {
@@ -122,7 +126,7 @@ public class DeviceComunicator {
         }
     }
     
-    public void connect(DataParameters data) {
+    public void connect(DataParameters data) throws IOException {
 
         this.initialize();
         try {
@@ -149,7 +153,7 @@ public class DeviceComunicator {
 
     }
 
-    public void connect(StopTest data) {
+    public void connect(StopTest data) throws IOException {
 
         this.initialize();
         try {
@@ -164,7 +168,7 @@ public class DeviceComunicator {
         }
     }
 
-    public void connect(DataDevice data) {
+    public void connect(DataDevice data) throws IOException {
 
         this.initialize();
         try {
@@ -187,7 +191,7 @@ public class DeviceComunicator {
         return receiveParametersData;
     }
 
-    public void runMonitor(int time, DataParameters data) {
+    public void runMonitor(int time, DataParameters data) throws IOException {
 
         connect(data);
         long ti = System.currentTimeMillis();

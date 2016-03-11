@@ -12,10 +12,11 @@ import javafx.scene.control.Alert;
  * @author rafael
  */
 public class AlertDialog {
+
     public static void SaveParameters() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Parametros não salvos");
-        alert.setHeaderText("Por favor, salvar os parâmetros antes de prosseguir.");
+        alert.setHeaderText("Por favor, salve os parâmetros antes de prosseguir.");
 
         alert.showAndWait();
     }
@@ -81,7 +82,7 @@ public class AlertDialog {
         alert.showAndWait();
 
     }
-    
+
     public static void IncorrectField(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Campo Incorreto");
@@ -102,6 +103,24 @@ public class AlertDialog {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Campo Incorreto");
         alert.setHeaderText("O campo " + text + " deve estar entre " + min + " e " + max);
+
+        alert.showAndWait();
+    }
+
+    public static void somethingGoingWrong(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Por favor, informe o administrador do software sobre o problema.");
+        alert.setContentText(text);
+
+        alert.showAndWait();
+    }
+    
+        public static void timeOut(String ip) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Time Out");
+        alert.setHeaderText("O endereço "+ ip +" não pôde ser alcançado.");
+        alert.setContentText("Corrija o IP, ou tente novamente mais tarde.");
 
         alert.showAndWait();
     }

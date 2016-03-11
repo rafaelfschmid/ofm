@@ -132,4 +132,24 @@ public class DataReferenceDAO {
             em.close();
         }
     }
+    
+    public void deleteData(String id) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            
+            em.remove(em.getReference(DataReference.class, id));
+            em.remove(em.getReference(DataDevice.class, id));
+            //em.remove(em.getReference(DataReceiveEvents.class, id));
+            em.remove(em.getReference(DataReceiveEvents.class, id));
+
+            em.getTransaction().commit();
+
+        } catch (Exception ex) {
+            //System.out.println("Data " + reference.toString() + " doesn't deleted.");
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }
