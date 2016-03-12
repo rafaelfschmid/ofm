@@ -44,7 +44,7 @@ public class DataReceiveEventsDAO implements Serializable {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataEvents(data.getID()) != null) {
+            if (find(data.getID()) != null) {
                 throw new Exception("Evento " + data.getID() + " already exists.", ex);
             }
             throw ex;
@@ -68,7 +68,7 @@ public class DataReceiveEventsDAO implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataEvents(id) == null) {
+                if (find(id) == null) {
                     throw new Exception("The event with id " + id + " no longer exists.");
                 }
             }
@@ -80,7 +80,7 @@ public class DataReceiveEventsDAO implements Serializable {
         }
     }
 
-    public DataReceiveEvents findDataEvents(Long id) {
+    public DataReceiveEvents find(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataReceiveEvents.class, id);
@@ -89,7 +89,7 @@ public class DataReceiveEventsDAO implements Serializable {
         }
     }
 
-    public void deleteData(DataReceiveEvents event )throws Exception {
+    public void delete(DataReceiveEvents event )throws Exception {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();

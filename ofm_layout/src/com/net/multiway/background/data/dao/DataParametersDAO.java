@@ -5,7 +5,6 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import java.io.Serializable;
 import javax.persistence.EntityManager;

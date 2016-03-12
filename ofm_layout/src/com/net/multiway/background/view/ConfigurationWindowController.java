@@ -10,7 +10,6 @@ import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.exception.AlertDialog;
 
 import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
@@ -21,7 +20,6 @@ import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -385,14 +383,19 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onHandleSetReference() {
         if (receiveParameters != null && receiveValues != null && device != null) {
-            reference = new DataReference();
-            reference.setDataReceive(receiveParameters.getData());
-            reference.setDevice(device);
-            reference.setParameters(parameters);
-
             DataReferenceDAO dao = new DataReferenceDAO();
             try {
-                dao.create(reference);
+                reference = new DataReference();
+                reference.setDataReceive(receiveParameters.getData());
+                reference.setDevice(device);
+                reference.setParameters(parameters);
+                
+                if (device.getID() != null) {
+                    dao.edit(reference);
+                } else {
+
+                    dao.create(reference);
+                }
             } catch (Exception ex) {
                 Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
                 AlertDialog.exception(ex);

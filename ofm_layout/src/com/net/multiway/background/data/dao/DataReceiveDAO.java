@@ -5,15 +5,11 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.MainApp;
-import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

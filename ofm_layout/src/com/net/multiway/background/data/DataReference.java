@@ -27,12 +27,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DataReference implements Serializable {
 
-    private Long ID;
+//    private Long ID;
 
     private DataDevice device;
     private DataParameters parameters;
     private DataReceive dataReceive;
 
+    @Id
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DATADEVICE_ID")
     public DataDevice getDevice() {
@@ -63,22 +64,22 @@ public class DataReference implements Serializable {
         this.dataReceive = dataReceive;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(Long ID) {
-        this.ID = ID;
-    }
-
-    public void copy(DataReference data) {
-        setDataReceive(data.getDataReceive());
-        setDevice(data.getDevice());
-        setParameters(data.getParameters());
-    }
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @Column(name = "ID")
+//    public Long getID() {
+//        return ID;
+//    }
+//
+//    public void setID(Long ID) {
+//        this.ID = ID;
+//    }
+//
+//    public void copy(DataReference data) {
+//        setDataReceive(data.getDataReceive());
+//        setDevice(data.getDevice());
+//        setParameters(data.getParameters());
+//    }
 
 }

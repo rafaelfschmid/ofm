@@ -102,6 +102,10 @@ public class DataDeviceDAO {
             } catch (Exception ex) {
                 throw new Exception("The device with id " + device.getID() + " no longer exists.", ex);
             }
+            
+            DataReferenceDAO dao = new DataReferenceDAO();
+            dao.delete(d.getID());
+            
             em.remove(d);
             em.getTransaction().commit();
         } finally {
