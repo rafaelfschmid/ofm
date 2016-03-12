@@ -36,7 +36,7 @@ public class DataDeviceDAO {
             em.persist(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataDevice(data.getID()) != null) {
+            if (find(data.getID()) != null) {
                 throw new Exception("Device " + data.getIp() + " already exists.", ex);
             }
             throw ex;
@@ -52,15 +52,15 @@ public class DataDeviceDAO {
 
         try {
             em = getEntityManager();
-            DataDevice d = em.find(DataDevice.class, data.getID());
+            //DataDevice d = em.find(DataDevice.class, data.getID());
             em.getTransaction().begin();
-            d.copy(data);
+            data = em.merge(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataDevice(id) == null) {
+                if (find(id) == null) {
                     throw new Exception("The device with id " + id + " no longer exists.");
                 }
             }
@@ -72,7 +72,7 @@ public class DataDeviceDAO {
         }
     }
 
-    public DataDevice findDataDevice(Long id) {
+    public DataDevice find(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataDevice.class, id);
@@ -90,25 +90,24 @@ public class DataDeviceDAO {
         }
     }
 
-    public void deleteData(DataDevice device) {
-
-        if (device.getID() != null) {
-            EntityManager em = getEntityManager();
+    public void delete(DataDevice device) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            DataDevice d;
             try {
-                em.getTransaction().begin();
-
-                em.remove(em.getReference(DataDevice.class, device.getID()));
-
-                em.getTransaction().commit();
-
+                d = em.getReference(DataDevice.class, device.getID());
+                d.getID();
             } catch (Exception ex) {
-                System.out.println("Data " + device.toString() + " doesn't deleted.");
-                throw ex;
-            } finally {
+                throw new Exception("The device with id " + device.getID() + " no longer exists.", ex);
+            }
+            em.remove(d);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
                 em.close();
             }
-        } else {
-            System.out.println("Data " + device.toString() + " doesn't found.");
         }
     }
 

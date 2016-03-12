@@ -36,25 +36,17 @@ public class DataReferenceDAO {
     private void create(DataReceive dr, DataDevice dd, DataParameters dp) throws Exception {
         DataReceiveDAO daor = new DataReceiveDAO();
         daor.create(dr);
-        String msg = "DataReceive inserido na base.";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
         for (DataReceiveEvents receiveEvents : dr.getEvents()) {
             edao.create(receiveEvents);
         }
-        msg = "DataReceiveEvents inserido na base.";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         DataDeviceDAO daod = new DataDeviceDAO();
         daod.create(dd);
-        msg = "DataDevice inserido na base.";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         DataParametersDAO daop = new DataParametersDAO();
         daop.create(dp);
-        msg = "DataParameters inserido na base.";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public void create(DataReference data) throws Exception {
@@ -86,7 +78,7 @@ public class DataReferenceDAO {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataReference(data.getID()) != null) {
+            if (find(data.getID()) != null) {
                 throw new Exception("Reference " + data.getID() + " already exists.", ex);
             }
             throw ex;
@@ -102,15 +94,15 @@ public class DataReferenceDAO {
 
         try {
             em = getEntityManager();
-            DataReference d = em.find(DataReference.class, data.getID());
+            //DataReference d = em.find(DataReference.class, data.getID());
             em.getTransaction().begin();
-            d.copy(data);
+            data = em.merge(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataReference(id) == null) {
+                if (find(id) == null) {
                     throw new Exception("The DataReference with id " + id + " no longer exists.");
                 }
             }
@@ -122,7 +114,7 @@ public class DataReferenceDAO {
         }
     }
 
-    public DataReference findDataReference(Long id) {
+    public DataReference find(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataReference.class, id);
@@ -130,24 +122,46 @@ public class DataReferenceDAO {
             em.close();
         }
     }
-    
-    public void deleteData(String id) {
+
+    private void delete(DataReceive dr, DataDevice dd, DataParameters dp) throws Exception {
+        DataReceiveDAO daor = new DataReceiveDAO();
+        daor.delete(dr);
+        
+        DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
+        for (DataReceiveEvents receiveEvents : dr.getEvents()) {
+            edao.deleteData(receiveEvents);
+        }
+
+        DataDeviceDAO daod = new DataDeviceDAO();
+        daod.delete(dd);
+
+        DataParametersDAO daop = new DataParametersDAO();
+        daop.delete(dp);
+    }
+
+    public void delete(String id) throws Exception {
+
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            
-            em.remove(em.getReference(DataReference.class, id));
-            em.remove(em.getReference(DataDevice.class, id));
-            //em.remove(em.getReference(DataReceiveEvents.class, id));
-            em.remove(em.getReference(DataReceiveEvents.class, id));
+
+            DataReference d;
+            try {
+                d = em.getReference(DataReference.class, id);
+                d.getID();
+            } catch (Exception ex) {
+                throw new Exception("The reference with id " + id + " no longer exists.", ex);
+            }
+            DataReferenceDAO.this.delete(d.getDataReceive(), d.getDevice(), d.getParameters());
+            em.remove(d);
 
             em.getTransaction().commit();
 
-        } catch (Exception ex) {
-            //System.out.println("Data " + reference.toString() + " doesn't deleted.");
-            throw ex;
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
+
 }

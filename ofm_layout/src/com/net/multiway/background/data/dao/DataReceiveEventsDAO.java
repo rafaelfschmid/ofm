@@ -62,7 +62,7 @@ public class DataReceiveEventsDAO implements Serializable {
             em = getEntityManager();
             DataReceiveEvents d = em.find(DataReceiveEvents.class, data.getID());
             em.getTransaction().begin();
-            d.copy(data);
+            data = em.merge(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -89,20 +89,25 @@ public class DataReceiveEventsDAO implements Serializable {
         }
     }
 
-    public void deleteData(DataReceiveEvents parameters) {
+    public void deleteData(DataReceiveEvents event )throws Exception {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-
-            em.remove(em.getReference(DataReceiveEvents.class, parameters.getID()));
+            
+            DataReceiveEvents d;
+            try {
+                d = em.getReference(DataReceiveEvents.class, event.getID());
+                d.getID();
+            } catch (Exception ex) {
+                throw new Exception("The parameters configuration with id " + event.getID() + " no longer exists.", ex);
+            }
+            em.remove(d);
 
             em.getTransaction().commit();
-
-        } catch (Exception ex) {
-            System.out.println("Data " + parameters.toString() + " doesn't deleted.");
-            throw ex;
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 }

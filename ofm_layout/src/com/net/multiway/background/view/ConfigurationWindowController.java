@@ -122,7 +122,7 @@ public class ConfigurationWindowController extends ControllerExec {
         mappingParametersTable();
         DataParametersDAO daop = new DataParametersDAO();
 
-        parameters = daop.findDataParameters(Long.parseLong("1"));
+        parameters = daop.find(Long.parseLong("1"));
 
         if (parameters == null) {
             parameters = new DataParameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);

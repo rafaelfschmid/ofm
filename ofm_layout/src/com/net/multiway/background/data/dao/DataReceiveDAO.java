@@ -6,10 +6,12 @@
 package com.net.multiway.background.data.dao;
 
 import com.net.multiway.background.MainApp;
+import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -42,10 +44,10 @@ public class DataReceiveDAO implements Serializable {
             em.getTransaction().begin();
 
             em.persist(data);
-            
+
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataReceive(data.getID()) != null) {
+            if (find(data.getID()) != null) {
                 throw new Exception("DataReceive " + data.getID() + " already exists.", ex);
             }
             throw ex;
@@ -61,15 +63,15 @@ public class DataReceiveDAO implements Serializable {
 
         try {
             em = getEntityManager();
-            DataReceive d = em.find(DataReceive.class, data.getID());
+//            DataReceive dPersistence = em.find(DataReceive.class, data.getID());
             em.getTransaction().begin();
-            //d.copy(data);
+            data = em.merge(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataReceive(id) == null) {
+                if (find(id) == null) {
                     throw new Exception("The DataReceive with id " + id + " no longer exists.");
                 }
             }
@@ -81,12 +83,41 @@ public class DataReceiveDAO implements Serializable {
         }
     }
 
-    public DataReceive findDataReceive(Long id) {
+    public DataReceive find(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataReceive.class, id);
         } finally {
             em.close();
+        }
+    }
+
+    public void delete(DataReceive receive) throws Exception {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            DataReceive d;
+            try {
+                d = em.getReference(DataReceive.class, receive.getID());
+                d.getID();
+            } catch (Exception ex) {
+                throw new Exception("The parameters configuration with id " + receive.getID() + " no longer exists.", ex);
+            }
+            
+            List<DataReceiveEvents> events = receive.getEvents();
+            for (DataReceiveEvents event : events) {
+                event.setDataReceive(null);
+                event = em.merge(event);
+            }
+            
+            em.remove(d);
+
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package com.net.multiway.background.data.dao;
 
+import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import java.io.Serializable;
 import javax.persistence.EntityManager;
@@ -37,7 +38,7 @@ public class DataParametersDAO implements Serializable {
 
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findDataParameters(data.getID()) != null) {
+            if (find(data.getID()) != null) {
                 throw new Exception("Parameter configuration " + data.getID()+ " already exists.", ex);
             }
             throw ex;
@@ -53,15 +54,15 @@ public class DataParametersDAO implements Serializable {
 
         try {
             em = getEntityManager();
-            DataParameters d = em.find(DataParameters.class, data.getID());
+            //DataParameters d = em.find(DataParameters.class, data.getID());
             em.getTransaction().begin();
-            d.copy(data);
+            data = em.merge(data);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
-                if (findDataParameters(id) == null) {
+                if (find(id) == null) {
                     throw new Exception("The parameters configuration with id " + id + " no longer exists.");
                 }
             }
@@ -73,7 +74,7 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public DataParameters findDataParameters(Long id) {
+    public DataParameters find(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(DataParameters.class, id);
@@ -82,20 +83,25 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public void deleteData(DataParameters parameters) {
+    public void delete(DataParameters parameters) throws Exception {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-
-            em.remove(em.getReference(DataParameters.class, parameters.getID()));
+            
+            DataParameters d;
+            try {
+                d = em.getReference(DataParameters.class, parameters.getID());
+                d.getID();
+            } catch (Exception ex) {
+                throw new Exception("The parameters configuration with id " + parameters.getID() + " no longer exists.", ex);
+            }
+            em.remove(d);
 
             em.getTransaction().commit();
-
-        } catch (Exception ex) {
-            System.out.println("Data " + parameters.toString() + " doesn't deleted.");
-            throw ex;
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 }
