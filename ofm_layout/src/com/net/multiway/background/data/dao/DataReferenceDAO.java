@@ -97,7 +97,7 @@ public class DataReferenceDAO {
         }
     }
 
-    public void edit(DataReference data) {
+    public void edit(DataReference data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -111,7 +111,7 @@ public class DataReferenceDAO {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataReference(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The DataReference with id " + id + " no longer exists.");
                 }
             }
             throw ex;

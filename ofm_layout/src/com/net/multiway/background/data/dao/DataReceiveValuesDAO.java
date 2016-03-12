@@ -47,7 +47,7 @@ public class DataReceiveValuesDAO {
         }
     }
 
-    public void edit(DataReceiveValues data) {
+    public void edit(DataReceiveValues data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -61,7 +61,7 @@ public class DataReceiveValuesDAO {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataReceiveValues(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The DataReceiveValues with id " + id + " no longer exists.");
                 }
             }
             throw ex;

@@ -48,7 +48,7 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public void edit(DataParameters data) {
+    public void edit(DataParameters data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -62,7 +62,7 @@ public class DataParametersDAO implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataParameters(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The parameters configuration with id " + id + " no longer exists.");
                 }
             }
             throw ex;

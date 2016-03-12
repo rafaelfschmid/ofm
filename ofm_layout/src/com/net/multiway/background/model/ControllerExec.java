@@ -11,7 +11,7 @@ import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
-import com.net.multiway.background.utils.AlertDialog;
+import com.net.multiway.background.exception.AlertDialog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

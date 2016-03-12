@@ -47,7 +47,7 @@ public class DataDeviceDAO {
         }
     }
 
-    public void edit(DataDevice data) {
+    public void edit(DataDevice data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -61,7 +61,7 @@ public class DataDeviceDAO {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataDevice(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The device with id " + id + " no longer exists.");
                 }
             }
             throw ex;

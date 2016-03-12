@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.net.multiway.background.utils;
+package com.net.multiway.background.exception;
 
 import javafx.scene.control.Alert;
 

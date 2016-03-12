@@ -56,7 +56,7 @@ public class DataReceiveDAO implements Serializable {
         }
     }
 
-    public void edit(DataReceive data) {
+    public void edit(DataReceive data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -70,7 +70,7 @@ public class DataReceiveDAO implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataReceive(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The DataReceive with id " + id + " no longer exists.");
                 }
             }
             throw ex;

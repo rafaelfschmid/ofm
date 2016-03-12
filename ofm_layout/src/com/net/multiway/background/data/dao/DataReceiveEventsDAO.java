@@ -55,7 +55,7 @@ public class DataReceiveEventsDAO implements Serializable {
         }
     }
 
-    public void edit(DataReceiveEvents data) {
+    public void edit(DataReceiveEvents data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -69,7 +69,7 @@ public class DataReceiveEventsDAO implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (findDataEvents(id) == null) {
-                    System.out.println("The data with id " + id + " no longer exists.");
+                    throw new Exception("The event with id " + id + " no longer exists.");
                 }
             }
             throw ex;
