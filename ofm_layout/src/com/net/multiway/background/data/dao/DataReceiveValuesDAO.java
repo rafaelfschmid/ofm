@@ -26,7 +26,7 @@ public class DataReceiveValuesDAO {
         return emf.createEntityManager();
     }
 
-    public void create(DataReceiveValues data) {
+    public void create(DataReceiveValues data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -37,7 +37,7 @@ public class DataReceiveValuesDAO {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findDataReceiveValues(data.getID()) != null) {
-                System.out.println("Data " + data.toString() + " already exists.");
+                throw new Exception("DataReceiveValues " + data.getID() + " already exists.", ex);
             }
             throw ex;
         } finally {

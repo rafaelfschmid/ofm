@@ -391,7 +391,12 @@ public class ConfigurationWindowController extends ControllerExec {
             reference.setParameters(parameters);
 
             DataReferenceDAO dao = new DataReferenceDAO();
-            dao.create(reference);
+            try {
+                dao.create(reference);
+            } catch (Exception ex) {
+                Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                AlertDialog.exception(ex);
+            }
 
             buttonReference.setDisable(true);
         } else {

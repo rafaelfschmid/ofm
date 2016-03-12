@@ -28,7 +28,7 @@ public class DataReceiveEventsDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DataReceiveEvents data) {
+    public void create(DataReceiveEvents data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -45,7 +45,7 @@ public class DataReceiveEventsDAO implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findDataEvents(data.getID()) != null) {
-                System.out.println("Data " + data.toString() + " already exists.");
+                throw new Exception("Evento " + data.getID() + " already exists.", ex);
             }
             throw ex;
         } finally {

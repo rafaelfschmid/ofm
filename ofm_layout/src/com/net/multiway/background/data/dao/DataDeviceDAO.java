@@ -27,18 +27,17 @@ public class DataDeviceDAO {
         return emf.createEntityManager();
     }
 
-    public void create(DataDevice data) {
+    public void create(DataDevice data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
+
             em.getTransaction().begin();
-
             em.persist(data);
-
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findDataDevice(data.getID()) != null) {
-                System.out.println("Data " + data.toString() + " already exists.");
+                throw new Exception("Device " + data.getIp() + " already exists.", ex);
             }
             throw ex;
         } finally {

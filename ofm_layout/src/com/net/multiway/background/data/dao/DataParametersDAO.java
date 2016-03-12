@@ -27,7 +27,7 @@ public class DataParametersDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DataParameters data) {
+    public void create(DataParameters data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -38,7 +38,7 @@ public class DataParametersDAO implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findDataParameters(data.getID()) != null) {
-                System.out.println("Data " + data.toString() + " already exists.");
+                throw new Exception("Parameter configuration " + data.getID()+ " already exists.", ex);
             }
             throw ex;
         } finally {

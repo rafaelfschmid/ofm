@@ -16,14 +16,10 @@ import com.net.multiway.background.send.SendParameters;
 import com.net.multiway.background.send.SendStopTest;
 import com.net.multiway.background.send.SendDevice;
 import com.net.multiway.background.send.SendConfirmationSignal;
-import com.net.multiway.background.utils.AlertDialog;
 import com.net.multiway.background.utils.Utils;
-import com.net.multiway.background.view.ConfigurationWindowController;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Label;
 
 public class DeviceComunicator {
 
@@ -60,16 +56,16 @@ public class DeviceComunicator {
         this.ip = ip;
     }
 
-    public void initialize() throws IOException {
-//        try {
+    public void initialize() throws Exception {
+        try {
             this.client = new Socket();
             this.client.connect(new InetSocketAddress(this.ip, this.door), 2000);
             System.out.println("O cliente se conectou ao OTDR!");
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
-//        } catch (Exception ex) {
-//            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (Exception ex) {
+            throw new Exception("Socket could not connect to the host " + this.ip + ".", ex);
+        }
     }
 
     private void sendPackage(DataParameters data) throws IOException {
@@ -92,41 +88,46 @@ public class DeviceComunicator {
         s.sender();
     }
 
-    private boolean receivePackage() throws IOException {
+    private boolean receivePackage() throws Exception {
 
-        // ignorando bytes inuteis
-        byte[] b = new byte[60];
-        this.in.read(b);
+        try {
+            // ignorando bytes inuteis
+            byte[] b = new byte[60];
+            this.in.read(b);
 
-        // ignorando cabecario
-        b = new byte[44];
-        this.in.read(b);
+            // ignorando cabecario
+            b = new byte[44];
+            this.in.read(b);
 
-        byte[] CMcode = new byte[4];
-        byte[] DataLen = new byte[4];
-        this.in.read(CMcode);
-        this.in.read(DataLen);
+            byte[] CMcode = new byte[4];
+            byte[] DataLen = new byte[4];
+            this.in.read(CMcode);
+            this.in.read(DataLen);
 
-        // codigo de resposta padao
-        if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
-            receiveStatusData = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
-            receiveStatusData.parser();
-            return true;
-        } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
-            receiveValues.setInputStream(this.in);
-            receiveValues.parser();
-            return true;
-        } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
-            receiveParametersData = new ReceiveParameters(this.in);
-            receiveParametersData.parser();
-            return false;
-        } else {
+            // codigo de resposta padao
+            if (Utils.byte4ToInt(CMcode) == 0xA0000000) {
+                receiveStatusData = new ReceiveStatus(this.in, Utils.byte4ToInt(DataLen));
+                receiveStatusData.parser();
+                return true;
+            } else if (Utils.byte4ToInt(CMcode) == 0x90000001) {
+                receiveValues.setInputStream(this.in);
+                receiveValues.parser();
+                return true;
+            } else if (Utils.byte4ToInt(CMcode) == 0x90000000) {
+                receiveParametersData = new ReceiveParameters(this.in);
+                receiveParametersData.parser();
+                return false;
+            } else {
 
-            return false;
+                return false;
+            }
+        } catch (Exception ex) {
+            throw new Exception("Error while reading package.", ex);
         }
+
     }
-    
-    public void connect(DataParameters data) throws IOException {
+
+    public void connect(DataParameters data) throws Exception {
 
         this.initialize();
         try {
@@ -137,49 +138,49 @@ public class DeviceComunicator {
                 String msg = "Receiving frame " + i + ".";
                 Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                 i++;
-                
+
                 flag = receivePackage();
 
                 sendPackage();
-
-                
             }
-
-            this.client.close();
-
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally {
+            this.client.close();
         }
 
     }
 
-    public void connect(StopTest data) throws IOException {
+    public void connect(StopTest data) throws Exception {
 
         this.initialize();
         try {
 
             sendPackage(data);
             sendPackage();
-            this.client.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(DeviceComunicator.class
-                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally {
+            this.client.close();
         }
     }
 
-    public void connect(DataDevice data) throws IOException {
+    public void connect(DataDevice data) throws Exception {
 
         this.initialize();
         try {
 
             sendPackage(data);
             sendPackage();
-            this.client.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(DeviceComunicator.class
-                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(DeviceComunicator.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally {
+            this.client.close();
         }
     }
 
@@ -191,8 +192,7 @@ public class DeviceComunicator {
         return receiveParametersData;
     }
 
-    public void runMonitor(int time, DataParameters data) throws IOException {
-
+    public void runMonitor(int time, DataParameters data) throws Exception {
         connect(data);
         long ti = System.currentTimeMillis();
         long tf = ti + (time * 1000);

@@ -33,7 +33,7 @@ public class DataReferenceDAO {
         return emf.createEntityManager();
     }
 
-    private void create(DataReceive dr, DataDevice dd, DataParameters dp) {
+    private void create(DataReceive dr, DataDevice dd, DataParameters dp) throws Exception {
         DataReceiveDAO daor = new DataReceiveDAO();
         daor.create(dr);
         String msg = "DataReceive inserido na base.";
@@ -57,7 +57,7 @@ public class DataReferenceDAO {
         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
-    public void create(DataReference data) {
+    public void create(DataReference data) throws Exception {
         create(data.getDataReceive(), data.getDevice(), data.getParameters());
 
         EntityManager em = null;
@@ -87,7 +87,7 @@ public class DataReferenceDAO {
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findDataReference(data.getID()) != null) {
-                System.out.println("Data " + data.toString() + " already exists.");
+                throw new Exception("Reference " + data.getID() + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -95,8 +95,6 @@ public class DataReferenceDAO {
                 em.close();
             }
         }
-        String msg = "DataReference inserido na base.";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public void edit(DataReference data) {

@@ -32,10 +32,7 @@ public class DataReceiveDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DataReceive data) {
-        String msg = "Iniciando insercao do DataReceive...";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-
+    public void create(DataReceive data) throws Exception {
         if (data.getEvents() == null) {
             data.setEvents(new ArrayList<DataReceiveEvents>());
         }
@@ -45,22 +42,18 @@ public class DataReceiveDAO implements Serializable {
             em.getTransaction().begin();
 
             em.persist(data);
-            msg = "ID inserido " + data.getID().toString();
-            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-
+            
             em.getTransaction().commit();
         } catch (Exception ex) {
-//			if (findDataReceive(data.getID()) != null) {
-//				System.out.println("Data " + data.toString() + " already exists.");
-//			}
+            if (findDataReceive(data.getID()) != null) {
+                throw new Exception("DataReceive " + data.getID() + " already exists.", ex);
+            }
             throw ex;
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-        msg = "DataReceive inserido com sucesso...";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public void edit(DataReceive data) {

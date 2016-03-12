@@ -124,4 +124,13 @@ public class AlertDialog {
 
         alert.showAndWait();
     }
+
+    public static void exception(Exception ex) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception");
+        alert.setHeaderText(ex.getMessage());
+        alert.setContentText(ex.getCause().getMessage());
+
+        alert.showAndWait();
+    }
 }
