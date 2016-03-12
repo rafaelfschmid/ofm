@@ -7,6 +7,7 @@ package com.net.multiway.background.data.dao;
 
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,7 +22,7 @@ public class DataReceiveEventsDAO implements Serializable {
     private EntityManagerFactory emf = null;
 
     public DataReceiveEventsDAO() {
-        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+        emf = Database.getInstance().getEntityManagerFactory();
     }
 
     public EntityManager getEntityManager() {

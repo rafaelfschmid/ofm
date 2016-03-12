@@ -9,6 +9,7 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DataReceiveDAO implements Serializable {
     private EntityManagerFactory emf = null;
 
     public DataReceiveDAO() {
-        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+        emf = Database.getInstance().getEntityManagerFactory();
     }
 
     public EntityManager getEntityManager() {

@@ -11,6 +11,7 @@ import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
+import com.net.multiway.background.database.Database;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class DataReferenceDAO {
     private EntityManagerFactory emf = null;
 
     public DataReferenceDAO() {
-        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+        emf = Database.getInstance().getEntityManagerFactory();
     }
 
     public EntityManager getEntityManager() {
