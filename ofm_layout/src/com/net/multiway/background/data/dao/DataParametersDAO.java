@@ -6,6 +6,7 @@
 package com.net.multiway.background.data.dao;
 
 import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,7 +21,7 @@ public class DataParametersDAO implements Serializable {
     private EntityManagerFactory emf = null;
 
     public DataParametersDAO() {
-        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+      emf = Database.getInstance().getEntityManagerFactory();
     }
 
     public EntityManager getEntityManager() {

@@ -6,10 +6,10 @@
 package com.net.multiway.background.data.dao;
 
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.database.Database;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
@@ -17,11 +17,10 @@ import javax.persistence.Persistence;
  */
 public class DataDeviceDAO {
 
-    private EntityManagerFactory emf = null;
-
     public DataDeviceDAO() {
-        emf = Persistence.createEntityManagerFactory("BackgroundDB");
+        emf = Database.getInstance().getEntityManagerFactory();
     }
+    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -102,10 +101,6 @@ public class DataDeviceDAO {
             } catch (Exception ex) {
                 throw new Exception("The device with id " + device.getID() + " no longer exists.", ex);
             }
-            
-            DataReferenceDAO dao = new DataReferenceDAO();
-            dao.delete(d.getID());
-            
             em.remove(d);
             em.getTransaction().commit();
         } finally {
@@ -114,5 +109,4 @@ public class DataDeviceDAO {
             }
         }
     }
-
 }
