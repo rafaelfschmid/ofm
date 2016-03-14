@@ -152,6 +152,14 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onClickDeviceSelection() {
         device = devicesList.getSelectionModel().getSelectedItem();
+
+        if (device.getID() != null) {
+            DataReferenceDAO daop = new DataReferenceDAO();
+            DataReference ref = daop.find(device.getID());
+            parameters = ref.getParameters();
+        } else {
+            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
+        }
     }
 
     /**
