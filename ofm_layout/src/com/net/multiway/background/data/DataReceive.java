@@ -245,7 +245,6 @@ public class DataReceive implements Serializable {
     }
 
     @OneToMany(mappedBy = "dataReceive")
-
     public List<DataReceiveEvents> getEvents() {
         return events;
     }

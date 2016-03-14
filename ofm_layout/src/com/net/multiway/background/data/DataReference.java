@@ -6,12 +6,8 @@
 package com.net.multiway.background.data;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -34,7 +30,7 @@ public class DataReference implements Serializable {
     private DataReceive dataReceive;
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "DATADEVICE_ID")
     public DataDevice getDevice() {
         return device;
@@ -44,7 +40,7 @@ public class DataReference implements Serializable {
         this.device = device;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "DATAPARAMETERS_ID")
     public DataParameters getParameters() {
         return parameters;
@@ -54,7 +50,7 @@ public class DataReference implements Serializable {
         this.parameters = parameters;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "DATARECEIVE_ID")
     public DataReceive getDataReceive() {
         return dataReceive;

@@ -33,7 +33,6 @@ public class DataParametersDAO implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-
             em.persist(data);
 
             em.getTransaction().commit();

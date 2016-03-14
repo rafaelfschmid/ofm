@@ -7,6 +7,7 @@ package com.net.multiway.background.data.dao;
 
 import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,17 +97,18 @@ public class DataReceiveDAO implements Serializable {
 
             DataReceive d;
             try {
-                d = em.getReference(DataReceive.class, receive.getID());
+                //d = em.getReference(DataReceive.class, receive.getID());
+                d = em.find(DataReceive.class, receive.getID());
                 d.getID();
             } catch (Exception ex) {
-                throw new Exception("The parameters configuration with id " + receive.getID() + " no longer exists.", ex);
+                throw new Exception("The DataReceive with id " + receive.getID() + " no longer exists.", ex);
             }
             
-            List<DataReceiveEvents> events = receive.getEvents();
-            for (DataReceiveEvents event : events) {
-                event.setDataReceive(null);
-                event = em.merge(event);
-            }
+//            List<DataReceiveEvents> events = receive.getEvents();
+//            for (DataReceiveEvents event : events) {
+//                event.setDataReceive(null);
+//                event = em.merge(event);
+//            }
             
             em.remove(d);
 

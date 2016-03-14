@@ -11,6 +11,7 @@ import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.database.Database;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -86,66 +87,75 @@ public class DataReferenceDAO {
         }
     }
 
-    private void delete(DataReceive dr, DataParameters dp) throws Exception {
+    private void createPartial(DataReference reference) throws Exception {
+
         DataReceiveDAO daor = new DataReceiveDAO();
-        daor.delete(dr);
+        daor.create(reference.getDataReceive());
 
         DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
-        for (DataReceiveEvents receiveEvents : dr.getEvents()) {
-            edao.delete(receiveEvents);
-        }
-
-        DataParametersDAO daop = new DataParametersDAO();
-        daop.delete(dp);
-    }
-
-    private void create(DataReceive dr, DataParameters dp) throws Exception {
-        DataReceiveDAO daor = new DataReceiveDAO();
-        daor.create(dr);
-
-        DataReceiveEventsDAO edao = new DataReceiveEventsDAO();
-        for (DataReceiveEvents receiveEvents : dr.getEvents()) {
+        for (DataReceiveEvents receiveEvents : reference.getDataReceive().getEvents()) {
             edao.create(receiveEvents);
         }
-
-        DataParametersDAO daop = new DataParametersDAO();
-        daop.create(dp);
     }
 
-    public void edit(DataReference reference) throws Exception {
-
+    public void deletePartial(Long id) throws Exception {
         EntityManager em = getEntityManager();
-        DataReference d;
+
+        DataReference dReference;
+        DataReceive receive;
+        DataParameters parameters;
+
+        Long idReceive;
+        Long idParameters;
         try {
             em.getTransaction().begin();
             try {
-                d = em.getReference(DataReference.class, reference.getDevice().getID());
-                d.getDevice().getID();
+                dReference = em.find(DataReference.class, id);
+                idReceive = dReference.getDataReceive().getID();
+                idParameters = dReference.getParameters().getID();
+                dReference.setDataReceive(null);
+                dReference.setParameters(null);
             } catch (Exception ex) {
-                throw new Exception("The reference with id " + reference.getDevice().getID() + " no longer exists.", ex);
+                throw new Exception("The reference with id " + id + " no longer exists.", ex);
             }
+
+            receive = em.find(DataReceive.class, idReceive);
+
+            List<DataReceiveEvents> events = receive.getEvents();
+            for (DataReceiveEvents e : events) {
+                em.remove(e);
+            }
+            em.remove(receive);
+
+//            parameters = em.find(DataParameters.class, idParameters);
+//            em.remove(parameters);
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
             }
         }
+    }
 
-        delete(d.getDataReceive(), d.getParameters());
-        create(reference.getDataReceive(), reference.getParameters());
+    public void edit(DataReference reference) throws Exception {
+        deletePartial(reference.getDevice().getID());
+        createPartial(reference);
         
+        EntityManager em = getEntityManager();
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
-            
+
             DataReceive r = reference.getDataReceive();
             if (r != null) {
                 r = em.getReference(r.getClass(), r.getID());
                 reference.setDataReceive(r);
             }
+            
             DataParameters dp = reference.getParameters();
 
             if (dp != null) {
+                dp = em.merge(dp);
                 dp = em.getReference(dp.getClass(), dp.getID());
                 reference.setParameters(dp);
             }
@@ -183,7 +193,6 @@ public class DataReferenceDAO {
             } catch (Exception ex) {
                 throw new Exception("The reference with id " + id + " no longer exists.", ex);
             }
-            delete(d.getDataReceive(), d.getParameters());
 
             em.getTransaction().commit();
 

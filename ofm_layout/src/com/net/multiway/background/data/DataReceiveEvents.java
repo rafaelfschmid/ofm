@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -165,7 +166,9 @@ public class DataReceiveEvents implements Serializable {
         this.ID = ID;
     }
 
+    //@Id
     @ManyToOne
+    //@JoinColumn( name="DATARECEIVE_ID", nullable = false )     
     public DataReceive getDataReceive() {
         return dataReceive;
     }
