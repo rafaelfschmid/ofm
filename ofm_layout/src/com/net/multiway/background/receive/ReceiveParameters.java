@@ -21,10 +21,18 @@ public class ReceiveParameters extends Package {
     private DataInputStream in;
     private DataReceive data;
 
+    public ReceiveParameters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public DataReceive getData() {
         return data;
     }
-
+    
+    public void setData(DataReceive data) {
+        this.data = data;
+    }
+    
     public ReceiveParameters(DataInputStream in) {
         this.setIn(in);
         data = new DataReceive();

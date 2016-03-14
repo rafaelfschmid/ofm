@@ -34,7 +34,7 @@
                               <Label prefHeight="32.0" prefWidth="84.0" text="Dispositivos" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0" />
                               <Button mnemonicParsing="false" onAction="#onHandleDeleteDevice" prefHeight="26.0" prefWidth="29.0" text="-" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="3.0" />
                               <Button mnemonicParsing="false" onAction="#onHandleAddDevice" text="+" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0" />
-                              <ListView fx:id="devicesList" prefHeight="168.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
+                              <ListView fx:id="devicesList" onMouseClicked="#onClickDeviceSelection" prefHeight="168.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="430.0" minWidth="258.0" prefHeight="430.0" prefWidth="258.0" SplitPane.resizableWithParent="false">

@@ -10,14 +10,17 @@ import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.exception.AlertDialog;
 
 import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
 import com.net.multiway.background.data.dao.DataParametersDAO;
+import com.net.multiway.background.data.dao.DataReceiveDAO;
 import com.net.multiway.background.data.dao.DataReferenceDAO;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
+import com.net.multiway.background.receive.ReceiveParameters;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -108,19 +111,17 @@ public class ConfigurationWindowController extends ControllerExec {
         devicesList.setItems(devicesData);
         updateDeviceList();
 
+        mappingParametersTable();
+
         if (devicesList.getItems().size() > 0) {
             device = devicesList.getItems().get(0);
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, "Devices carregados na tela...");
+            DataReferenceDAO daop = new DataReferenceDAO();
+            DataReference ref = daop.find(device.getID());
+            parameters = ref.getParameters();
         } else {
             device = null;
         }
-
-        String msg = "Devices carregados na tela...";
-        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-
-        mappingParametersTable();
-        DataParametersDAO daop = new DataParametersDAO();
-
-        parameters = daop.find(Long.parseLong("1"));
 
         if (parameters == null) {
             parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
@@ -142,10 +143,15 @@ public class ConfigurationWindowController extends ControllerExec {
         endThresholdField.setText(parameters.getEndThreshold().toString());
         reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
 
-        msg = "Parâmetros carregados na tela...";
+        String msg = "Parâmetros carregados na tela...";
         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
         cycleTimeField.setText("10");
+    }
+
+    @FXML
+    private void onClickDeviceSelection() {
+        device = devicesList.getSelectionModel().getSelectedItem();
     }
 
     /**
@@ -158,10 +164,19 @@ public class ConfigurationWindowController extends ControllerExec {
 
         if (selectedIndex >= 0) {
             if (AlertDialog.DeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
-                //DataDeviceDAO dao = new DataDeviceDAO();
-                //dao.deleteData(devicesList.getSelectionModel().getSelectedItem());
-//                DataReferenceDAO dao = new DataReferenceDAO();
-//                dao.delet
+                if (device.getID() != null) {
+                    try {
+                        DataReferenceDAO daoRef = new DataReferenceDAO();
+                        daoRef.delete(device.getID());
+
+                        DataDeviceDAO daoDev = new DataDeviceDAO();
+                        daoDev.delete(device);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                        AlertDialog.exception(ex);
+                    }
+                }
+
                 devicesList.getItems().remove(selectedIndex);
                 String msg = "Device removido com sucesso.";
                 Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
@@ -219,7 +234,8 @@ public class ConfigurationWindowController extends ControllerExec {
                 this.device = device;
             }
         } catch (IOException ex) {
-            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            AlertDialog.exception(ex);
         }
 
         updateDeviceList();
@@ -389,7 +405,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 reference.setDataReceive(receiveParameters.getData());
                 reference.setDevice(device);
                 reference.setParameters(parameters);
-                
+
                 if (device.getID() != null) {
                     dao.edit(reference);
                 } else {

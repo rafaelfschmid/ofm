@@ -183,19 +183,39 @@ public class DataReferenceDAO {
     public void delete(Long id) throws Exception {
 
         EntityManager em = getEntityManager();
+
+        DataReference dReference;
+        DataReceive receive;
+        DataParameters parameters;
+
+        Long idReceive;
+        Long idParameters;
         try {
             em.getTransaction().begin();
-
-            DataReference d;
             try {
-                d = em.getReference(DataReference.class, id);
-                d.getDevice().getID();
+                dReference = em.find(DataReference.class, id);
+                idReceive = dReference.getDataReceive().getID();
+                idParameters = dReference.getParameters().getID();
+                dReference.setDataReceive(null);
+                dReference.setParameters(null);
             } catch (Exception ex) {
                 throw new Exception("The reference with id " + id + " no longer exists.", ex);
             }
 
-            em.getTransaction().commit();
+            receive = em.find(DataReceive.class, idReceive);
 
+            List<DataReceiveEvents> events = receive.getEvents();
+            for (DataReceiveEvents e : events) {
+                em.remove(e);
+            }
+            em.remove(receive);
+
+            parameters = em.find(DataParameters.class, idParameters);
+            em.remove(parameters);
+            
+            em.remove(dReference);
+
+            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
