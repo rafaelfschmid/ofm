@@ -33,6 +33,8 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     private MainSceneController rootController;
+    private Node configNode;
+    private IController configController;
 
     public static MainApp getInstance() {
         return instance;
@@ -85,14 +87,22 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
             // Loads Configuration view
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(MainApp.class.getResource(View.ConfigurationWindow.getResource()));
+//            Node node = loader.load();
+//            IController controller = (IController) loader.getController();
+//            controller.prepareForm(Mode.VIEW);
+//            controller.prepareMenu(Mode.VIEW);
+//            rootController.setCenterController(controller);
+//            rootLayout.setCenter((AnchorPane) node);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(View.ConfigurationWindow.getResource()));
-            Node node = loader.load();
-            IController controller = (IController) loader.getController();
-            controller.prepareForm(Mode.VIEW);
-            controller.prepareMenu(Mode.VIEW);
-            rootController.setCenterController(controller);
-            rootLayout.setCenter((AnchorPane) node);
+            configNode = loader.load();
+            configController = (IController) loader.getController();
+            configController.prepareForm(Mode.VIEW);
+            configController.prepareMenu(Mode.VIEW);
+            rootController.setCenterController(configController);
+            rootLayout.setCenter((AnchorPane) configNode);
 
             msg = "ConfigurationWindow inicializada...";
             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
@@ -144,6 +154,14 @@ public class MainApp extends Application {
         }
 
         return null;
+    }
+
+    public void showConfiguration() {
+
+        rootController.setCenterController(configController);
+        rootLayout.setCenter((AnchorPane) configNode);
+        String msg = "showConfiguration inicializado...";
+        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
     }
 
     public static void main(String[] args) {

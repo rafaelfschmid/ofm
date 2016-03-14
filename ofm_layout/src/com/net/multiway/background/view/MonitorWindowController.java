@@ -220,7 +220,8 @@ public class MonitorWindowController extends ControllerExec {
 
     @FXML
     private void onHandleChangeToConfiguration() {
-        MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
+        //MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
+        MainApp.getInstance().showConfiguration();
     }
 
     @Override

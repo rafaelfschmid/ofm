@@ -443,6 +443,8 @@ public class ConfigurationWindowController extends ControllerExec {
 
             controller.setDevice(device);
             controller.setParameters(parameters);
+        } else {
+            AlertDialog.DeviceSelection();
         }
     }
 
