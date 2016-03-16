@@ -99,15 +99,14 @@ public class ConfigurationWindowController extends ControllerExec {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        super.initialize(location, resources);                
+        
         executionLabel.setVisible(false);
 
         DataDeviceDAO dao = new DataDeviceDAO();
         devicesData.addAll(dao.getDevices());
         devicesList.setItems(devicesData);
         updateDeviceList();
-
-        mappingParametersTable();
 
         if (devicesList.getItems().size() > 0) {
             device = devicesList.getItems().get(0);
@@ -540,13 +539,6 @@ public class ConfigurationWindowController extends ControllerExec {
         });
     }
 
-    private void mappingParametersTable() {
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().distanceProperty());
-        insertLossColumn.setCellValueFactory(cellData -> cellData.getValue().insertLossProperty());
-        reflectLossColumn.setCellValueFactory(cellData -> cellData.getValue().echoLossProperty());
-        accumulationColumn.setCellValueFactory(cellData -> cellData.getValue().acumulativeLossProperty());
-        attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().averageAttenuationCoefficientProperty());
-    }
+    
 
 }

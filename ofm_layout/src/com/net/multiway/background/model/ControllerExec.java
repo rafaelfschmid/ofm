@@ -13,6 +13,8 @@ import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
 import com.net.multiway.background.exception.AlertDialog;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -31,68 +33,82 @@ import javafx.scene.control.TableView;
  */
 public abstract class ControllerExec implements Initializable, IController {
 
-	protected DataParameters parameters;
-	protected DataDevice device;
-	protected DataReference reference;
+    protected DataParameters parameters;
+    protected DataDevice device;
+    protected DataReference reference;
 
-	protected ReceiveParameters receiveParameters;
-	protected ReceiveValues receiveValues;
+    protected ReceiveParameters receiveParameters;
+    protected ReceiveValues receiveValues;
 
-	// Gráfico
-	@FXML
-	protected LineChart<NumberAxis, NumberAxis> grafico;
-	@FXML
-	protected NumberAxis xAxis;
-	@FXML
-	protected NumberAxis yAxis;
+    // Gráfico
+    @FXML
+    protected LineChart<NumberAxis, NumberAxis> grafico;
+    @FXML
+    protected NumberAxis xAxis;
+    @FXML
+    protected NumberAxis yAxis;
 
-	//result
-	@FXML
-	protected TableView<DataReceiveEvents> resultTable;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Long> numeroColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Integer> typeColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Integer> distanceColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Float> insertLossColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Float> reflectLossColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Float> accumulationColumn;
-	@FXML
-	protected TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+    //result
+    @FXML
+    protected TableView<DataReceiveEvents> resultTable;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Long> numeroColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Integer> typeColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Integer> distanceColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Float> insertLossColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Float> reflectLossColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Float> accumulationColumn;
+    @FXML
+    protected TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
 
-	protected void plotGraph() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+       mappingParametersTable();
+    }
+    
+    protected void plotGraph() {
 
-		ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
+        ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
 
-		//int[] data = receiveValues.getDataValues();
-		int i = 1;
-		Integer dataPrevious = 0;
-		for (Integer data : receiveParameters.getData().getGraphData()) {
-			XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i++, data);
-			coordData.setNode(
-					new HoveredThresholdNode(dataPrevious, data));
-			dataset.add(coordData);
-			dataPrevious = data;
-		}
+        //int[] data = receiveValues.getDataValues();
+        int i = 1;
+        Integer dataPrevious = 0;
+        for (Integer data : receiveParameters.getData().getGraphData()) {
+            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i++, data);
+            coordData.setNode(
+                    new HoveredThresholdNode(dataPrevious, data));
+            dataset.add(coordData);
+            dataPrevious = data;
+        }
 
-		grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
-	}
+        grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
+    }
 
-	protected void exportData() {
-		if ((receiveParameters == null) || (receiveValues == null)) {
-			String msg = "Não há dados a serem exportados.";
-			Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-			AlertDialog.NothingToExport();
-		} else {
-			receiveParameters.print();
-			receiveValues.print();
-			String msg = "Dados exportados com sucesso.";
-			Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-			AlertDialog.ExportSuccess();
-		}
-	}
+    protected void exportData() {
+        if ((receiveParameters == null) || (receiveValues == null)) {
+            String msg = "Não há dados a serem exportados.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.NothingToExport();
+        } else {
+            receiveParameters.print();
+            receiveValues.print();
+            String msg = "Dados exportados com sucesso.";
+            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+            AlertDialog.ExportSuccess();
+        }
+    }
+
+    protected void mappingParametersTable() {
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().distanceProperty());
+        insertLossColumn.setCellValueFactory(cellData -> cellData.getValue().insertLossProperty());
+        reflectLossColumn.setCellValueFactory(cellData -> cellData.getValue().echoLossProperty());
+        accumulationColumn.setCellValueFactory(cellData -> cellData.getValue().acumulativeLossProperty());
+        attenuationCoefficientColumn.setCellValueFactory(cellData -> cellData.getValue().averageAttenuationCoefficientProperty());
+    }
 }
