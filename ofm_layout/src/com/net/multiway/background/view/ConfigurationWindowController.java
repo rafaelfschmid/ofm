@@ -10,17 +10,13 @@ import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.exception.AlertDialog;
 
 import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReceive;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.data.dao.DataDeviceDAO;
-import com.net.multiway.background.data.dao.DataParametersDAO;
-import com.net.multiway.background.data.dao.DataReceiveDAO;
 import com.net.multiway.background.data.dao.DataReferenceDAO;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
-import com.net.multiway.background.receive.ReceiveParameters;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -124,7 +120,7 @@ public class ConfigurationWindowController extends ControllerExec {
         }
 
         if (parameters == null) {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
+            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1,10);
         }
 
         updateParameters();
@@ -146,7 +142,7 @@ public class ConfigurationWindowController extends ControllerExec {
         String msg = "Parâmetros carregados na tela...";
         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
 
-        cycleTimeField.setText("10");
+        cycleTimeField.setText(parameters.getCycleTime().toString());
     }
 
     @FXML
@@ -158,7 +154,7 @@ public class ConfigurationWindowController extends ControllerExec {
             DataReference ref = daop.find(device.getID());
             parameters = ref.getParameters();
         } else {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1);
+            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1,10);
         }
     }
 
@@ -283,6 +279,9 @@ public class ConfigurationWindowController extends ControllerExec {
         } else if (reflectionThresholdField.getText().isEmpty()) {
             AlertDialog.IncorrectField("Reflection Threshold");
             return false;
+        }else if (cycleTimeField.getText().isEmpty()) {
+            AlertDialog.IncorrectField("Cycle Time");
+            return false;
         } else {
             return true;
         }
@@ -311,6 +310,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
                 parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
                 parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
+				parameters.setCycleTime(Integer.parseInt(cycleTimeField.getText()));
                 prepareForm(Mode.VIEW);
             }
 
@@ -475,6 +475,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 endThresholdField.setDisable(true);
                 reflectionThresholdField.setDisable(true);
                 buttonSave.setDisable(true);
+				cycleTimeField.setDisable(true);
                 break;
             case EDIT:
                 measureRangeField.setDisable(false);
@@ -486,6 +487,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 nonReflactionThresholdField.setDisable(false);
                 endThresholdField.setDisable(false);
                 reflectionThresholdField.setDisable(false);
+				cycleTimeField.setDisable(false);
                 buttonSave.setDisable(false);
 
                 break;

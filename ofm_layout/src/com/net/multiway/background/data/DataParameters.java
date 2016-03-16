@@ -36,6 +36,9 @@ public class DataParameters implements IData, Serializable {
     private ObjectProperty<Integer> optimizeMode;
     private ObjectProperty<Integer> enabledRefresh;
     private ObjectProperty<Integer> refreshCycle;
+	private ObjectProperty<Integer> cycleTime;
+
+	
 
     private Long ID;
 
@@ -53,13 +56,14 @@ public class DataParameters implements IData, Serializable {
         this.optimizeMode = new SimpleObjectProperty<>();
         this.enabledRefresh = new SimpleObjectProperty<>();
         this.refreshCycle = new SimpleObjectProperty<>();
+		this.cycleTime = new SimpleObjectProperty<>();
 
     }
 
     public DataParameters(int measuringRangeOfTest, int testPulseWidth, int measuringTime,
             int testWaveLength, int measureMode, float refractiveIndex,
             float nonReflactionThreshold, float endThreshold, float reflectionThreshold,
-            int optimizeMode, int enabledRefresh, int refreshCycle) {
+            int optimizeMode, int enabledRefresh, int refreshCycle, int cycleTime) {
 
         this.measuringRangeOfTest = new SimpleObjectProperty<>(measuringRangeOfTest);
         this.testPulseWidth = new SimpleObjectProperty<>(testPulseWidth);
@@ -74,6 +78,7 @@ public class DataParameters implements IData, Serializable {
         this.optimizeMode = new SimpleObjectProperty<>(optimizeMode);
         this.enabledRefresh = new SimpleObjectProperty<>(enabledRefresh);
         this.refreshCycle = new SimpleObjectProperty<>(refreshCycle);
+		this.cycleTime = new SimpleObjectProperty<>(cycleTime);
     }
 
     @Id
@@ -209,6 +214,16 @@ public class DataParameters implements IData, Serializable {
         this.nonReflactionThreshold.set(nonReflactionThreshold);
     }
 
+	@Basic(optional = false)
+    @Column(name = "CYCLE_TIME")
+	public Integer getCycleTime() {
+		return cycleTime.get();
+	}
+
+	public void setCycleTime(int cycleTime) {
+		this.cycleTime.set(cycleTime);
+	}
+	
     public byte[] takeData() {
         byte[] b = new byte[48];
         byte[] c = new byte[4];

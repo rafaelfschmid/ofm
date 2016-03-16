@@ -13,7 +13,6 @@ import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.Mode;
-import com.net.multiway.background.model.View;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
 import java.net.URL;
@@ -27,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -76,8 +76,6 @@ public class MonitorWindowController extends ControllerExec {
     @FXML
     private TextField reflectionThresholdField;
 
-    @FXML
-    private TextField cycleTimeField;
 
     //result
     @FXML
@@ -96,6 +94,10 @@ public class MonitorWindowController extends ControllerExec {
     private TableColumn<DataReceiveEvents, Float> accumulationColumn;
     @FXML
     private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+	@FXML
+	private Button buttonSave;
+	@FXML
+	private Button buttonEdit;
 
     //result
 //    @FXML
@@ -111,7 +113,6 @@ public class MonitorWindowController extends ControllerExec {
     /**
      * Initializes the controller class.
      */
-    @FXML
     public void initialize() {
 
     }
@@ -210,13 +211,9 @@ public class MonitorWindowController extends ControllerExec {
 
     @FXML
     private void onHandleExport() {
-
+		exportData();
     }
 
-    @FXML
-    private void onHandleSetReference() {
-
-    }
 
     @FXML
     private void onHandleChangeToConfiguration() {
@@ -226,6 +223,7 @@ public class MonitorWindowController extends ControllerExec {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+		prepareForm(Mode.VIEW);
     }
 
     @Override
@@ -234,20 +232,31 @@ public class MonitorWindowController extends ControllerExec {
 
     @Override
     public void prepareForm(Mode mode) {
-        measureRangeField.setDisable(true);
-        pulseWidthField.setDisable(true);
-        measureTimeField.setDisable(true);
-        waveLengthField.setDisable(true);
-        measureModeField.setDisable(true);
-        refractiveIndexField.setDisable(true);
-        nonReflactionThresholdField.setDisable(true);
-        endThresholdField.setDisable(true);
-        reflectionThresholdField.setDisable(true);
+		switch (mode) {
+            case VIEW:
+                measureRangeField.setDisable(true);
+                pulseWidthField.setDisable(true);
+                measureTimeField.setDisable(true);
+                waveLengthField.setDisable(true);
+                measureModeField.setDisable(true);
+                refractiveIndexField.setDisable(true);
+                nonReflactionThresholdField.setDisable(true);
+                endThresholdField.setDisable(true);
+                reflectionThresholdField.setDisable(true);
+                buttonSave.setDisable(true);
+				buttonEdit.setDisable(true);
+//				cycleTimeField.setDisable(true);
+                break;
+        }
 
     }
 
     @Override
     public void prepareMenu(Mode mode) {
     }
+
+	@FXML
+	private void onHandleStop(ActionEvent event) {
+	}
 
 }
