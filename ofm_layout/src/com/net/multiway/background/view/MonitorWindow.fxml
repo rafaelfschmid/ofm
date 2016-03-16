@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -15,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="1000.0" prefHeight="610.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.MonitorWindowController">
+<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="1000.0" prefHeight="610.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.MonitorWindowController">
    <children>
       <SplitPane dividerPositions="0.2755511022044088" prefHeight="323.0" prefWidth="707.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -69,6 +74,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
                                     <Label text="Measure Mode:" GridPane.rowIndex="4" />
@@ -89,10 +95,12 @@
                                     <ComboBox fx:id="pulseWidthField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <ComboBox fx:id="measureTimeField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <ComboBox fx:id="waveLengthField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label text="Cycle Time(min):" GridPane.rowIndex="9" />
+                                    <TextField fx:id="cycleTimeField" prefHeight="26.0" prefWidth="104.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                  </children>
                               </GridPane>
-                              <Button fx:id="buttonSave" layoutX="189.0" layoutY="342.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="342.0" />
-                              <Button fx:id="buttonEdit" layoutX="119.0" layoutY="342.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="119.0" AnchorPane.topAnchor="342.0" />
+                              <Button fx:id="buttonSave" layoutX="192.0" layoutY="343.0" mnemonicParsing="false" onAction="#onHandleSaveParameters" text="Salvar" textAlignment="CENTER" AnchorPane.leftAnchor="192.0" AnchorPane.topAnchor="343.0" />
+                              <Button fx:id="buttonEdit" layoutX="122.0" layoutY="343.0" mnemonicParsing="false" onAction="#onHandleEditParameters" prefHeight="26.0" prefWidth="59.0" text="Editar" textAlignment="CENTER" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="343.0" />
                            </children>
                         </AnchorPane>
                     </items>
