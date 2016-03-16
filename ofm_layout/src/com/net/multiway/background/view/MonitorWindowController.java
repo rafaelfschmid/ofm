@@ -9,6 +9,7 @@ import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.HoveredThresholdNode;
@@ -40,223 +41,203 @@ import javafx.scene.control.TextField;
  */
 public class MonitorWindowController extends ControllerExec {
 
-    //device
-    @FXML
-    private Label ipLabel;
-    @FXML
-    private Label maskLabel;
-    @FXML
-    private Label gatewayLabel;
+	//device
+	@FXML
+	private Label ipLabel;
+	@FXML
+	private Label maskLabel;
+	@FXML
+	private Label gatewayLabel;
 
-    // Gráfico
-    @FXML
-    private LineChart<Double, Double> grafico;
-    @FXML
-    private NumberAxis xAxis;
-    @FXML
-    private NumberAxis yAxis;
+	// Gráfico
+	@FXML
+	private LineChart<Double, Double> grafico;
+	@FXML
+	private NumberAxis xAxis;
+	@FXML
+	private NumberAxis yAxis;
 
-    //parameter
-    @FXML
-    private ComboBox measureRangeField;
-    @FXML
-    private ComboBox pulseWidthField;
-    @FXML
-    private ComboBox measureTimeField;
-    @FXML
-    private ComboBox waveLengthField;
-    @FXML
-    private ComboBox measureModeField;
-    @FXML
-    private TextField refractiveIndexField;
-    @FXML
-    private TextField nonReflactionThresholdField;
-    @FXML
-    private TextField endThresholdField;
-    @FXML
-    private TextField reflectionThresholdField;
+	//parameter
+	@FXML
+	private ComboBox measureRangeField;
+	@FXML
+	private ComboBox pulseWidthField;
+	@FXML
+	private ComboBox measureTimeField;
+	@FXML
+	private ComboBox waveLengthField;
+	@FXML
+	private ComboBox measureModeField;
+	@FXML
+	private TextField refractiveIndexField;
+	@FXML
+	private TextField nonReflactionThresholdField;
+	@FXML
+	private TextField endThresholdField;
+	@FXML
+	private TextField reflectionThresholdField;
 
-
-    //result
-    @FXML
-    private TableView<DataReceiveEvents> resultTable;
-    @FXML
-    private TableColumn<DataReceiveEvents, Long> numeroColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Integer> typeColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Integer> distanceColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> insertLossColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> reflectLossColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> accumulationColumn;
-    @FXML
-    private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+	//result
+	@FXML
+	private TableView<DataReceiveEvents> resultTable;
+	@FXML
+	private TableColumn<DataReceiveEvents, Long> numeroColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Integer> typeColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Integer> distanceColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Float> insertLossColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Float> reflectLossColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Float> accumulationColumn;
+	@FXML
+	private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
 	@FXML
 	private Button buttonSave;
 	@FXML
 	private Button buttonEdit;
 
-    //result
-//    @FXML
-//    private TableView<Warning> warningsTable;
-//    @FXML
-//    private TableColumn<Warning, Integer> idColumn;
-//    @FXML
-//    private TableColumn<Warning, String> warningColumn;
-//    @FXML
-//    private TableColumn<Warning, String> descriptionColumn;
-//    @FXML
-//    private TableColumn<Warning, Date> dateHourColumn;
-    /**
-     * Initializes the controller class.
-     */
-    public void initialize() {
+	@FXML
+	private void onHandleEditParameters() {
 
-    }
+	}
 
-    void setDevice(DataDevice device) {
-        this.device = device;
+	@FXML
+	private void onHandleSaveParameters() {
 
-        ipLabel.setText(device.getIp());
-        maskLabel.setText(device.getMask());;
-        gatewayLabel.setText(device.getGateway());;
-    }
+	}
 
-    void setParameters(DataParameters parameters) {
-        this.parameters = parameters;
+	@FXML
+	private void onHandleExecute() {
+		DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText().trim(), 5000);
+		System.out.println(this.ipLabel.getText().trim());
+		Task execute = new Task() {
+			@Override
+			protected String call() throws Exception {
+				if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
+					resultTable.getItems().remove(0, resultTable.getItems().size());
+				}
 
-        this.measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
-        this.pulseWidthField.setValue(parameters.getTestPulseWidth());
-        this.measureTimeField.setValue(parameters.getMeasuringTime());
-        this.waveLengthField.setValue(parameters.getTestWaveLength());
-        this.measureModeField.setValue(parameters.getMeasureMode());
-        this.refractiveIndexField.setText(parameters.getRefractiveIndex().toString());
-        this.nonReflactionThresholdField.setText(parameters.getReflectionThreshold().toString());
-        this.endThresholdField.setText(parameters.getEndThreshold().toString());
-        this.reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
-    }
+				host.connect(parameters);
 
-    @FXML
-    private void onHandleEditParameters() {
+				return "Conexcao realizada";
+			}
 
-    }
+			@Override
+			protected void succeeded() {
+				ReceiveParameters r = host.getReceiveParametersData();
+				showReceiveParametersTable((ArrayList<DataReceiveEvents>) r.getData().getEvents());
 
-    @FXML
-    private void onHandleSaveParameters() {
+				plotGraph(host.getReceiveValues());
+				grafico.setCreateSymbols(false);
 
-    }
+			}
+		};
 
-    @FXML
-    private void onHandleExecute() {
-        DeviceComunicator host = new DeviceComunicator(this.ipLabel.getText().trim(), 5000);
-        System.out.println(this.ipLabel.getText().trim());
-        Task execute = new Task() {
-            @Override
-            protected String call() throws Exception {
-                if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
-                    resultTable.getItems().remove(0, resultTable.getItems().size());
-                }
+		Thread tr = new Thread(execute);
 
-                host.connect(parameters);
+		tr.start();
+	}
 
-                return "Conexcao realizada";
-            }
+	private void plotGraph(ReceiveValues receiveValues) {
 
-            @Override
-            protected void succeeded() {
-                ReceiveParameters r = host.getReceiveParametersData();
-                showReceiveParametersTable((ArrayList<DataReceiveEvents>) r.getData().getEvents());
+		ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
 
-                plotGraph(host.getReceiveValues());
-                grafico.setCreateSymbols(false);
+		//int[] data = receiveValues.getDataValues();
+		int i = 0;
+		Integer dataPrevious = 0;
+		for (Integer data : receiveParameters.getData().getGraphData()) {
+			XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data);
+			coordData.setNode(
+					new HoveredThresholdNode(dataPrevious, data));
+			dataset.add(coordData);
+			dataPrevious = data;
+		}
 
-            }
-        };
+		grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
+	}
 
-        Thread tr = new Thread(execute);
+	private void showReceiveParametersTable(ArrayList<DataReceiveEvents> r) {
 
-        tr.start();
-    }
+		ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
+		for (int i = 0; i < r.size(); i++) {
+			value.add(r.get(i));
+		}
+		resultTable.setItems(value);
 
-    private void plotGraph(ReceiveValues receiveValues) {
+	}
 
-        ObservableList<XYChart.Data<Integer, Integer>> dataset = FXCollections.observableArrayList();
-
-        //int[] data = receiveValues.getDataValues();
-        int i = 0;
-        Integer dataPrevious = 0;
-        for (Integer data : receiveParameters.getData().getGraphData()) {
-            XYChart.Data<Integer, Integer> coordData = new XYChart.Data<>(i + 1, data);
-            coordData.setNode(
-                    new HoveredThresholdNode(dataPrevious, data));
-            dataset.add(coordData);
-            dataPrevious = data;
-        }
-
-        grafico.getData().add(new XYChart.Series("My portfolio", FXCollections.observableArrayList(dataset)));
-    }
-
-    private void showReceiveParametersTable(ArrayList<DataReceiveEvents> r) {
-
-        ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
-        for (int i = 0; i < r.size(); i++) {
-            value.add(r.get(i));
-        }
-        resultTable.setItems(value);
-
-    }
-
-    @FXML
-    private void onHandleExport() {
+	@FXML
+	private void onHandleExport() {
 		exportData();
-    }
+	}
 
+	@FXML
+	private void onHandleChangeToConfiguration() {
+		//MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
+		MainApp.getInstance().showConfiguration();
+	}
 
-    @FXML
-    private void onHandleChangeToConfiguration() {
-        //MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
-        MainApp.getInstance().showConfiguration();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 		prepareForm(Mode.VIEW);
-    }
+	}
 
-    @Override
-    public void handleSave(ActionEvent event) {
-    }
+	@Override
+	public void handleSave(ActionEvent event) {
+	}
 
-    @Override
-    public void prepareForm(Mode mode) {
+	@Override
+	public void prepareForm(Mode mode) {
 		switch (mode) {
-            case VIEW:
-                measureRangeField.setDisable(true);
-                pulseWidthField.setDisable(true);
-                measureTimeField.setDisable(true);
-                waveLengthField.setDisable(true);
-                measureModeField.setDisable(true);
-                refractiveIndexField.setDisable(true);
-                nonReflactionThresholdField.setDisable(true);
-                endThresholdField.setDisable(true);
-                reflectionThresholdField.setDisable(true);
-                buttonSave.setDisable(true);
+			case VIEW:
+				measureRangeField.setDisable(true);
+				pulseWidthField.setDisable(true);
+				measureTimeField.setDisable(true);
+				waveLengthField.setDisable(true);
+				measureModeField.setDisable(true);
+				refractiveIndexField.setDisable(true);
+				nonReflactionThresholdField.setDisable(true);
+				endThresholdField.setDisable(true);
+				reflectionThresholdField.setDisable(true);
+				buttonSave.setDisable(true);
 				buttonEdit.setDisable(true);
 //				cycleTimeField.setDisable(true);
-                break;
-        }
+				break;
+		}
 
-    }
+	}
 
-    @Override
-    public void prepareMenu(Mode mode) {
-    }
+	@Override
+	public void prepareMenu(Mode mode) {
+	}
 
 	@FXML
 	private void onHandleStop(ActionEvent event) {
+	}
+
+	void setReference(DataReference reference) {
+		
+		this.reference = reference;
+		this.parameters = reference.getParameters();
+		this.device = reference.getDevice();
+
+		this.measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
+		this.pulseWidthField.setValue(parameters.getTestPulseWidth());
+		this.measureTimeField.setValue(parameters.getMeasuringTime());
+		this.waveLengthField.setValue(parameters.getTestWaveLength());
+		this.measureModeField.setValue(parameters.getMeasureMode());
+		this.refractiveIndexField.setText(parameters.getRefractiveIndex().toString());
+		this.nonReflactionThresholdField.setText(parameters.getReflectionThreshold().toString());
+		this.endThresholdField.setText(parameters.getEndThreshold().toString());
+		this.reflectionThresholdField.setText(parameters.getReflectionThreshold().toString());
+
+		ipLabel.setText(device.getIp());
+		maskLabel.setText(device.getMask());
+		gatewayLabel.setText(device.getGateway());
+
 	}
 
 }

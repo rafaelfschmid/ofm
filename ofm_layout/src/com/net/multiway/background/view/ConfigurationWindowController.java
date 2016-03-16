@@ -48,7 +48,7 @@ import javafx.util.Callback;
 public class ConfigurationWindowController extends ControllerExec {
 
     private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
-    private DataReference reference;
+   
 
     //device
     @FXML
@@ -113,10 +113,11 @@ public class ConfigurationWindowController extends ControllerExec {
             device = devicesList.getItems().get(0);
             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, "Devices carregados na tela...");
             DataReferenceDAO daop = new DataReferenceDAO();
-            DataReference ref = daop.find(device.getID());
-            parameters = ref.getParameters();
+            reference = daop.find(device.getID());
+            parameters = reference.getParameters();
         } else {
             device = null;
+			reference = null;
         }
 
         if (parameters == null) {
@@ -417,7 +418,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 if (device.getID() != null) {
                     dao.edit(reference);
                 } else {
-
+					
                     dao.create(reference);
                 }
             } catch (Exception ex) {
@@ -436,23 +437,15 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onHandleChangeToMonitor() throws IOException {
 
-        if (devicesList.getItems().size() > 0) {
-            int selectedIndex = devicesList.getSelectionModel().getSelectedIndex();
-
+        if (reference != null) {
+            
             MonitorWindowController controller
                     = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
-
-            DataDevice device;
-            if (selectedIndex >= 0) {
-                device = devicesList.getSelectionModel().getSelectedItem();
-            } else {
-                device = devicesList.getItems().get(0);
-            }
-
-            controller.setDevice(device);
-            controller.setParameters(parameters);
+			
+            controller.setReference(reference);
+            
         } else {
-            AlertDialog.DeviceSelection();
+            AlertDialog.referenceMissing();
         }
     }
 

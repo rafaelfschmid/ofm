@@ -133,4 +133,13 @@ public class AlertDialog {
 
         alert.showAndWait();
     }
+
+	public static void referenceMissing() {
+		 // Nada selecionado.
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Aviso!.");
+        alert.setHeaderText("Defina uma referencia antes de usar o modo MONITOR!");
+
+        alert.showAndWait();
+	}
 }

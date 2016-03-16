@@ -48,7 +48,8 @@ public class DataReferenceDAO {
     }
 
     public void create(DataReference data) throws Exception {
-        create(data.getDataReceive(), data.getDevice(), data.getParameters());
+        
+		create(data.getDataReceive(), data.getDevice(), data.getParameters());
 
         EntityManager em = null;
         try {
@@ -56,19 +57,19 @@ public class DataReferenceDAO {
             em.getTransaction().begin();
             DataReceive r = data.getDataReceive();
             if (r != null) {
-                r = em.getReference(r.getClass(), r.getID());
+                r = em.find(r.getClass(), r.getID());
                 data.setDataReceive(r);
             }
             DataParameters dp = data.getParameters();
 
             if (dp != null) {
-                dp = em.getReference(dp.getClass(), dp.getID());
+                dp = em.find(dp.getClass(), dp.getID());
                 data.setParameters(dp);
             }
             DataDevice d = data.getDevice();
 
             if (d != null) {
-                d = em.getReference(d.getClass(), d.getID());
+                d = em.find(d.getClass(), d.getID());
                 data.setDevice(d);
             }
 
