@@ -313,6 +313,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 } catch (Exception ex) {
                     Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
                     AlertDialog.exception(ex);
+                    return;
                 }
                 prepareForm(Mode.VIEW);
             }

@@ -183,7 +183,7 @@ public class MonitorWindowController extends ControllerExec {
                         buttonConfig.setDisable(false);
                         buttonStop.setDisable(true);
                         Exception ex = new Exception(getException());
-                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, null, ex);
+                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, ex.getMessage());
                         AlertDialog.exception(ex);
                     }
 
