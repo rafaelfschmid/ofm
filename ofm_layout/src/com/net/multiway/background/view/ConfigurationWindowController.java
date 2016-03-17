@@ -48,7 +48,6 @@ import javafx.util.Callback;
 public class ConfigurationWindowController extends ControllerExec {
 
     private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
-   
 
     //device
     @FXML
@@ -99,8 +98,8 @@ public class ConfigurationWindowController extends ControllerExec {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.initialize(location, resources);                
-        
+        super.initialize(location, resources);
+
         executionLabel.setVisible(false);
 
         DataDeviceDAO dao = new DataDeviceDAO();
@@ -116,11 +115,11 @@ public class ConfigurationWindowController extends ControllerExec {
             parameters = reference.getParameters();
         } else {
             device = null;
-			reference = null;
+            reference = null;
         }
 
         if (parameters == null) {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1,10);
+            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
         }
 
         updateParameters();
@@ -154,7 +153,7 @@ public class ConfigurationWindowController extends ControllerExec {
             DataReference ref = daop.find(device.getID());
             parameters = ref.getParameters();
         } else {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1,10);
+            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
         }
     }
 
@@ -279,7 +278,7 @@ public class ConfigurationWindowController extends ControllerExec {
         } else if (reflectionThresholdField.getText().isEmpty()) {
             AlertDialog.IncorrectField("Reflection Threshold");
             return false;
-        }else if (cycleTimeField.getText().isEmpty()) {
+        } else if (cycleTimeField.getText().isEmpty()) {
             AlertDialog.IncorrectField("Cycle Time");
             return false;
         } else {
@@ -310,7 +309,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
                 parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
                 parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
-				parameters.setCycleTime(Integer.parseInt(cycleTimeField.getText()));
+                parameters.setCycleTime(Integer.parseInt(cycleTimeField.getText()));
                 prepareForm(Mode.VIEW);
             }
 
@@ -335,56 +334,58 @@ public class ConfigurationWindowController extends ControllerExec {
 
                 Task execute = new Task() {
                     @Override
-                    protected Boolean call() throws Exception {
+                    protected Void call() throws Exception {
                         if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
                             resultTable.getItems().remove(0, resultTable.getItems().size());
 
                         }
                         buttonExecute.setDisable(true);
                         buttonMonitor.setDisable(true);
-                        try {
-                            host.connect(parameters);
-                        } catch (Exception ex) {
-                            buttonExecute.setDisable(false);
-                            buttonMonitor.setDisable(false);
-                        }
 
-                        return buttonExecute.isDisable();
+                        host.connect(parameters);
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        buttonExecute.setDisable(false);
+                        buttonMonitor.setDisable(false);
+                        AlertDialog.timeOut(device.getIp());
                     }
 
                     @Override
                     protected void succeeded() {
-                        if (!buttonExecute.isDisable()) {
-                            AlertDialog.timeOut(device.getIp());
-                        } else {
-                            String msg = "Envio de dados finalizado.";
+
+                        String msg = "Envio de dados finalizado.";
+                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                        executionLabel.setText(msg);
+
+                        receiveParameters = host.getReceiveParametersData();
+                        if (receiveParameters != null) {
+                            resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
+
+                            msg = "Eventos atualizados na tela de configuração.";
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                             executionLabel.setText(msg);
 
-                            receiveParameters = host.getReceiveParametersData();
-                            if (receiveParameters != null) {
-                                resultTable.setItems(FXCollections.observableArrayList(receiveParameters.getData().getEvents()));
+                            receiveValues = host.getReceiveValues();
+                            grafico.getData().clear();
+                            plotGraph();
+                            grafico.setCreateSymbols(false);
+                            msg = "Gráfico plotado na tela de configuração.";
+                            Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
+                            executionLabel.setText(msg);
 
-                                msg = "Eventos atualizados na tela de configuração.";
-                                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-                                executionLabel.setText(msg);
-
-                                receiveValues = host.getReceiveValues();
-                                grafico.getData().clear();
-                                plotGraph();
-                                grafico.setCreateSymbols(false);
-                                msg = "Gráfico plotado na tela de configuração.";
-                                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
-                                executionLabel.setText(msg);
-
-                                buttonExport.setDisable(false);
-                                buttonReference.setDisable(false);
-                                buttonExecute.setDisable(false);
-                                buttonMonitor.setDisable(false);
-                                executionLabel.setVisible(false);
-                            }
+                            buttonExport.setDisable(false);
+                            buttonReference.setDisable(false);
+                            buttonExecute.setDisable(false);
+                            buttonMonitor.setDisable(false);
+                            executionLabel.setVisible(false);
                         }
                     }
+
                 };
 
                 Thread tr = new Thread(execute);
@@ -417,7 +418,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 if (device.getID() != null) {
                     dao.edit(reference);
                 } else {
-					
+
                     dao.create(reference);
                 }
             } catch (Exception ex) {
@@ -437,12 +438,12 @@ public class ConfigurationWindowController extends ControllerExec {
     private void onHandleChangeToMonitor() throws IOException {
 
         if (reference != null) {
-            
+
             MonitorWindowController controller
                     = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
-			
+
             controller.setReference(reference);
-            
+
         } else {
             AlertDialog.referenceMissing();
         }
@@ -467,7 +468,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 endThresholdField.setDisable(true);
                 reflectionThresholdField.setDisable(true);
                 buttonSave.setDisable(true);
-				cycleTimeField.setDisable(true);
+                cycleTimeField.setDisable(true);
                 break;
             case EDIT:
                 measureRangeField.setDisable(false);
@@ -479,7 +480,7 @@ public class ConfigurationWindowController extends ControllerExec {
                 nonReflactionThresholdField.setDisable(false);
                 endThresholdField.setDisable(false);
                 reflectionThresholdField.setDisable(false);
-				cycleTimeField.setDisable(false);
+                cycleTimeField.setDisable(false);
                 buttonSave.setDisable(false);
 
                 break;
@@ -538,7 +539,5 @@ public class ConfigurationWindowController extends ControllerExec {
             }
         });
     }
-
-    
 
 }

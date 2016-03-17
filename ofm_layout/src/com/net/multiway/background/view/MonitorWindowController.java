@@ -6,31 +6,23 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
 import com.net.multiway.background.exception.AlertDialog;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
-import com.net.multiway.background.model.HoveredThresholdNode;
 import com.net.multiway.background.model.Mode;
-import com.net.multiway.background.receive.ReceiveParameters;
-import com.net.multiway.background.receive.ReceiveValues;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -115,6 +107,13 @@ public class MonitorWindowController extends ControllerExec {
     @FXML
     private Label executionLabel;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+
+        prepareForm(Mode.VIEW);
+    }
+
     @FXML
     private void onHandleEditParameters() {
 
@@ -154,21 +153,15 @@ public class MonitorWindowController extends ControllerExec {
 
                         }
 
-                        try {
-                            while (!buttonStop.isDisable()) {
-                                host.connect(parameters);
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        updateMessage();
-                                    }
-                                });
-                                Thread.sleep(1000 * 60);
-                            }
-
-                        } catch (Exception ex) {
-                            buttonExecute.setDisable(false);
-                            buttonConfig.setDisable(false);
+                        while (!buttonStop.isDisable()) {
+                            host.connect(parameters);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateMessage();
+                                }
+                            });
+                            Thread.sleep(1000 * 60);
                         }
 
                         buttonExecute.setDisable(false);
@@ -176,6 +169,15 @@ public class MonitorWindowController extends ControllerExec {
                         buttonExport.setDisable(false);
 
                         return null;
+                    }
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        buttonExecute.setDisable(false);
+                        buttonConfig.setDisable(false);
+                        buttonStop.setDisable(true);
+                        AlertDialog.timeOut(device.getIp());
                     }
 
                     private void updateMessage() {
@@ -200,6 +202,7 @@ public class MonitorWindowController extends ControllerExec {
                             executionLabel.setText(msg);
                         }
                     }
+
                 };
 
                 Thread tr = new Thread(execute);
@@ -234,13 +237,6 @@ public class MonitorWindowController extends ControllerExec {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        super.initialize(location, resources);
-
-        prepareForm(Mode.VIEW);
-    }
-
-    @Override
     public void handleSave(ActionEvent event) {
     }
 
@@ -260,6 +256,8 @@ public class MonitorWindowController extends ControllerExec {
                 buttonSave.setDisable(true);
                 buttonEdit.setDisable(true);
                 cycleTimeField.setDisable(true);
+                buttonStop.setDisable(true);
+                buttonExport.setDisable(true);
                 break;
         }
 
