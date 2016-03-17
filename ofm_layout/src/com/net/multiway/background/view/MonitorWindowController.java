@@ -13,6 +13,7 @@ import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.Mode;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,8 @@ import javafx.scene.control.TextField;
  */
 public class MonitorWindowController extends ControllerExec {
 
+    //Thread de execução do monitor
+    Thread tr;
     //device
     @FXML
     private Label ipLabel;
@@ -130,10 +133,6 @@ public class MonitorWindowController extends ControllerExec {
         if (device != null) {
             host = new DeviceComunicator(device.getIp().trim(), 5000);
 
-//            if(host.connect(device)) {
-//                
-//            }
-//            else 
             if (buttonSave.isDisable()) {
                 executionLabel.setVisible(true);
                 String msg = "Receiving data from OTDR...";
@@ -150,7 +149,6 @@ public class MonitorWindowController extends ControllerExec {
 
                         if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
                             resultTable.getItems().remove(0, resultTable.getItems().size());
-
                         }
 
                         while (!buttonStop.isDisable()) {
@@ -161,7 +159,13 @@ public class MonitorWindowController extends ControllerExec {
                                     updateMessage();
                                 }
                             });
-                            Thread.sleep(1000 * 60);
+
+                            try {
+                                // Sleep at least n milliseconds.
+                                Thread.sleep(1000 * 60 * parameters.getCycleTime());
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(MainApp.class.getName()).log(Level.INFO, "Sleep interrupted.");
+                            }
                         }
 
                         buttonExecute.setDisable(false);
@@ -177,7 +181,9 @@ public class MonitorWindowController extends ControllerExec {
                         buttonExecute.setDisable(false);
                         buttonConfig.setDisable(false);
                         buttonStop.setDisable(true);
-                        AlertDialog.timeOut(device.getIp());
+                        Exception ex = new Exception(getException());
+                        Logger.getLogger(MainApp.class.getName()).log(Level.INFO, null, ex);
+                        AlertDialog.exception(ex);
                     }
 
                     private void updateMessage() {
@@ -205,8 +211,8 @@ public class MonitorWindowController extends ControllerExec {
 
                 };
 
-                Thread tr = new Thread(execute);
-                tr.start();
+                this.tr = new Thread(execute);
+                this.tr.start();
 
             } else {
                 AlertDialog.SaveParameters();
@@ -216,15 +222,6 @@ public class MonitorWindowController extends ControllerExec {
         }
     }
 
-//    private void showReceiveParametersTable(ArrayList<DataReceiveEvents> r) {
-//
-//        ObservableList<DataReceiveEvents> value = FXCollections.observableArrayList();
-//        for (int i = 0; i < r.size(); i++) {
-//            value.add(r.get(i));
-//        }
-//        resultTable.setItems(value);
-//
-//    }
     @FXML
     private void onHandleExport() {
         exportData();
@@ -232,7 +229,6 @@ public class MonitorWindowController extends ControllerExec {
 
     @FXML
     private void onHandleChangeToConfiguration() {
-        //MainApp.getInstance().showView(View.ConfigurationWindow, Mode.VIEW);
         MainApp.getInstance().showConfiguration();
     }
 
@@ -270,6 +266,7 @@ public class MonitorWindowController extends ControllerExec {
     @FXML
     private void onHandleStop(ActionEvent event) {
         buttonStop.setDisable(true);
+        this.tr.interrupt();
     }
 
     void setReference(DataReference reference) {
