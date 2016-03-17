@@ -71,7 +71,6 @@ public class ConfigurationWindowController extends ControllerExec {
     private TextField endThresholdField;
     @FXML
     private TextField reflectionThresholdField;
-
     @FXML
     private TextField cycleTimeField;
 
@@ -300,16 +299,21 @@ public class ConfigurationWindowController extends ControllerExec {
             } else if (reflectionThresh < 20 || reflectionThresh > 80) {
                 AlertDialog.IncorrectRangeField("Reflaction Threshold", 20, 80);
             } else {
-                parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
-                parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
-                parameters.setMeasuringTime(Integer.parseInt(measureTimeField.getValue().toString()) * 1000);
-                parameters.setTestWaveLength(Integer.parseInt(waveLengthField.getValue().toString()));
-                parameters.setMeasureMode((measureModeField.getValue().toString() == "1-Average") ? 1 : 2);
-                parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
-                parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
-                parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
-                parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
-                parameters.setCycleTime(Integer.parseInt(cycleTimeField.getText()));
+                try {
+                    parameters.setMeasuringRangeOfTest(Integer.parseInt(measureRangeField.getValue().toString()));
+                    parameters.setTestPulseWidth(Integer.parseInt(pulseWidthField.getValue().toString()));
+                    parameters.setMeasuringTime(Integer.parseInt(measureTimeField.getValue().toString()) * 1000);
+                    parameters.setTestWaveLength(Integer.parseInt(waveLengthField.getValue().toString()));
+                    parameters.setMeasureMode((measureModeField.getValue().toString() == "1-Average") ? 1 : 2);
+                    parameters.setRefractiveIndex(Float.parseFloat(refractiveIndexField.getText()));
+                    parameters.setNonReflactionThreshold(Float.parseFloat(nonReflactionThresholdField.getText()));
+                    parameters.setEndThreshold(Float.parseFloat(endThresholdField.getText()));
+                    parameters.setReflectionThreshold(Float.parseFloat(reflectionThresholdField.getText()));
+                    parameters.setCycleTime(Integer.parseInt(cycleTimeField.getText()));
+                } catch (Exception ex) {
+                    Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    AlertDialog.exception(ex);
+                }
                 prepareForm(Mode.VIEW);
             }
 

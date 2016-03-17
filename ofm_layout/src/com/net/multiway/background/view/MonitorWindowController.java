@@ -75,7 +75,9 @@ public class MonitorWindowController extends ControllerExec {
     private TextField endThresholdField;
     @FXML
     private TextField reflectionThresholdField;
-
+    @FXML
+    private TextField cycleTimeField;
+    
     //result
     @FXML
     private TableView<DataReceiveEvents> resultTable;
@@ -97,8 +99,7 @@ public class MonitorWindowController extends ControllerExec {
     private Button buttonSave;
     @FXML
     private Button buttonEdit;
-    @FXML
-    private TextField cycleTimeField;
+
     @FXML
     private Button buttonExport;
     @FXML

@@ -115,11 +115,11 @@ public class AlertDialog {
 
         alert.showAndWait();
     }
-    
-        public static void timeOut(String ip) {
+
+    public static void timeOut(String ip) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Time Out");
-        alert.setHeaderText("O endereço "+ ip +" não pôde ser alcançado.");
+        alert.setHeaderText("O endereço " + ip + " não pôde ser alcançado.");
         alert.setContentText("Corrija o IP, ou tente novamente mais tarde.");
 
         alert.showAndWait();
@@ -129,17 +129,18 @@ public class AlertDialog {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception");
         alert.setHeaderText(ex.getMessage());
-        alert.setContentText(ex.getCause().getMessage());
-
+        if (ex.getCause() != null) {
+            alert.setContentText(ex.getCause().getMessage());
+        }
         alert.showAndWait();
     }
 
-	public static void referenceMissing() {
-		 // Nada selecionado.
+    public static void referenceMissing() {
+        // Nada selecionado.
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Aviso!.");
         alert.setHeaderText("Defina uma referencia antes de usar o modo MONITOR!");
 
         alert.showAndWait();
-	}
+    }
 }

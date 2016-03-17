@@ -37,7 +37,7 @@
                               <ListView fx:id="devicesList" onMouseClicked="#onClickDeviceSelection" prefHeight="168.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane prefHeight="382.0" prefWidth="258.0" SplitPane.resizableWithParent="false">
+                      <AnchorPane minHeight="368.0" minWidth="258.0" prefHeight="382.0" prefWidth="258.0" SplitPane.resizableWithParent="false">
                            <children>
                               <GridPane layoutX="11.0" layoutY="4.0" prefHeight="324.0" prefWidth="244.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="4.0">
                                 <columnConstraints>
