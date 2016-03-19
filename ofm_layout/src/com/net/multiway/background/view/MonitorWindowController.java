@@ -39,7 +39,7 @@ import javafx.scene.control.TextField;
 public class MonitorWindowController extends ControllerExec {
 
     //Thread de execução do monitor
-    Thread tr;
+    private Thread tr;
     //device
     @FXML
     private Label ipLabel;

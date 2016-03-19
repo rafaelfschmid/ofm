@@ -118,7 +118,7 @@ public class ConfigurationWindowController extends ControllerExec {
         }
 
         if (parameters == null) {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
+            parameters = new DataParameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
         }
 
         updateParameters();
