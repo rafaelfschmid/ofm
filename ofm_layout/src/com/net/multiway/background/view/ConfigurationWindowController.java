@@ -334,7 +334,7 @@ public class ConfigurationWindowController extends ControllerExec {
 //            else 
             if (buttonSave.isDisable()) {
                 executionLabel.setVisible(true);
-                String msg = "Receiving data from OTDR...";
+                String msg = "Recebendo Dados do OTDR...";
                 executionLabel.setText(msg);
 
                 Task execute = new Task() {

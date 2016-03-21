@@ -40,6 +40,7 @@ public class MonitorWindowController extends ControllerExec {
 
     //Thread de execução do monitor
     private Thread tr;
+    private int count =0;
     //device
     @FXML
     private Label ipLabel;
@@ -77,7 +78,7 @@ public class MonitorWindowController extends ControllerExec {
     private TextField reflectionThresholdField;
     @FXML
     private TextField cycleTimeField;
-    
+
     //result
     @FXML
     private TableView<DataReceiveEvents> resultTable;
@@ -136,7 +137,7 @@ public class MonitorWindowController extends ControllerExec {
 
             if (buttonSave.isDisable()) {
                 executionLabel.setVisible(true);
-                String msg = "Receiving data from OTDR...";
+                String msg = "Recebendo Dados do OTDR...";
                 executionLabel.setText(msg);
 
                 buttonExecute.setDisable(true);
@@ -144,20 +145,20 @@ public class MonitorWindowController extends ControllerExec {
                 buttonExport.setDisable(true);
                 buttonStop.setDisable(false);
 
-                Task execute = new Task() {
+                Task execute;
+                execute = new Task() {
                     @Override
                     protected Void call() throws Exception {
-
-                        if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
-                            resultTable.getItems().remove(0, resultTable.getItems().size());
-                        }
-
+                        count =0;
                         while (!buttonStop.isDisable()) {
+                            if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
+                                resultTable.getItems().remove(0, resultTable.getItems().size());
+                            }
                             host.connect(parameters);
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateMessage();
+                                    updateMessage(++count);
                                 }
                             });
 
@@ -187,7 +188,7 @@ public class MonitorWindowController extends ControllerExec {
                         AlertDialog.exception(ex);
                     }
 
-                    private void updateMessage() {
+                    private void updateMessage(int count) {
                         String msg = "Envio de dados finalizado.";
                         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                         executionLabel.setText(msg);
@@ -204,7 +205,7 @@ public class MonitorWindowController extends ControllerExec {
                             grafico.getData().clear();
                             plotGraph();
                             grafico.setCreateSymbols(false);
-                            msg = "Gráfico plotado na tela de configuração.";
+                            msg = "Gráfico plotado. Iteração "+count;
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                             executionLabel.setText(msg);
                         }
