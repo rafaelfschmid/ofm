@@ -6,19 +6,24 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
+import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataOccurrence;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
+import com.net.multiway.background.data.dao.DataOccurrenceDAO;
 import com.net.multiway.background.exception.AlertDialog;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.Mode;
 import java.net.URL;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,9 +43,11 @@ import javafx.scene.control.TextField;
  */
 public class MonitorWindowController extends ControllerExec {
 
+    private ObservableList<DataOccurrence> occurrenceList;
+    private DataOccurrence occurrence;
     //Thread de execução do monitor
     private Thread tr;
-    private int count =0;
+    private int count = 0;
     //device
     @FXML
     private Label ipLabel;
@@ -111,10 +118,21 @@ public class MonitorWindowController extends ControllerExec {
     private Button buttonConfig;
     @FXML
     private Label executionLabel;
+    @FXML
+    private TableView<DataOccurrence> occurrenceTable;
+    @FXML
+    private TableColumn<DataOccurrence, Long> idColumm;
+    @FXML
+    private TableColumn<DataOccurrence, String> occurrenceColumm;
+    @FXML
+    private TableColumn<DataOccurrence, String> descriptionColumm;
+    @FXML
+    private TableColumn<DataOccurrence, String> dateColumm;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+        occurrence = new DataOccurrence();
 
         prepareForm(Mode.VIEW);
     }
@@ -149,7 +167,7 @@ public class MonitorWindowController extends ControllerExec {
                 execute = new Task() {
                     @Override
                     protected Void call() throws Exception {
-                        count =0;
+                        count = 0;
                         while (!buttonStop.isDisable()) {
                             if (resultTable.getItems().size() > 0 && grafico.getData().size() > 0) {
                                 resultTable.getItems().remove(0, resultTable.getItems().size());
@@ -158,7 +176,11 @@ public class MonitorWindowController extends ControllerExec {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateMessage(++count);
+                                    try {
+                                        updateMessage(++count);
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(MonitorWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
                             });
 
@@ -188,7 +210,7 @@ public class MonitorWindowController extends ControllerExec {
                         AlertDialog.exception(ex);
                     }
 
-                    private void updateMessage(int count) {
+                    private void updateMessage(int count) throws Exception {
                         String msg = "Envio de dados finalizado.";
                         Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                         executionLabel.setText(msg);
@@ -205,9 +227,13 @@ public class MonitorWindowController extends ControllerExec {
                             grafico.getData().clear();
                             plotGraph();
                             grafico.setCreateSymbols(false);
-                            msg = "Gráfico plotado. Iteração "+count;
+                            msg = "Gráfico plotado. Iteração " + count;
                             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, msg);
                             executionLabel.setText(msg);
+                            
+                            saveOccurrence();
+                            DataOccurrenceDAO dao = new DataOccurrenceDAO();
+                            displayOccurrence(dao.getOccurrences());
                         }
                     }
 
@@ -294,4 +320,31 @@ public class MonitorWindowController extends ControllerExec {
 
     }
 
+    private void displayOccurrence(List<DataOccurrence> resultList) {
+        if (resultList != null) {
+            occurrenceList = FXCollections.observableArrayList();
+            resultList.stream().forEach((result) -> {
+                occurrenceList.add(result);
+            });
+            occurrenceTable.setItems(occurrenceList);
+            // idColumm.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+            occurrenceColumm.setCellValueFactory(cellData -> cellData.getValue().occurrenceProperty());
+            descriptionColumm.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+            dateColumm.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
+        }
+
+    }
+
+    public void saveOccurrence() throws Exception {
+        
+        DataOccurrence occurrence2 =  new DataOccurrence();
+        occurrence2.setOccurrence("VERDE");
+        occurrence2.setDescription("Não há erros encontrados!");
+        LocalDateTime timePoint = LocalDateTime.now();
+        occurrence2.setDate(timePoint.toString());
+
+        DataOccurrenceDAO dao = new DataOccurrenceDAO();
+        dao.create(occurrence2);
+    }
 }

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="231.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.RangeDialogController">
+   <children>
+      <GridPane layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="232.0" prefWidth="405.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="110.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="35.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Distância" GridPane.rowIndex="1">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <Label text="Reflection Loss" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <Label text="Insertion Loss" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <Label text="Verde" GridPane.columnIndex="1" />
+            <Label text="Amarelo" GridPane.columnIndex="2" />
+            <Label text="Vermelho" GridPane.columnIndex="3" />
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="distanceYellowField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="insertionYellowField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="reflectionYellowField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="distanceRedField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="acima de" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="insertionRedField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="acima de" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="reflectionRedField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="acima de" />
+               </children>
+            </GridPane>
+            <Label text="Attenuation" GridPane.rowIndex="5">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="attenuationYellowField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="attenuationRedField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="acima de" />
+               </children>
+            </GridPane>
+            <Button mnemonicParsing="false" onAction="#onHandleEdit" text="Editar" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Button mnemonicParsing="false" onAction="#onHandleSave" text="Salvar" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+            <Label text="Acumulation Loss" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="acumulationRedField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="acima de" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="acumulationYellowField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="distanceGreenField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="insertionGreenField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="reflectionGreenField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="acumulationGreenField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="28.0" prefWidth="77.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="75.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="45.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="attenuationGreenField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="35.0" GridPane.columnIndex="1" />
+                  <Label text="até" />
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

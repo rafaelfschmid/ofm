@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -20,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="1000.0" prefHeight="610.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.MonitorWindowController">
+<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="1000.0" prefHeight="610.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.net.multiway.background.view.MonitorWindowController">
    <children>
       <SplitPane dividerPositions="0.2755511022044088" prefHeight="323.0" prefWidth="707.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -147,12 +142,12 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <TableView prefHeight="97.0" prefWidth="731.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TableView fx:id="occurrenceTable" prefHeight="97.0" prefWidth="731.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columns>
-                                              <TableColumn prefWidth="33.0" text="ID" />
-                                              <TableColumn prefWidth="195.0" text="Ocorrencia" />
-                                                <TableColumn prefWidth="390.0" text="Descricao" />
-                                                <TableColumn prefWidth="111.0" text="Data/Hora" />
+                                              <TableColumn fx:id="idColumm" prefWidth="33.0" text="ID" />
+                                              <TableColumn fx:id="occurrenceColumm" prefWidth="195.0" text="Ocorrencia" />
+                                                <TableColumn fx:id="descriptionColumm" prefWidth="390.0" text="Descricao" />
+                                                <TableColumn fx:id="dateColumm" prefWidth="111.0" text="Data/Hora" />
                                             </columns>
                                           </TableView>
                                        </children>

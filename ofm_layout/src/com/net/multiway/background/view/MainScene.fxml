@@ -15,11 +15,16 @@
                   <MenuItem mnemonicParsing="false" onAction="#onMenuExit" text="Sair" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Realatorios">
+            <Menu mnemonicParsing="false" text="Relatórios">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#onMenuExportLastRead" text="Exportar ultima leitura" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuExportEventsList" text="Exportar lista de eventos" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuExportOcurrencesList" text="Exportar lista de ocorrencias" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Configuracões">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuConfigureLimits" text="Configurar Limites" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Ajuda">

@@ -5,13 +5,24 @@
  */
 package com.net.multiway.background.view;
 
+import com.net.multiway.background.MainApp;
+import com.net.multiway.background.exception.AlertDialog;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
+import com.net.multiway.background.model.View;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -76,6 +87,49 @@ public class MainSceneController implements Initializable, IController {
 
     @FXML
     private void onMenuAbout(ActionEvent event) {
+    }
+
+    @FXML
+    private void onMenuConfigureLimits(ActionEvent event) {
+
+        try {
+            // Carrega o arquivo fxml e cria um novo stage para a janela popup.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource(View.RangeDialog.getResource()));
+            AnchorPane page;
+
+            page = (AnchorPane) loader.load();
+
+            // Cria o palco dialogStage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Editar Limites");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(MainApp.getInstance().getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+//            // Define o device no controller.
+            RangeDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setRange();
+            
+            
+
+            // Mostra a janela e espera até o usuário fechar.
+            dialogStage.showAndWait();
+
+//            if (controller.isOkClicked()) {
+////                DataDeviceDAO dao = new DataDeviceDAO();
+////                dao.create(device);
+//                devicesData.add(device);
+//                devicesList.setItems(devicesData);
+//                this.device = device;
+//            }
+        } catch (IOException ex) {
+            Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            AlertDialog.exception(ex);
+        }
+
     }
 
 }

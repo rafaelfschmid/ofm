@@ -7,6 +7,7 @@ package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataLimits;
 import com.net.multiway.background.exception.AlertDialog;
 
 import com.net.multiway.background.data.DataParameters;
@@ -90,6 +91,12 @@ public class ConfigurationWindowController extends ControllerExec {
 
     @FXML
     private Label executionLabel;
+
+    public void setLimits(DataLimits limits) {
+        this.limits = limits;
+    }
+    
+    
 
     public void setExecutionLabel(String msg) {
         executionLabel.setText(msg);

@@ -7,6 +7,7 @@ package com.net.multiway.background.model;
 
 import com.net.multiway.background.MainApp;
 import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.DataLimits;
 import com.net.multiway.background.data.DataParameters;
 import com.net.multiway.background.data.DataReceiveEvents;
 import com.net.multiway.background.data.DataReference;
@@ -36,6 +37,7 @@ public abstract class ControllerExec implements Initializable, IController {
     protected DataParameters parameters;
     protected DataDevice device;
     protected DataReference reference;
+    protected DataLimits limits;
 
     protected ReceiveParameters receiveParameters;
     protected ReceiveValues receiveValues;

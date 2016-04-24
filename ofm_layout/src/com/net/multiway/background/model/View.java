@@ -14,7 +14,8 @@ public enum View {
     ConfigurationWindow,
     MonitorWindow,
     MainScene,
-    DeviceAddDialog;
+    DeviceAddDialog,
+    RangeDialog;
 
     /**
      * @return File path to FXML resource of the view
@@ -29,6 +30,8 @@ public enum View {
                 return "view/MainScene.fxml";
             case DeviceAddDialog:
                 return "view/DeviceAddDialog.fxml";
+            case RangeDialog:
+                return "view/RangeDialog.fxml";
             default:
                 return null;
         }
