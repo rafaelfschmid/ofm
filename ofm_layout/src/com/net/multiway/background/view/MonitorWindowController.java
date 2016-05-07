@@ -6,11 +6,10 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataOccurrence;
-import com.net.multiway.background.data.DataReceiveEvents;
-import com.net.multiway.background.data.DataReference;
-import com.net.multiway.background.data.dao.DataOccurrenceDAO;
+import com.net.multiway.background.data.Occurrence;
+import com.net.multiway.background.data.DataEvents;
+import com.net.multiway.background.data.Device;
+import com.net.multiway.background.data.dao.OccurrenceDAO;
 import com.net.multiway.background.exception.AlertDialog;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
@@ -43,8 +42,8 @@ import javafx.scene.control.TextField;
  */
 public class MonitorWindowController extends ControllerExec {
 
-    private ObservableList<DataOccurrence> occurrenceList;
-    private DataOccurrence occurrence;
+    private ObservableList<Occurrence> occurrenceList;
+    private Occurrence occurrence;
     //Thread de execução do monitor
     private Thread tr;
     private int count = 0;
@@ -88,21 +87,21 @@ public class MonitorWindowController extends ControllerExec {
 
     //result
     @FXML
-    private TableView<DataReceiveEvents> resultTable;
+    private TableView<DataEvents> resultTable;
     @FXML
-    private TableColumn<DataReceiveEvents, Long> numeroColumn;
+    private TableColumn<DataEvents, Long> numeroColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Integer> typeColumn;
+    private TableColumn<DataEvents, Integer> typeColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Integer> distanceColumn;
+    private TableColumn<DataEvents, Integer> distanceColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Float> insertLossColumn;
+    private TableColumn<DataEvents, Float> insertLossColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Float> reflectLossColumn;
+    private TableColumn<DataEvents, Float> reflectLossColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Float> accumulationColumn;
+    private TableColumn<DataEvents, Float> accumulationColumn;
     @FXML
-    private TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+    private TableColumn<DataEvents, Float> attenuationCoefficientColumn;
     @FXML
     private Button buttonSave;
     @FXML
@@ -119,20 +118,20 @@ public class MonitorWindowController extends ControllerExec {
     @FXML
     private Label executionLabel;
     @FXML
-    private TableView<DataOccurrence> occurrenceTable;
+    private TableView<Occurrence> occurrenceTable;
     @FXML
-    private TableColumn<DataOccurrence, Long> idColumm;
+    private TableColumn<Occurrence, Long> idColumm;
     @FXML
-    private TableColumn<DataOccurrence, String> occurrenceColumm;
+    private TableColumn<Occurrence, String> occurrenceColumm;
     @FXML
-    private TableColumn<DataOccurrence, String> descriptionColumm;
+    private TableColumn<Occurrence, String> descriptionColumm;
     @FXML
-    private TableColumn<DataOccurrence, String> dateColumm;
+    private TableColumn<Occurrence, String> dateColumm;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        occurrence = new DataOccurrence();
+        occurrence = new Occurrence();
 
         prepareForm(Mode.VIEW);
     }
@@ -232,7 +231,7 @@ public class MonitorWindowController extends ControllerExec {
                             executionLabel.setText(msg);
                             
                             saveOccurrence();
-                            DataOccurrenceDAO dao = new DataOccurrenceDAO();
+                            OccurrenceDAO dao = new OccurrenceDAO();
                             displayOccurrence(dao.getOccurrences());
                         }
                     }
@@ -297,12 +296,11 @@ public class MonitorWindowController extends ControllerExec {
         this.tr.interrupt();
     }
 
-    void setReference(DataReference reference) {
+    void setReference(Device reference) {
 
-        this.reference = reference;
+        this.device = reference;
         this.parameters = reference.getParameters();
-        this.device = reference.getDevice();
-
+       
         this.measureRangeField.setValue(parameters.getMeasuringRangeOfTest());
         this.pulseWidthField.setValue(parameters.getTestPulseWidth());
         this.measureTimeField.setValue(parameters.getMeasuringTime());
@@ -320,7 +318,7 @@ public class MonitorWindowController extends ControllerExec {
 
     }
 
-    private void displayOccurrence(List<DataOccurrence> resultList) {
+    private void displayOccurrence(List<Occurrence> resultList) {
         if (resultList != null) {
             occurrenceList = FXCollections.observableArrayList();
             resultList.stream().forEach((result) -> {
@@ -338,13 +336,13 @@ public class MonitorWindowController extends ControllerExec {
 
     public void saveOccurrence() throws Exception {
         
-        DataOccurrence occurrence2 =  new DataOccurrence();
+        Occurrence occurrence2 =  new Occurrence();
         occurrence2.setOccurrence("VERDE");
         occurrence2.setDescription("Não há erros encontrados!");
         LocalDateTime timePoint = LocalDateTime.now();
         occurrence2.setDate(timePoint.toString());
 
-        DataOccurrenceDAO dao = new DataOccurrenceDAO();
+        OccurrenceDAO dao = new OccurrenceDAO();
         dao.create(occurrence2);
     }
 }

@@ -24,9 +24,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author phelipe
  */
 @Entity
-@Table(name = "DATALIMITS")
+@Table(name = "limits")
 @XmlRootElement
-public class DataLimits implements Serializable {
+public class Limits implements Serializable {
 
     private ObjectProperty<Float> insertionGreen;
     private ObjectProperty<Float> reflectionGreen;
@@ -40,7 +40,7 @@ public class DataLimits implements Serializable {
     private ObjectProperty<Float> acumulationGreen;
     private Long ID;
     
-     public DataLimits() {
+     public Limits() {
         this.insertionGreen = new SimpleObjectProperty<>();
         this.reflectionGreen = new SimpleObjectProperty<>();
         this.distanceGreen = new SimpleObjectProperty<>();
@@ -54,7 +54,7 @@ public class DataLimits implements Serializable {
 
     }
 
-    public DataLimits(float insertionGreen, float reflectionGreen, float distanceGreen,
+    public Limits(float insertionGreen, float reflectionGreen, float distanceGreen,
             float distanceYellow, float insertionYellow, float reflectionYellow, float attenuationGreen,
             float attenuationYellow, float acumulationYellow, float acumulationGreen) {
         this.insertionGreen = new SimpleObjectProperty<>(insertionGreen);
@@ -73,7 +73,7 @@ public class DataLimits implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID")
+    @Column(name = "id")
     public Long getID() {
         return ID;
     }
@@ -83,7 +83,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "INSERTION_GREEN")
+    @Column(name = "insertion_green")
     public Float getInsertionGreen() {
         return insertionGreen.get();
     }
@@ -93,7 +93,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "REFLECTION_GREEN")
+    @Column(name = "reflection_green")
     public Float getReflectionGreen() {
         return reflectionGreen.get();
     }
@@ -103,7 +103,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "DISTANCE_GREEN")
+    @Column(name = "distance_green")
     public Float getDistanceGreen() {
         return distanceGreen.get();
     }
@@ -113,7 +113,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "DISTANCE_YELLOW")
+    @Column(name = "distance_yellow")
     public Float getDistanceYellow() {
         return distanceYellow.get();
     }
@@ -123,7 +123,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "INSERTION_YELLOW")
+    @Column(name = "insertion_yellow")
     public Float getInsertionYellow() {
         return insertionYellow.get();
     }
@@ -133,7 +133,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "REFLECTION_YELLOW")
+    @Column(name = "reflection_yellow")
     public Float getReflectionYellow() {
         return reflectionYellow.get();
     }
@@ -143,7 +143,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "ATTENUATION_GREEN")
+    @Column(name = "attenuation_green")
     public Float getAttenuationGreen() {
         return attenuationGreen.get();
     }
@@ -153,7 +153,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "ATTENUATION_YELLOW")
+    @Column(name = "attenuation_yellow")
     public Float getAttenuationYellow() {
         return attenuationYellow.get();
     }
@@ -163,7 +163,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "ACUMULATION_YELLOW")
+    @Column(name = "acumulation_yellow")
     public Float getAcumulationYellow() {
         return acumulationYellow.get();
     }
@@ -173,7 +173,7 @@ public class DataLimits implements Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "ACUMULATION_GREEN")
+    @Column(name = "acumulation_green")
     public Float getAcumulationGreen() {
         return acumulationGreen.get();
     }

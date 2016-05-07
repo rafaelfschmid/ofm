@@ -5,9 +5,9 @@
  */
 package com.net.multiway.background.view;
 
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataLimits;
-import com.net.multiway.background.data.dao.DataLimitsDAO;
+
+import com.net.multiway.background.data.Limits;
+import com.net.multiway.background.data.dao.LimitsDAO;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import java.net.URL;
@@ -57,9 +57,9 @@ public class RangeDialogController implements Initializable, IController {
     @FXML
     private TextField acumulationGreenField;
 
-    private DataLimits limits;
+    private Limits limits;
 
-    public DataLimits getLimits() {
+    public Limits getLimits() {
         return limits;
     }
 
@@ -69,10 +69,10 @@ public class RangeDialogController implements Initializable, IController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        DataLimitsDAO dao = new DataLimitsDAO();
+        LimitsDAO dao = new LimitsDAO();
         limits = dao.find(Long.parseLong("1"));
         if (limits == null) {
-            limits = new DataLimits(3, 3, 3, 5, 5, 5, 3, 5, 5, 3);
+            limits = new Limits(3, 3, 3, 5, 5, 5, 3, 5, 5, 3);
         }
 
         distanceGreenField.setText(limits.getDistanceGreen().toString());
@@ -138,7 +138,7 @@ public class RangeDialogController implements Initializable, IController {
         limits.setReflectionGreen(Float.parseFloat(reflectionGreenField.getText()));
         limits.setReflectionYellow(Float.parseFloat(reflectionYellowField.getText()));
 
-        DataLimitsDAO dao = new DataLimitsDAO();
+        LimitsDAO dao = new LimitsDAO();
         if (limits.getID() != null) {
             dao.edit(limits);
         } else {

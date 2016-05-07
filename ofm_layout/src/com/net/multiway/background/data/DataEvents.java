@@ -24,23 +24,47 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATARECEIVEEVENTS")
+@Table(name = "data_events")
 @XmlRootElement
-public class DataReceiveEvents implements Serializable {
+public class DataEvents implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "distance")
     private ObjectProperty<Integer> distance;
+
+    @Basic(optional = false)
+    @Column(name = "type")
     private ObjectProperty<Integer> type;
+
+    @Basic(optional = false)
+    @Column(name = "echo_loss")
     private ObjectProperty<Float> echoLoss;
+
+    @Basic(optional = false)
+    @Column(name = "insertion_loss")
     private ObjectProperty<Float> insertionLoss;
+
+    @Basic(optional = false)
+    @Column(name = "average_attenuation_coefficient")
     private ObjectProperty<Float> averageAttenuationCoefficient;
+
+    @Basic(optional = false)
+    @Column(name = "acumulative_loss")
     private ObjectProperty<Float> acumulativeLoss;
 
-    private DataReceive dataReceive;
 
+    @ManyToOne
+    //@JoinColumn( name="DATARECEIVE_ID", nullable = false )
+    private Data data;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
     private Long ID;
     private Long event_id;
 
-    public DataReceiveEvents() {
+    public DataEvents() {
 
         this.distance = new SimpleObjectProperty<>();
         this.type = new SimpleObjectProperty<>();
@@ -51,7 +75,7 @@ public class DataReceiveEvents implements Serializable {
 
     }
 
-    public DataReceiveEvents(int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
+    public DataEvents(int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
 
         this.distance = new SimpleObjectProperty<>(distance);
         this.type = new SimpleObjectProperty<>(type);
@@ -61,8 +85,6 @@ public class DataReceiveEvents implements Serializable {
         this.acumulativeLoss = new SimpleObjectProperty<>(acumulativeLoss);
     }
 
-    @Basic(optional = false)
-    @Column(name = "DISTANCE")
     public Integer getDistance() {
         return distance.get();
     }
@@ -75,8 +97,6 @@ public class DataReceiveEvents implements Serializable {
         return this.distance;
     }
 
-    @Basic(optional = false)
-    @Column(name = "TYPE")
     public Integer getType() {
         return type.get();
     }
@@ -89,8 +109,6 @@ public class DataReceiveEvents implements Serializable {
         return this.type;
     }
 
-    @Basic(optional = false)
-    @Column(name = "ECHOLOSS")
     public Float getEchoLoss() {
         return echoLoss.get();
     }
@@ -103,8 +121,6 @@ public class DataReceiveEvents implements Serializable {
         return this.echoLoss;
     }
 
-    @Basic(optional = false)
-    @Column(name = "INSERTIONLOSS")
     public Float getInsertionLoss() {
         return insertionLoss.get();
     }
@@ -117,8 +133,6 @@ public class DataReceiveEvents implements Serializable {
         return this.insertionLoss;
     }
 
-    @Basic(optional = false)
-    @Column(name = "AVERAGEATTENUATIONCOEFFICIENT")
     public Float getAverageAttenuationCoefficient() {
         return averageAttenuationCoefficient.get();
     }
@@ -131,8 +145,6 @@ public class DataReceiveEvents implements Serializable {
         return this.averageAttenuationCoefficient;
     }
 
-    @Basic(optional = false)
-    @Column(name = "ACUMULATIVELOSS")
     public Float getAcumulativeLoss() {
         return acumulativeLoss.get();
     }
@@ -145,7 +157,7 @@ public class DataReceiveEvents implements Serializable {
         return this.acumulativeLoss;
     }
 
-    public void copy(DataReceiveEvents data) {
+    public void copy(DataEvents data) {
         setAcumulativeLoss(data.getAcumulativeLoss());
         setAverageAttenuationCoefficient(data.getAverageAttenuationCoefficient());
         setDistance(data.getDistance());
@@ -154,10 +166,6 @@ public class DataReceiveEvents implements Serializable {
         setType(data.getType());
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "EVENT_ID")
     public Long getID() {
         return ID;
     }
@@ -166,15 +174,12 @@ public class DataReceiveEvents implements Serializable {
         this.ID = ID;
     }
 
-    //@Id
-    @ManyToOne
-    //@JoinColumn( name="DATARECEIVE_ID", nullable = false )     
-    public DataReceive getDataReceive() {
-        return dataReceive;
+    public Data getData() {
+        return data;
     }
 
-    public void setDataReceive(DataReceive dataReceive) {
-        this.dataReceive = dataReceive;
+    public void setData(Data dataReceive) {
+        this.data = dataReceive;
     }
 
 }

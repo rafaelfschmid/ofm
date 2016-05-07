@@ -6,11 +6,10 @@
 package com.net.multiway.background.model;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataLimits;
-import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReceiveEvents;
-import com.net.multiway.background.data.DataReference;
+import com.net.multiway.background.data.Limits;
+import com.net.multiway.background.data.Parameters;
+import com.net.multiway.background.data.DataEvents;
+import com.net.multiway.background.data.Device;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
 import com.net.multiway.background.exception.AlertDialog;
@@ -34,10 +33,9 @@ import javafx.scene.control.TableView;
  */
 public abstract class ControllerExec implements Initializable, IController {
 
-    protected DataParameters parameters;
-    protected DataDevice device;
-    protected DataReference reference;
-    protected DataLimits limits;
+    protected Parameters parameters;
+    protected Device device;
+    protected Limits limits;
 
     protected ReceiveParameters receiveParameters;
     protected ReceiveValues receiveValues;
@@ -52,21 +50,21 @@ public abstract class ControllerExec implements Initializable, IController {
 
     //result
     @FXML
-    protected TableView<DataReceiveEvents> resultTable;
+    protected TableView<DataEvents> resultTable;
     @FXML
-    protected TableColumn<DataReceiveEvents, Long> numeroColumn;
+    protected TableColumn<DataEvents, Long> numeroColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Integer> typeColumn;
+    protected TableColumn<DataEvents, Integer> typeColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Integer> distanceColumn;
+    protected TableColumn<DataEvents, Integer> distanceColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Float> insertLossColumn;
+    protected TableColumn<DataEvents, Float> insertLossColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Float> reflectLossColumn;
+    protected TableColumn<DataEvents, Float> reflectLossColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Float> accumulationColumn;
+    protected TableColumn<DataEvents, Float> accumulationColumn;
     @FXML
-    protected TableColumn<DataReceiveEvents, Float> attenuationCoefficientColumn;
+    protected TableColumn<DataEvents, Float> attenuationCoefficientColumn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

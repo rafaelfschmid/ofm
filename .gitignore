@@ -2,3 +2,6 @@
 /build/
 /dist/
 /lib/nblibraries.properties
+/ofm_layout/nbproject/private/
+/ofm_layout/build/
+/ofm_layout/dist/

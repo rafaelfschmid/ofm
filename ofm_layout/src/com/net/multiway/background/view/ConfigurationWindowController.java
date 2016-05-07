@@ -6,14 +6,12 @@
 package com.net.multiway.background.view;
 
 import com.net.multiway.background.MainApp;
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataLimits;
+import com.net.multiway.background.data.Limits;
 import com.net.multiway.background.exception.AlertDialog;
 
-import com.net.multiway.background.data.DataParameters;
-import com.net.multiway.background.data.DataReference;
-import com.net.multiway.background.data.dao.DataDeviceDAO;
-import com.net.multiway.background.data.dao.DataReferenceDAO;
+import com.net.multiway.background.data.Parameters;
+import com.net.multiway.background.data.Device;
+import com.net.multiway.background.data.dao.DeviceDAO;
 import com.net.multiway.background.model.ControllerExec;
 import com.net.multiway.background.model.DeviceComunicator;
 import com.net.multiway.background.model.Mode;
@@ -48,11 +46,11 @@ import javafx.util.Callback;
  */
 public class ConfigurationWindowController extends ControllerExec {
 
-    private ObservableList<DataDevice> devicesData = FXCollections.observableArrayList();
+    private ObservableList<Device> devicesData = FXCollections.observableArrayList();
 
     //device
     @FXML
-    private ListView<DataDevice> devicesList;
+    private ListView<Device> devicesList;
 
     @FXML
     private ComboBox measureRangeField;
@@ -92,7 +90,7 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private Label executionLabel;
 
-    public void setLimits(DataLimits limits) {
+    public void setLimits(Limits limits) {
         this.limits = limits;
     }
     
@@ -108,7 +106,7 @@ public class ConfigurationWindowController extends ControllerExec {
 
         executionLabel.setVisible(false);
 
-        DataDeviceDAO dao = new DataDeviceDAO();
+        DeviceDAO dao = new DeviceDAO();
         devicesData.addAll(dao.getDevices());
         devicesList.setItems(devicesData);
         updateDeviceList();
@@ -116,16 +114,16 @@ public class ConfigurationWindowController extends ControllerExec {
         if (devicesList.getItems().size() > 0) {
             device = devicesList.getItems().get(0);
             Logger.getLogger(MainApp.class.getName()).log(Level.INFO, "Devices carregados na tela...");
-            DataReferenceDAO daop = new DataReferenceDAO();
-            reference = daop.find(device.getID());
-            parameters = reference.getParameters();
+            DeviceDAO daop = new DeviceDAO();
+            device = daop.find(device.getID());
+            parameters = device.getParameters();
         } else {
             device = null;
-            reference = null;
+            device = null;
         }
 
         if (parameters == null) {
-            parameters = new DataParameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
+            parameters = new Parameters(0, 0, 15000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
         }
 
         updateParameters();
@@ -155,11 +153,11 @@ public class ConfigurationWindowController extends ControllerExec {
         device = devicesList.getSelectionModel().getSelectedItem();
 
         if (device.getID() != null) {
-            DataReferenceDAO daop = new DataReferenceDAO();
-            DataReference ref = daop.find(device.getID());
+            DeviceDAO daop = new DeviceDAO();
+            Device ref = daop.find(device.getID());
             parameters = ref.getParameters();
         } else {
-            parameters = new DataParameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
+            parameters = new Parameters(0, 0, 2000, 1550, 1, 1.4685f, 0, 5.0f, 65.0f, 0, 1, 1, 10);
         }
     }
 
@@ -175,11 +173,10 @@ public class ConfigurationWindowController extends ControllerExec {
             if (AlertDialog.DeviceDeletion(devicesList.getSelectionModel().getSelectedItem().getIp())) {
                 if (device.getID() != null) {
                     try {
-                        DataReferenceDAO daoRef = new DataReferenceDAO();
+                        DeviceDAO daoRef = new DeviceDAO();
                         daoRef.delete(device.getID());
 
-                        DataDeviceDAO daoDev = new DataDeviceDAO();
-                        daoDev.delete(device);
+                        
                     } catch (Exception ex) {
                         Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         AlertDialog.exception(ex);
@@ -210,7 +207,7 @@ public class ConfigurationWindowController extends ControllerExec {
      */
     @FXML
     private void onHandleAddDevice() {
-        DataDevice device = new DataDevice();
+        Device dvc = new Device();
         try {
             // Carrega o arquivo fxml e cria um novo stage para a janela popup.
             FXMLLoader loader = new FXMLLoader();
@@ -230,17 +227,16 @@ public class ConfigurationWindowController extends ControllerExec {
             // Define o device no controller.
             DeviceAddDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setDevice(device);
+            controller.setDevice(dvc);
 
             // Mostra a janela e espera até o usuário fechar.
             dialogStage.showAndWait();
 
             if (controller.isOkClicked()) {
-//                DataDeviceDAO dao = new DataDeviceDAO();
-//                dao.create(device);
-                devicesData.add(device);
+
+                devicesData.add(dvc);
                 devicesList.setItems(devicesData);
-                this.device = device;
+                this.device = dvc;
             }
         } catch (IOException ex) {
             Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -420,18 +416,18 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onHandleSetReference() {
         if (receiveParameters != null && receiveValues != null && device != null) {
-            DataReferenceDAO dao = new DataReferenceDAO();
+            DeviceDAO dao = new DeviceDAO();
             try {
-                reference = new DataReference();
-                reference.setDataReceive(receiveParameters.getData());
-                reference.setDevice(device);
-                reference.setParameters(parameters);
+                device = new Device();
+                device.setData(receiveParameters.getData());
+                //device.setDevice(device);
+                device.setParameters(parameters);
 
                 if (device.getID() != null) {
-                    dao.edit(reference);
+                    dao.edit(device);
                 } else {
 
-                    dao.create(reference);
+                    dao.create(device);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(ConfigurationWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -449,12 +445,12 @@ public class ConfigurationWindowController extends ControllerExec {
     @FXML
     private void onHandleChangeToMonitor() throws IOException {
 
-        if (reference != null) {
+        if (device != null) {
 
             MonitorWindowController controller
                     = (MonitorWindowController) MainApp.getInstance().showView(View.MonitorWindow, Mode.VIEW);
 
-            controller.setReference(reference);
+            controller.setReference(device);
 
         } else {
             AlertDialog.referenceMissing();
@@ -531,14 +527,14 @@ public class ConfigurationWindowController extends ControllerExec {
     }
 
     private void updateDeviceList() {
-        devicesList.setCellFactory(new Callback<ListView<DataDevice>, ListCell<DataDevice>>() {
+        devicesList.setCellFactory(new Callback<ListView<Device>, ListCell<Device>>() {
             @Override
-            public ListCell<DataDevice> call(ListView<DataDevice> p) {
+            public ListCell<Device> call(ListView<Device> p) {
 
-                ListCell<DataDevice> cell = new ListCell<DataDevice>() {
+                ListCell<Device> cell = new ListCell<Device>() {
 
                     @Override
-                    protected void updateItem(DataDevice t, boolean bln) {
+                    protected void updateItem(Device t, boolean bln) {
                         super.updateItem(t, bln);
                         if (t != null) {
                             setText(t.getIp());

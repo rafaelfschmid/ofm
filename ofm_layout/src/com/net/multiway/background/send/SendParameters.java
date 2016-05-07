@@ -3,7 +3,7 @@ package com.net.multiway.background.send;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.Parameters;
 import com.net.multiway.background.model.Header;
 import com.net.multiway.background.utils.Utils;
 
@@ -12,9 +12,9 @@ public class SendParameters {
 
     private DataOutputStream os;
     private Header header;
-    private DataParameters data;
+    private Parameters data;
 
-    public SendParameters(DataOutputStream out, DataParameters data) {
+    public SendParameters(DataOutputStream out, Parameters data) {
         this.os = out;
         this.header = new Header(0x00000068, 0x10000000, 0x00000030);
         this.data = data;

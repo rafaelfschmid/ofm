@@ -28,30 +28,80 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATARECEIVE")
+@Table(name = "data")
 @XmlRootElement
-public class DataReceive implements Serializable {
+public class Data implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "sample_frequency")
     private ObjectProperty<Integer> sampleFrequency;
+
+    @Basic(optional = false)
+    @Column(name = "range_test")
     private ObjectProperty<Integer> rangeOfTest;
+
+    @Basic(optional = false)
+    @Column(name = "pulse_width")
     private ObjectProperty<Integer> pulseWidth;
+
+    @Basic(optional = false)
+    @Column(name = "wave_length")
     private ObjectProperty<Integer> waveLength;
+
+    @Basic(optional = false)
+    @Column(name = "test_time")
     private ObjectProperty<Integer> testTime;
+
+    @Basic(optional = false)
+    @Column(name = "refractive_index")
     private ObjectProperty<Float> groupRefractiveIndex;
+
+    @Basic(optional = false)
+    @Column(name = "link_length")
     private ObjectProperty<Float> linkLength;
+
+    @Basic(optional = false)
+    @Column(name = "link_loss")
     private ObjectProperty<Float> linkLoss;
+
+    @Basic(optional = false)
+    @Column(name = "link_attenuation")
     private ObjectProperty<Float> linkAttenuation;
+
+    @Basic(optional = false)
+    @Column(name = "nonreflecting_threshold")
     private ObjectProperty<Float> nonReflectingThreshold;
+
+    @Basic(optional = false)
+    @Column(name = "end_threshold")
     private ObjectProperty<Float> endThreshold;
+
+    @Basic(optional = false)
+    @Column(name = "test_mode")
     private ObjectProperty<Float> testMode;
+
+    @Basic(optional = false)
+    @Column(name = "test_way")
     private ObjectProperty<Integer> testWay;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "graphic",
+            joinColumns = @JoinColumn(name = "data_id")
+    )
+    @Column(name = "graphic_data")
     private List<Integer> graphData;
-    private List<DataReceiveEvents> events;
 
+    @OneToMany(mappedBy = "data")
+    private List<DataEvents> events;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
     private Long ID;
 
-    public DataReceive() {
+    public Data() {
         this.sampleFrequency = new SimpleObjectProperty<>();
         this.rangeOfTest = new SimpleObjectProperty<>();
         this.pulseWidth = new SimpleObjectProperty<>();
@@ -69,7 +119,7 @@ public class DataReceive implements Serializable {
         this.events = new ArrayList<>();
     }
 
-    public DataReceive(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
+    public Data(int sampleFrequency, int rangeOfTest, int pulseWidth, int waveLength, int testTime, float groupRefractiveIndex, float linkLength, float linkLoss, float linkAttenuation, float nonReflectingThreshold, float endThreshold, float testMode, int testWay, int lenght_vec, int distance, int type, float echoLoss, float insertionLoss, float averageAttenuationCoefficient, float acumulativeLoss) {
         this.sampleFrequency = new SimpleObjectProperty<>(sampleFrequency);
         this.rangeOfTest = new SimpleObjectProperty<>(rangeOfTest);
         this.pulseWidth = new SimpleObjectProperty<>(pulseWidth);
@@ -88,8 +138,6 @@ public class DataReceive implements Serializable {
 
     }
 
-    @Basic(optional = false)
-    @Column(name = "SAMPLEFREQUENCY")
     public Integer getSampleFrequency() {
         return sampleFrequency.get();
     }
@@ -98,8 +146,10 @@ public class DataReceive implements Serializable {
         this.sampleFrequency.set(sampleFrequency);
     }
 
-    @Basic(optional = false)
-    @Column(name = "RANGEOFTEST")
+    public ObjectProperty<Integer> sampleFrequencyProperty() {
+        return sampleFrequency;
+    }
+
     public Integer getRangeOfTest() {
         return rangeOfTest.get();
     }
@@ -108,8 +158,10 @@ public class DataReceive implements Serializable {
         this.rangeOfTest.set(rangeOfTest);
     }
 
-    @Basic(optional = false)
-    @Column(name = "PULSEWIDTH")
+    public ObjectProperty<Integer> rangeOfTestProperty() {
+        return rangeOfTest;
+    }
+
     public Integer getPulseWidth() {
         return pulseWidth.get();
     }
@@ -118,8 +170,10 @@ public class DataReceive implements Serializable {
         this.pulseWidth.set(pulseWidth);
     }
 
-    @Basic(optional = false)
-    @Column(name = "WAVELENGTH")
+    public ObjectProperty<Integer> pulseWidthProperty() {
+        return pulseWidth;
+    }
+
     public Integer getWaveLength() {
         return waveLength.get();
     }
@@ -128,8 +182,10 @@ public class DataReceive implements Serializable {
         this.waveLength.set(waveLength);
     }
 
-    @Basic(optional = false)
-    @Column(name = "TESTTIME")
+    public ObjectProperty<Integer> waveLengthProperty() {
+        return waveLength;
+    }
+
     public Integer getTestTime() {
         return testTime.get();
     }
@@ -138,8 +194,10 @@ public class DataReceive implements Serializable {
         this.testTime.set(testTime);
     }
 
-    @Basic(optional = false)
-    @Column(name = "GROUPREFRACTIVEINDEX")
+    public ObjectProperty<Integer> testTimeProperty() {
+        return testTime;
+    }
+
     public Float getGroupRefractiveIndex() {
         return groupRefractiveIndex.get();
     }
@@ -148,8 +206,10 @@ public class DataReceive implements Serializable {
         this.groupRefractiveIndex.set(groupRefractiveIndex);
     }
 
-    @Basic(optional = false)
-    @Column(name = "LINKLENGTH")
+    public ObjectProperty<Float> groupRefractiveIndexProperty() {
+        return groupRefractiveIndex;
+    }
+
     public Float getLinkLength() {
         return linkLength.get();
     }
@@ -158,8 +218,10 @@ public class DataReceive implements Serializable {
         this.linkLength.set(linkLength);
     }
 
-    @Basic(optional = false)
-    @Column(name = "LINKLOSS")
+    public ObjectProperty<Float> linkLengthProperty() {
+        return linkLength;
+    }
+
     public Float getLinkLoss() {
         return linkLoss.get();
     }
@@ -168,8 +230,10 @@ public class DataReceive implements Serializable {
         this.linkLoss.set(linkLoss);
     }
 
-    @Basic(optional = false)
-    @Column(name = "LINKATTENUATION")
+    public ObjectProperty<Float> linkLossProperty() {
+        return linkLoss;
+    }
+
     public Float getLinkAttenuation() {
         return linkAttenuation.get();
     }
@@ -178,8 +242,10 @@ public class DataReceive implements Serializable {
         this.linkAttenuation.set(linkAttenuation);
     }
 
-    @Basic(optional = false)
-    @Column(name = "NONREFLECTINGTHRESHOLD")
+    public ObjectProperty<Float> linkAttenuationProperty() {
+        return linkAttenuation;
+    }
+
     public Float getNonReflectingThreshold() {
         return nonReflectingThreshold.get();
     }
@@ -188,8 +254,10 @@ public class DataReceive implements Serializable {
         this.nonReflectingThreshold.set(nonReflectingThreshold);
     }
 
-    @Basic(optional = false)
-    @Column(name = "ENDTHRESHOLD")
+    public ObjectProperty<Float> nonReflectingThresholdProperty() {
+        return nonReflectingThreshold;
+    }
+
     public Float getEndThreshold() {
         return endThreshold.get();
     }
@@ -198,8 +266,10 @@ public class DataReceive implements Serializable {
         this.endThreshold.set(endThreshold);
     }
 
-    @Basic(optional = false)
-    @Column(name = "TESTMODE")
+    public ObjectProperty<Float> endThresholdProperty() {
+        return endThreshold;
+    }
+
     public Float getTestMode() {
         return testMode.get();
     }
@@ -208,8 +278,10 @@ public class DataReceive implements Serializable {
         this.testMode.set(testMode);
     }
 
-    @Basic(optional = false)
-    @Column(name = "TESTWAY")
+    public ObjectProperty<Float> testModeProperty() {
+        return testMode;
+    }
+
     public Integer getTestWay() {
         return testWay.get();
     }
@@ -218,10 +290,10 @@ public class DataReceive implements Serializable {
         this.testWay.set(testWay);
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
+    public ObjectProperty<Integer> testWayProperty() {
+        return testWay;
+    }
+
     public Long getID() {
         return ID;
     }
@@ -230,12 +302,6 @@ public class DataReceive implements Serializable {
         this.ID = ID;
     }
 
-    @ElementCollection
-    @CollectionTable(
-            name = "GRAPH",
-            joinColumns = @JoinColumn(name = "OWNER_ID")
-    )
-    @Column(name = "GRAPH_DATA")
     public List<Integer> getGraphData() {
         return graphData;
     }
@@ -244,40 +310,20 @@ public class DataReceive implements Serializable {
         this.graphData = graphData;
     }
 
-    @OneToMany(mappedBy = "dataReceive")
-    public List<DataReceiveEvents> getEvents() {
+    public List<DataEvents> getEvents() {
         return events;
     }
 
-    public void addEvents(DataReceiveEvents events) {
+    public void addEvents(DataEvents events) {
         this.events.add(events);
     }
 
-    public void setEvents(List<DataReceiveEvents> events) {
+    public void setEvents(List<DataEvents> events) {
         this.events = events;
     }
 
-//	public void copy(DataReceive data) {
-//
-//		setGraphData(data.getGraphData());
-//		setEvents((ArrayList<DataReceiveEvents>)data.getEvents());
-//		setEndThreshold(data.getEndThreshold());
-//		setGroupRefractiveIndex(data.getGroupRefractiveIndex());
-//		setID(data.getID());
-//		setLenght_vec(data.getLenght_vec());
-//		setLinkAttenuation(data.getLinkAttenuation());
-//		setLinkLength(data.getLinkLength());
-//		setLinkLoss(data.getLinkLoss());
-//		setNonReflectingThreshold(data.getNonReflectingThreshold());
-//		setPulseWidth(data.getPulseWidth());
-//		setRangeOfTest(data.getRangeOfTest());
-//		setSampleFrequency(data.getSampleFrequency());
-//		setTestMode(data.getTestMode());
-//		setTestTime(data.getTestTime());
-//		setTestWay(data.getTestWay());
-//		setWaveLength(data.getWaveLength());
-//	}
-    public void copy(DataReceive data) {
+
+    public void copy(Data data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

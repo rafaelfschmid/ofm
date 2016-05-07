@@ -5,9 +5,9 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataReceive;
-import com.net.multiway.background.data.DataReceiveEvents;
-import com.net.multiway.background.data.DataReference;
+import com.net.multiway.background.data.Data;
+import com.net.multiway.background.data.DataEvents;
+import com.net.multiway.background.data.Device;
 import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,11 +20,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DataReceiveDAO implements Serializable {
+public class DataDAO implements Serializable {
 
     private EntityManagerFactory emf = null;
 
-    public DataReceiveDAO() {
+    public DataDAO() {
         emf = Database.getInstance().getEntityManagerFactory();
     }
 
@@ -32,9 +32,9 @@ public class DataReceiveDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DataReceive data) throws Exception {
+    public void create(Data data) throws Exception {
         if (data.getEvents() == null) {
-            data.setEvents(new ArrayList<DataReceiveEvents>());
+            data.setEvents(new ArrayList<DataEvents>());
         }
         EntityManager em = null;
         try {
@@ -56,7 +56,7 @@ public class DataReceiveDAO implements Serializable {
         }
     }
 
-    public void edit(DataReceive data) throws Exception {
+    public void edit(Data data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -81,24 +81,24 @@ public class DataReceiveDAO implements Serializable {
         }
     }
 
-    public DataReceive find(Long id) {
+    public Data find(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataReceive.class, id);
+            return em.find(Data.class, id);
         } finally {
             em.close();
         }
     }
 
-    public void delete(DataReceive receive) throws Exception {
+    public void delete(Data receive) throws Exception {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
-            DataReceive d;
+            Data d;
             try {
                 //d = em.getReference(DataReceive.class, receive.getID());
-                d = em.find(DataReceive.class, receive.getID());
+                d = em.find(Data.class, receive.getID());
                 d.getID();
             } catch (Exception ex) {
                 throw new Exception("The DataReceive with id " + receive.getID() + " no longer exists.", ex);

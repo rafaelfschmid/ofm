@@ -6,9 +6,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.Parameters;
 import com.net.multiway.background.data.StopTest;
-import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.Device;
 import com.net.multiway.background.receive.ReceiveParameters;
 import com.net.multiway.background.receive.ReceiveValues;
 import com.net.multiway.background.receive.ReceiveStatus;
@@ -68,7 +68,7 @@ public class DeviceComunicator {
         }
     }
 
-    private void sendPackage(DataParameters data) throws IOException {
+    private void sendPackage(Parameters data) throws IOException {
         SendParameters s = new SendParameters(this.out, data);
         s.sender();
     }
@@ -78,7 +78,7 @@ public class DeviceComunicator {
         s.sender();
     }
 
-    private void sendPackage(DataDevice data) throws IOException {
+    private void sendPackage(Device data) throws IOException {
         SendDevice s = new SendDevice(this.out, data);
         s.sender();
     }
@@ -127,7 +127,7 @@ public class DeviceComunicator {
 
     }
 
-    public void connect(DataParameters data) throws Exception {
+    public void connect(Parameters data) throws Exception {
 
         this.initialize();
         try {
@@ -168,7 +168,7 @@ public class DeviceComunicator {
         }
     }
 
-    public void connect(DataDevice data) throws Exception {
+    public void connect(Device data) throws Exception {
 
         this.initialize();
         try {
@@ -192,7 +192,7 @@ public class DeviceComunicator {
         return receiveParametersData;
     }
 
-    public void runMonitor(int time, DataParameters data) throws Exception {
+    public void runMonitor(int time, Parameters data) throws Exception {
         connect(data);
         long ti = System.currentTimeMillis();
         long tf = ti + (time * 1000);

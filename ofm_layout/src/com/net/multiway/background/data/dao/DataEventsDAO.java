@@ -5,38 +5,48 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataDevice;
+import com.net.multiway.background.data.Data;
+import com.net.multiway.background.data.DataEvents;
 import com.net.multiway.background.database.Database;
-import java.util.List;
+import java.io.Serializable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author Phelipe
  */
-public class DataDeviceDAO {
+public class DataEventsDAO implements Serializable {
 
-    public DataDeviceDAO() {
+    private EntityManagerFactory emf = null;
+
+    public DataEventsDAO() {
         emf = Database.getInstance().getEntityManagerFactory();
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(DataDevice data) throws Exception {
+    public void create(DataEvents data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-
             em.getTransaction().begin();
+
+            Data d = data.getData();
+            if (d != null) {
+                d = em.getReference(d.getClass(), d.getID());
+                data.setData(d);
+            }
+
             em.persist(data);
+
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (find(data.getID()) != null) {
-                throw new Exception("Device " + data.getIp() + " already exists.", ex);
+                throw new Exception("Evento " + data.getID() + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -46,12 +56,12 @@ public class DataDeviceDAO {
         }
     }
 
-    public void edit(DataDevice data) throws Exception {
+    public void edit(DataEvents data) throws Exception {
         EntityManager em = null;
 
         try {
             em = getEntityManager();
-            //DataDevice d = em.find(DataDevice.class, data.getID());
+            DataEvents d = em.find(DataEvents.class, data.getID());
             em.getTransaction().begin();
             data = em.merge(data);
             em.getTransaction().commit();
@@ -60,7 +70,7 @@ public class DataDeviceDAO {
             if (msg == null || msg.length() == 0) {
                 Long id = data.getID();
                 if (find(id) == null) {
-                    throw new Exception("The device with id " + id + " no longer exists.");
+                    throw new Exception("The event with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -71,37 +81,29 @@ public class DataDeviceDAO {
         }
     }
 
-    public DataDevice find(Long id) {
+    public DataEvents find(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataDevice.class, id);
+            return em.find(DataEvents.class, id);
         } finally {
             em.close();
         }
     }
 
-    public List<DataDevice> getDevices() {
+    public void delete(DataEvents event )throws Exception {
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT e FROM DataDevice e").getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public void delete(DataDevice device) throws Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
             em.getTransaction().begin();
-            DataDevice d;
+            
+            DataEvents d;
             try {
-                d = em.getReference(DataDevice.class, device.getID());
+                d = em.getReference(DataEvents.class, event.getID());
                 d.getID();
             } catch (Exception ex) {
-                throw new Exception("The device with id " + device.getID() + " no longer exists.", ex);
+                throw new Exception("The parameters configuration with id " + event.getID() + " no longer exists.", ex);
             }
             em.remove(d);
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {

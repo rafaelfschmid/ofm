@@ -18,10 +18,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Phelipe
  */
 @Entity
-@Table(name = "DATAPARAMETERS")
+@Table(name = "parameters")
 @XmlRootElement
 
-public class DataParameters implements IData, Serializable {
+public class Parameters implements IData, Serializable {
 
     private ObjectProperty<Integer> measuringRangeOfTest;
     private ObjectProperty<Integer> testPulseWidth;
@@ -42,7 +42,7 @@ public class DataParameters implements IData, Serializable {
 
     private Long ID;
 
-    public DataParameters() {
+    public Parameters() {
         this.measuringRangeOfTest = new SimpleObjectProperty<>();
         this.testPulseWidth = new SimpleObjectProperty<>();
         this.measuringTime = new SimpleObjectProperty<>();
@@ -60,7 +60,7 @@ public class DataParameters implements IData, Serializable {
 
     }
 
-    public DataParameters(int measuringRangeOfTest, int testPulseWidth, int measuringTime,
+    public Parameters(int measuringRangeOfTest, int testPulseWidth, int measuringTime,
             int testWaveLength, int measureMode, float refractiveIndex,
             float nonReflactionThreshold, float endThreshold, float reflectionThreshold,
             int optimizeMode, int enabledRefresh, int refreshCycle, int cycleTime) {
@@ -84,7 +84,7 @@ public class DataParameters implements IData, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID")
+    @Column(name = "id")
     public Long getID() {
         return ID;
     }
@@ -94,7 +94,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "MEASURE_MODE")
+    @Column(name = "measure_mode")
 
     public Integer getMeasureMode() {
         return measureMode.get();
@@ -105,7 +105,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "OPTIMIZE_MODE")
+    @Column(name = "optimize_mode")
     public Integer getOptimizeMode() {
         return optimizeMode.get();
     }
@@ -115,7 +115,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "REFLECTION_THRESHOLD")
+    @Column(name = "reflection_threshold")
     public Float getReflectionThreshold() {
         return reflectionThreshold.get();
     }
@@ -125,7 +125,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "ENABLE_REFRESH")
+    @Column(name = "enable_refresh")
     public Integer getEnabledRefresh() {
         return enabledRefresh.get();
     }
@@ -135,7 +135,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "REFRESH_CYCLE")
+    @Column(name = "refresh_cycle")
     public Integer getRefreshCycle() {
         return refreshCycle.get();
     }
@@ -145,7 +145,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "TEST_WAVE_LENGHT")
+    @Column(name = "test_wave_length")
     public Integer getTestWaveLength() {
         return testWaveLength.get();
     }
@@ -155,7 +155,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "MEASURING_RANGE")
+    @Column(name = "measuring_range")
     public Integer getMeasuringRangeOfTest() {
         return measuringRangeOfTest.get();
     }
@@ -165,7 +165,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "TEST_PULSEWIDTH")
+    @Column(name = "test_pulse_width")
     public Integer getTestPulseWidth() {
         return testPulseWidth.get();
     }
@@ -175,7 +175,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "MEASURING_TIME")
+    @Column(name = "measuring_time")
     public Integer getMeasuringTime() {
         return measuringTime.get();
     }
@@ -185,7 +185,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "REFRACTIVE_INDEX")
+    @Column(name = "refractive_index")
     public Float getRefractiveIndex() {
         return refractiveIndex.get();
     }
@@ -195,7 +195,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "END_THRESHOLD")
+    @Column(name = "end_threshold")
     public Float getEndThreshold() {
         return endThreshold.get();
     }
@@ -205,7 +205,7 @@ public class DataParameters implements IData, Serializable {
     }
 
     @Basic(optional = false)
-    @Column(name = "NONREFLACTION_THRESHOLD")
+    @Column(name = "non_reflaction_threshold")
     public Float getNonReflactionThreshold() {
         return nonReflactionThreshold.get();
     }
@@ -215,7 +215,7 @@ public class DataParameters implements IData, Serializable {
     }
 
 	@Basic(optional = false)
-    @Column(name = "CYCLE_TIME")
+    @Column(name = "cycle_time")
 	public Integer getCycleTime() {
 		return cycleTime.get();
 	}
@@ -281,7 +281,7 @@ public class DataParameters implements IData, Serializable {
 
     }
 
-    public void copy(DataParameters data) {
+    public void copy(Parameters data) {
         setEnabledRefresh(data.getEnabledRefresh());
         setEndThreshold(data.getEndThreshold());
         setID(data.getID());

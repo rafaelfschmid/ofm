@@ -1,7 +1,7 @@
 package com.net.multiway.background.receive;
 
-import com.net.multiway.background.data.DataReceive;
-import com.net.multiway.background.data.DataReceiveEvents;
+import com.net.multiway.background.data.Data;
+import com.net.multiway.background.data.DataEvents;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -19,23 +19,23 @@ import java.util.logging.Logger;
 public class ReceiveParameters extends Package {
 
     private DataInputStream in;
-    private DataReceive data;
+    private Data data;
 
     public ReceiveParameters() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public DataReceive getData() {
+    public Data getData() {
         return data;
     }
     
-    public void setData(DataReceive data) {
+    public void setData(Data data) {
         this.data = data;
     }
     
     public ReceiveParameters(DataInputStream in) {
         this.setIn(in);
-        data = new DataReceive();
+        data = new Data();
     }
 
     public DataInputStream getIn() {
@@ -106,7 +106,7 @@ public class ReceiveParameters extends Package {
         byte[] b = new byte[4];
 
         for (int i = 0; i < this.length; i++) {
-            DataReceiveEvents dt = new DataReceiveEvents();
+            DataEvents dt = new DataEvents();
             in.read(d);
             dt.setDistance(Utils.byte4ToInt(d));
             in.read(d);
@@ -119,7 +119,7 @@ public class ReceiveParameters extends Package {
             dt.setAverageAttenuationCoefficient(Utils.byte4ToFloat(d));
             in.read(d);
             dt.setAcumulativeLoss(Utils.byte4ToFloat(d));
-            dt.setDataReceive(data);
+            dt.setData(data);
             data.addEvents(dt);
         }
 
@@ -179,12 +179,12 @@ public class ReceiveParameters extends Package {
     }
 
     public void printPartC(PrintWriter out) {
-        List<DataReceiveEvents> ar = data.getEvents();
+        List<DataEvents> ar = data.getEvents();
         out.println("/**************************************************************/");
         out.println("/***********************OUTPUT EVENTS**************************/");
         out.println("/**************************************************************/");
         int i = 1;
-        for (DataReceiveEvents data : ar) {
+        for (DataEvents data : ar) {
             out.println("EVENT " + i++);
             out.println("Distance = " + data.getDistance());
             out.println("Type = " + data.getType());

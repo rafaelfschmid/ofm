@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author phelipe
  */
 @Entity
-@Table(name = "DATAOCCURRENCE")
+@Table(name = "occurrence")
 @XmlRootElement
-public class DataOccurrence {
+public class Occurrence {
 
     private StringProperty occurrence;
     private StringProperty description;
@@ -31,7 +31,7 @@ public class DataOccurrence {
 
     private Long ID;
 
-    public DataOccurrence() {
+    public Occurrence() {
         this.occurrence = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
         this.date = new SimpleStringProperty();
@@ -40,7 +40,7 @@ public class DataOccurrence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID")
+    @Column(name = "id")
     public Long getID() {
         return ID;
     }
@@ -50,7 +50,7 @@ public class DataOccurrence {
     }
 
     @Basic(optional = false)
-    @Column(name = "OCCURRENCE")
+    @Column(name = "occurrence")
     public String getOccurrence() {
         return occurrence.get();
     }
@@ -64,7 +64,7 @@ public class DataOccurrence {
     }
 
     @Basic(optional = false)
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     public String getDescription() {
         return description.get();
     }
@@ -78,7 +78,7 @@ public class DataOccurrence {
     }
 
     @Basic(optional = false)
-    @Column(name = "DATE")
+    @Column(name = "date")
     public String getDate() {
         return date.get();
     }

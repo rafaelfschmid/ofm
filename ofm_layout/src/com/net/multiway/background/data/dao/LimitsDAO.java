@@ -5,9 +5,9 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataDevice;
-import com.net.multiway.background.data.DataLimits;
-import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.Device;
+import com.net.multiway.background.data.Limits;
+import com.net.multiway.background.data.Parameters;
 import com.net.multiway.background.database.Database;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,8 +17,8 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author phelipe
  */
-public class DataLimitsDAO {
-      public DataLimitsDAO() {
+public class LimitsDAO {
+      public LimitsDAO() {
         emf = Database.getInstance().getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
@@ -27,7 +27,7 @@ public class DataLimitsDAO {
         return emf.createEntityManager();
     }
 
-    public void create(DataLimits data) throws Exception {
+    public void create(Limits data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -47,7 +47,7 @@ public class DataLimitsDAO {
         }
     }
 
-    public void edit(DataLimits data) throws Exception {
+    public void edit(Limits data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -72,23 +72,23 @@ public class DataLimitsDAO {
         }
     }
 
-    public DataLimits find(Long id) {
+    public Limits find(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataLimits.class, id);
+            return em.find(Limits.class, id);
         } finally {
             em.close();
         }
     }
 
-    public void delete(DataLimits device) throws Exception {
+    public void delete(Limits device) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            DataLimits d;
+            Limits d;
             try {
-                d = em.getReference(DataLimits.class, device.getID());
+                d = em.getReference(Limits.class, device.getID());
                 d.getID();
             } catch (Exception ex) {
                 throw new Exception("The device with id " + device.getID() + " no longer exists.", ex);

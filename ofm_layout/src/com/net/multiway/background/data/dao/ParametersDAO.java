@@ -5,7 +5,7 @@
  */
 package com.net.multiway.background.data.dao;
 
-import com.net.multiway.background.data.DataParameters;
+import com.net.multiway.background.data.Parameters;
 import com.net.multiway.background.database.Database;
 import java.io.Serializable;
 import javax.persistence.EntityManager;
@@ -16,11 +16,11 @@ import javax.persistence.Persistence;
  *
  * @author Phelipe
  */
-public class DataParametersDAO implements Serializable {
+public class ParametersDAO implements Serializable {
 
     private EntityManagerFactory emf = null;
 
-    public DataParametersDAO() {
+    public ParametersDAO() {
       emf = Database.getInstance().getEntityManagerFactory();
     }
 
@@ -28,7 +28,7 @@ public class DataParametersDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DataParameters data) throws Exception {
+    public void create(Parameters data) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -48,7 +48,7 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public void edit(DataParameters data) throws Exception {
+    public void edit(Parameters data) throws Exception {
         EntityManager em = null;
 
         try {
@@ -73,23 +73,23 @@ public class DataParametersDAO implements Serializable {
         }
     }
 
-    public DataParameters find(Long id) {
+    public Parameters find(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataParameters.class, id);
+            return em.find(Parameters.class, id);
         } finally {
             em.close();
         }
     }
 
-    public void delete(DataParameters parameters) throws Exception {
+    public void delete(Parameters parameters) throws Exception {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             
-            DataParameters d;
+            Parameters d;
             try {
-                d = em.getReference(DataParameters.class, parameters.getID());
+                d = em.getReference(Parameters.class, parameters.getID());
                 d.getID();
             } catch (Exception ex) {
                 throw new Exception("The parameters configuration with id " + parameters.getID() + " no longer exists.", ex);
