@@ -10,8 +10,11 @@ import com.net.multiway.background.exception.AlertDialog;
 import com.net.multiway.background.model.IController;
 import com.net.multiway.background.model.Mode;
 import com.net.multiway.background.model.View;
+import com.net.multiway.background.report.Reports;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  * FXML Controller class
@@ -70,7 +74,13 @@ public class MainSceneController implements Initializable, IController {
     }
 
     @FXML
-    private void onMenuExportLastRead(ActionEvent event) {
+    private void onMenuExportLastRead(ActionEvent event) throws SQLException, JRException {
+        Reports report = new Reports();
+
+        HashMap	paramRel = new HashMap();
+        String nomeRelatorio = "Relatório 1";
+       report.gerarRelatorio(nomeRelatorio, paramRel);
+
     }
 
     @FXML
@@ -112,8 +122,6 @@ public class MainSceneController implements Initializable, IController {
             RangeDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setRange();
-            
-            
 
             // Mostra a janela e espera até o usuário fechar.
             dialogStage.showAndWait();
